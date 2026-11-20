@@ -1274,6 +1274,200 @@ html,body{overflow:hidden}
 
 .opts>.opt{min-width:0}
 .qpic small{font-size:clamp(12px,min(3.6vw,2.6dvh),16px);max-width:100%;overflow-wrap:anywhere;line-height:1.1}
+
+/* ===== DUNIA SEHARI-HARI ===== */
+.card.j{--k:#1E88C8}
+.card.o{--k:#8DB33A;--kon:var(--ink)}
+.card.r{--k:#B5651D}
+.card.rwide{grid-column:span 2}
+.card .artill.coins{display:flex;align-items:center;justify-content:center}
+.card .artill.coins svg+svg{margin-left:-14px;transform:rotate(12deg)}
+[data-mod=jam]{--c:#1E88C8;--c-d:#125E8C;--c-s:#D3EAF7;--c-on:#fff}
+[data-mod=toko]{--c:#8DB33A;--c-d:#5E7A1F;--c-s:#E5F0CF;--c-on:var(--ink)}
+[data-mod=rutin]{--c:#B5651D;--c-d:#7E4511;--c-s:#F4E2CF;--c-on:#fff}
+.ask mark{background:var(--c-s);color:var(--ink);padding:0 .18em;border-radius:6px;box-decoration-break:clone}
+/* jam */
+.kegscene{position:relative;display:flex;align-items:flex-end;justify-content:center;gap:4px;background:var(--c-s);border:3px solid var(--ink);border-radius:16px;padding:10px 18px 0;min-width:min(260px,80vw)}
+.kegscene .ill{margin-bottom:10px}
+.kegscene .ktk svg{width:clamp(74px,14dvh,110px);height:auto;display:block}
+.kegscene.sm{padding:8px 14px;min-width:0}
+.kegscene.sm .ill{margin:0}
+.skyopts .qpic svg.sky{width:clamp(56px,min(16vw,10dvh),88px);height:auto;border-radius:8px}
+.clock{display:block;max-width:100%;height:auto}
+.clock .hh,.clock .mh{transform-origin:50px 50px;transform-box:view-box;transition:transform .18s ease-out}
+.clockbig{position:relative;display:grid;place-items:center}
+.clockbig .clock{width:clamp(170px,min(62vw,34dvh),260px);height:auto;filter:drop-shadow(5px 6px 0 var(--ink))}
+.clockbig.drag .clock{touch-action:none;cursor:grab}
+.clockbig.ok .clock{animation:pop .5s}
+.kegtag{position:absolute;right:-8px;bottom:-4px;background:var(--card);border:3px solid var(--ink);border-radius:50%;padding:6px;display:grid}
+.clockopts .qpic{height:auto!important;padding:8px}
+.clockopts .qpic .clock{width:clamp(70px,min(20vw,13dvh),112px)}
+.timeopts .opt.word{display:flex;flex-direction:column;gap:4px}
+.timeopts .opt.word{height:auto!important;min-height:76px;padding:8px 6px}
+.timeopts .opt.word b{font:800 clamp(24px,7vw,32px)/1 var(--f-display)}
+.timeopts .opt.word small{font-size:13px;font-weight:700;font-family:inherit;line-height:1.1;color:var(--muted);text-transform:none;font-stretch:100%}
+.aturrow{display:flex;align-items:center;gap:14px;justify-content:center}
+.kegside{background:var(--c-s);border:3px solid var(--ink);border-radius:14px;padding:8px;display:grid}
+.seg.hands{margin:4px 0}
+.row.turn{display:flex;gap:12px;align-items:center;justify-content:center}
+.ibtn.flip svg{transform:scaleX(-1)}
+.train{display:flex;align-items:flex-end;gap:5px;max-width:100%;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none}
+.train::-webkit-scrollbar{display:none}
+.train .loco{flex:none;display:grid;place-items:center;width:52px;height:56px;background:var(--ink);border-radius:14px 14px 6px 6px}
+.car{position:relative;flex:none;width:clamp(56px,11.5vw,92px);height:clamp(48px,7dvh,62px);background:var(--dc);border:3px solid var(--ink);border-radius:8px;display:grid;place-items:center;margin-bottom:8px}
+.car b{font:800 clamp(12px,2.6vw,17px) var(--f-display);color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.car i{position:absolute;bottom:-11px;width:14px;height:14px;border-radius:50%;background:var(--ink);border:3px solid var(--card)}
+.car i:first-of-type{left:8px}.car i:last-of-type{right:8px}
+.car.q{background:var(--card);border-style:dashed}
+.car.q b{color:var(--ink);text-shadow:none;font-size:26px}
+.car.mk{outline:4px solid var(--ink);outline-offset:2px}
+.opts.days{max-width:min(560px,100%)}
+.dayopt{border-left:12px solid var(--dc)!important}
+.seqrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.seqc{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;width:clamp(104px,28vw,150px);padding:12px 8px;height:auto}
+.seqc small{font:800 14px/1.1 var(--f-display);text-align:center}
+.seqc em{position:absolute;top:-12px;left:-12px;width:34px;height:34px;border-radius:50%;background:var(--c);color:var(--c-on);font:800 18px/34px var(--f-display);font-style:normal;border:3px solid var(--ink);display:none}
+.seqc.done{background:var(--c-s)}
+.seqc.done em{display:block}
+.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+/* toko */
+.money{display:block;flex:none}
+.money.coin{filter:drop-shadow(2px 3px 0 rgba(28,27,34,.55))}
+.money.note{filter:drop-shadow(3px 3px 0 rgba(28,27,34,.45))}
+.shop{display:flex;flex-direction:column;align-items:center;gap:14px}
+.shopr{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:560px}
+.stall{position:relative;width:min(300px,82vw);background:var(--card);border:3px solid var(--ink);border-radius:10px;overflow:hidden;box-shadow:6px 6px 0 var(--ink)}
+.awning{display:block;height:30px;background:repeating-linear-gradient(90deg,var(--red) 0 28px,var(--card) 28px 56px);border-bottom:3px solid var(--ink)}
+.goods{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 12px 14px}
+.goods .ill{width:clamp(64px,13dvh,96px);height:auto}
+.tag{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--yellow);border:3px solid var(--ink);border-radius:8px 8px 8px 22px;padding:8px 12px;transform:rotate(-4deg)}
+.tag b{font:800 26px/1 var(--f-display)}
+.cdots{display:flex;flex-wrap:wrap;gap:3px;max-width:96px;justify-content:center}
+.cdots u{width:12px;height:12px;border-radius:50%;background:#C9CCD2;border:2px solid var(--ink)}
+.stall.sold .goods .ill{animation:pop .5s}
+.tray{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;min-height:clamp(64px,10dvh,84px);width:100%;padding:8px;border:3px dashed var(--ink);border-radius:14px;background:var(--c-s)}
+.tray .tc{padding:0;background:none;border:0}
+.tempty{color:var(--muted);font-weight:700;font-size:14px}
+.ttot{margin:0;font-weight:700}
+.ttot b{font:800 24px var(--f-display)}
+.wallet{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.wbtn{height:auto!important;padding:8px 10px!important;display:grid;place-items:center}
+.shop .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.purse{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:min(520px,100%);padding:10px 12px;background:var(--c-s);border:3px solid var(--ink);border-radius:16px}
+.moneyopts .qpic{height:auto!important;min-height:clamp(80px,13dvh,120px)}
+.yn .opt.word{display:flex;gap:8px;align-items:center;justify-content:center}
+.yn .yes svg{width:30px;height:30px}
+.yn .xx{font:900 36px/1 var(--f-display)}
+.kopts .opt.word{font-size:clamp(20px,5vw,26px)}
+/* rutin */
+.rtn{display:flex;flex-direction:column;align-items:center;gap:12px}
+.rseg{margin:0;display:grid;grid-template-columns:repeat(3,1fr);width:min(520px,100%)}
+.rseg button{justify-content:center}
+@media (max-width:520px){.rseg button{flex-direction:column;gap:2px;padding:6px 4px}}
+.card.rwide{min-height:120px}
+.card .artill.rarts{display:flex;gap:4px;align-items:center;justify-content:flex-end}
+.mcompact .card.rwide .art{width:240px;transform:scale(.75)}
+.rseg button{display:flex;align-items:center;gap:8px;padding:8px 14px}
+.rseg button small{font-size:12px;opacity:.75}
+.rseg svg.sky{border-radius:6px}
+.rbar{width:min(520px,100%);height:14px;border:3px solid var(--ink);border-radius:10px;background:var(--card);overflow:hidden}
+.rbar i{display:block;height:100%;background:var(--c);transition:width .4s}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,42vw),1fr));gap:12px;width:100%;max-width:820px}
+.rcard{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px 12px;height:auto!important;text-align:center}
+.rcard span{font:800 15px/1.15 var(--f-display)}
+.rcard .rchk{position:absolute;top:8px;right:8px;width:30px;height:30px;border:3px solid var(--ink);border-radius:50%;background:var(--card);display:grid;place-items:center}
+.rcard .rchk svg{width:18px;height:18px}
+.rcard.ok{background:var(--c-s)}
+.rcard.ok .rchk{background:var(--green);color:#fff}
+.rcard.ok .ill{opacity:.85}
+h3.wk{margin:6px 0 0;font:800 16px var(--f-display);text-transform:uppercase;letter-spacing:.08em}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;width:min(520px,100%)}
+.wd{display:flex;flex-direction:column;align-items:center;gap:4px}
+.wd b{font-size:12px;font-weight:800}
+.wd i{width:clamp(30px,9vw,42px);aspect-ratio:1;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font:800 13px var(--f-display);font-style:normal;background:conic-gradient(var(--dc) calc(var(--f)*360deg),var(--card) 0)}
+.wd i svg{width:16px;height:16px}
+.wd.now b{text-decoration:underline;text-underline-offset:3px}
+.wd.fut{opacity:.45}
+.rpick{display:flex;flex-wrap:wrap;gap:8px}
+.rp{display:flex;align-items:center;gap:6px;padding:6px 10px 6px 6px;border:2px solid var(--ink);border-radius:999px;background:var(--card);font-weight:700;font-size:14px}
+.rp.on{background:var(--ink);color:var(--card)}
+@media (orientation:landscape) and (min-width:720px){
+  .shop{flex-direction:row;justify-content:center;align-items:center;gap:28px}
+  .shopr{max-width:520px}
+  .quiz.atur{display:grid;grid-template-columns:auto minmax(220px,340px);column-gap:24px;align-items:center;justify-content:center}
+  .quiz.atur>.aturrow{grid-column:1;grid-row:1/span 6}
+  .quiz.atur>:not(.aturrow){grid-column:2}
+  .quiz.atur .clockbig .clock{width:clamp(180px,calc(100dvh - 220px),300px)}
+}
+@media (max-height:700px){.stall .awning{height:20px}.goods{padding:6px 10px 10px}.tag b{font-size:22px}.rcard{padding:10px 6px 8px}.rcard .ill{width:48px;height:48px}}
+
+[data-mod=jam] .quiz,[data-mod=toko] .quiz,[data-mod=toko] .shop,[data-mod=toko] .shopr{gap:12px}
+.clockbig .clock{width:clamp(150px,min(62vw,26dvh),260px)}
+.quiz.atur .clockbig .clock{width:clamp(160px,min(58vw,32dvh),280px)}
+@media (max-height:920px){[data-mod=jam] .hint,[data-mod=toko] .hint{display:none}}
+@media (orientation:landscape) and (max-height:560px){
+  [data-mod=toko] .ask,[data-mod=jam] .ask{font-size:21px}
+  .stall{width:min(230px,30vw)}
+  .stall .awning{height:16px}
+  .goods .ill{width:64px}
+  .tray{min-height:48px;padding:4px}
+  .tray .money.coin{width:30px;height:30px}
+  .tray .money.note{width:62px;height:31px}
+  .ttot b{font-size:18px}
+  .wbtn{padding:4px 6px!important}
+  .wbtn .money.coin{width:38px;height:38px}
+  .wbtn .money.note{width:72px;height:36px}
+  .purse{padding:6px}
+  .shop .say{height:48px}
+  .kopts.opts{grid-template-columns:repeat(4,1fr);max-width:100%}
+  .kopts .opt.word{height:56px;min-height:0;font-size:18px}
+  .timeopts .opt.word{min-height:0;height:auto!important;padding:4px}
+  .timeopts .opt.word small{display:none}
+  .quiz .clockbig .clock{width:clamp(140px,calc(100dvh - 150px),240px)}
+  .quiz>.clockbig,.quiz>.kegscene,.quiz>.train{grid-column:1;grid-row:1/span 3}
+}
+
+@media (orientation:landscape) and (max-height:560px){
+  .quiz.lv{grid-template-columns:auto minmax(0,1fr);column-gap:24px}
+  .quiz.lv>*{grid-column:2!important;grid-row:auto!important}
+  .quiz.lv>.lvv{grid-column:1!important;grid-row:1/span 6!important}
+  .quiz.lv>.train{max-width:46vw;flex-wrap:wrap;justify-content:center}
+  .quiz.lv .opts{max-width:100%}
+  .kegscene .ktk svg{width:90px}
+  .seqrow{gap:8px}.seqc{width:clamp(96px,22vw,140px);padding:8px 6px}.seqc .ill{width:52px;height:52px}
+}
+@media (orientation:portrait) and (max-height:780px){
+  .stall .awning{height:16px}
+  .goods{padding:4px 10px 8px}
+  .goods .ill{width:60px}
+  .tag b{font-size:21px}
+  .tray{min-height:52px;padding:4px}
+  .wallet{gap:6px;flex-wrap:nowrap}
+  .wbtn{padding:4px 6px!important}
+  .wbtn .money.coin{width:40px;height:40px}
+  .wbtn .money.note{width:68px;height:34px}
+  .shop .say{height:50px}
+  .clockbig .clock{width:clamp(140px,min(58vw,24dvh),240px)}
+  .quiz.atur .clockbig .clock{width:clamp(140px,min(54vw,28dvh),260px)}
+  .kegscene .ktk svg{width:72px}
+  .opts.skyopts .qpic{min-height:0!important;height:auto!important;padding:6px 4px}
+}
+
+.clockopts .qpic{min-height:0!important}
+@media (orientation:landscape) and (max-height:560px){.quiz.atur .clockbig .clock{width:clamp(140px,calc(100dvh - 150px),240px)}.kegside .ill{width:48px;height:48px}}
+@media (orientation:portrait) and (max-height:700px){.seg.hands button{padding:8px 12px;font-size:14px}.quiz.atur .clockbig .clock{width:clamp(140px,min(50vw,25dvh),240px)}.kegside .ill{width:44px;height:44px}}
+
+@media (orientation:portrait) and (max-height:700px){.timeopts .opt.word{min-height:56px;padding:4px}.timeopts .opt.word small{display:none}[data-mod=jam] .quiz>.say{height:48px}}
+
+@media (max-width:600px){.train .loco{display:none}.train{gap:3px;width:100%;overflow:visible}.car{flex:1 1 0;min-width:0;width:auto}.car b{font-size:clamp(9px,2.7vw,13px)}.car.q b{font-size:20px}.car i{width:10px;height:10px;bottom:-9px;border-width:2px}.car i:first-of-type{left:4px}.car i:last-of-type{right:4px}}
+.opts.days{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:min(440px,100%)}
+.opts.days.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opts.days .dayopt{max-width:none;width:100%;font-size:clamp(20px,6vw,28px);padding:0 8px}
+.yn.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-width:min(420px,100%)}
+.yn .opt.word{display:grid!important;grid-template-columns:auto auto;place-content:center;align-items:center;gap:10px;padding:0 8px;max-width:none;width:100%;font-size:clamp(20px,6vw,28px)}
+.ynic{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:900 20px/1 system-ui;font-style:normal;color:#fff;border:3px solid var(--ink)}
+.yes .ynic{background:var(--green)}.no .ynic{background:var(--red)}
 </style>
 
 <div id="app" data-mod="home">
@@ -1512,9 +1706,12 @@ const MODS={
   main:{title:"Main",tabs:[["tangkap","Tangkap"],["memori","Memori"],["jembatan","Jembatan"],["balon","Balon"],["simon","Tongki Bilang"],["umpet","Petak Umpet"]],groups:[["Cepat & Fokus",["tangkap","balon","umpet"]],["Ingat & Pikir",["memori","simon","jembatan"]]]},
   cerita:{title:"Cerita",tabs:[]},
   warna:{title:"Mewarnai",tabs:[]},
+  rutin:{title:"Rutinitas",tabs:[]},
+  jam:{title:"Jam & Hari",tabs:[["waktu","Pagi Siang Malam"],["hari","Nama Hari"],["baca","Baca Jam"],["atur","Atur Jam"]],groups:[["Waktu & Hari",["waktu","hari"]],["Jam",["baca","atur"]]]},
+  toko:{title:"Toko",tabs:[["kenal","Kenal Uang"],["bayar","Bayar Pas"],["cukup","Cukup?"],["kembali","Kembalian"]]},
   inggris:{title:"English",tabs:[["abc","ABC"],["vocab","Kosakata"],["dengar","Dengar & Pilih"],["warna","Colours"],["gerak","Ayo Bergerak"]],groups:[["Kosakata",["abc","vocab","warna"]],["Latihan",["dengar","gerak"]]]}
 };
-const tabOf={baca:"huruf",tulis:"garis",hitung:"kenal",inggris:"abc",main:"tangkap"};
+const tabOf={baca:"huruf",tulis:"garis",hitung:"kenal",inggris:"abc",main:"tangkap",jam:"waktu",toko:"kenal"};
 let acts={},inApp=false,padRO=null,lock=false;
 main.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b||!main.contains(b))return;const f=acts[b.dataset.a];if(f)f(b.dataset.v,b,e)});
 bar.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;
@@ -1560,8 +1757,10 @@ function renderMod(mod){
   Ktok++;Q.tok++;wrongN=0;stRead++;sayEvt=null;gTok++;
   buddyShow(!["kuis","cerita","warna"].includes(mod)&&!(mod==="inggris"&&tabOf.inggris==="gerak")&&!(mod==="main"&&tabOf.main==="jembatan"));
   if(mod==="kuis"){main.innerHTML=`<div id="panel"></div>`;acts={};kuisActs();kuisStart($("#panel"));return}
+  if(mod==="rutin"){main.innerHTML=`<div id="panel"></div>`;acts={};rtnSeg=rtnSegNow();rutinPage($("#panel"));const[a,b]=rtnCount();tkLook={expr:"senang",move:"wave"};say(a>=b&&b?"Wah, semua rutinitas hari ini sudah selesai. Hebat!":`Ayo cek rutinitas ${RSEG[rtnSeg].toLowerCase()}! Mana yang sudah kamu kerjakan?`);return}
   if(mod==="cerita"||mod==="warna"){main.innerHTML=`<div id="panel"></div>`;acts={};(mod==="cerita"?ceritaList:warnaList)($("#panel"));return}
-  const M=MODS[mod];let t=M.tabs.map(([k,l])=>[k,(mod==="hitung"&&k==="tambah"&&S().sub)?"Tambah & Kurang":(mod==="hitung"&&k==="pasangan")?"Pasangan "+S().bond:l]),grpH="";
+  if(mod==="toko"&&tabOf.toko==="kembali"&&(store.stage||1)<3)tabOf.toko="kenal";
+  const M=MODS[mod];let t=M.tabs.filter(([k])=>!(mod==="toko"&&k==="kembali"&&(store.stage||1)<3)).map(([k,l])=>[k,(mod==="hitung"&&k==="tambah"&&S().sub)?"Tambah & Kurang":(mod==="hitung"&&k==="pasangan")?"Pasangan "+S().bond:l]),grpH="";
   if(M.groups){const gi=Math.max(0,M.groups.findIndex(g=>g[1].includes(tabOf[mod])));
     grpH=`<div class="grps" role="group" aria-label="Kelompok">${M.groups.map((g,i)=>`<button data-a="grp" data-v="${i}" aria-pressed="${i===gi}">${g[0]}</button>`).join("")}</div>`;
     t=M.groups[gi][1].map(k=>t.find(x=>x[0]===k))}
@@ -1570,7 +1769,7 @@ function renderMod(mod){
   if(padRO){padRO.disconnect();padRO=null}
   const p=$("#panel");
   try{const at=main.querySelector('.tab[aria-selected="true"]');if(at)at.parentElement.scrollLeft=at.offsetLeft-at.parentElement.clientWidth/2+at.offsetWidth/2}catch(e){}
-  ({baca:{huruf:bacaHuruf,bunyi:bacaBunyi,suku:bacaSuku,rangkai:bacaRangkai,tebak:bacaTebak},tulis:{garis:tulisPad,besar:tulisPad,kecil:tulisPad,angka:tulisPad},main:{tangkap:gTangkap,memori:gMemori,jembatan:gJembatan,balon:gBalon,simon:gSimon,umpet:gUmpet},inggris:{abc:engAbc,vocab:engVocab,dengar:engDengar,warna:engWarna,gerak:engGerak},hitung:{kenal:hitungKenal,hitung:hitungAyo,pasangan:hitungPasangan,tambah:hitungTambah,bentuk:hitungBentuk,pola:hitungPola,ukuran:hitungUkuran,data:hitungData}})[mod][tabOf[mod]](p);
+  ({baca:{huruf:bacaHuruf,bunyi:bacaBunyi,suku:bacaSuku,rangkai:bacaRangkai,tebak:bacaTebak},tulis:{garis:tulisPad,besar:tulisPad,kecil:tulisPad,angka:tulisPad},main:{tangkap:gTangkap,memori:gMemori,jembatan:gJembatan,balon:gBalon,simon:gSimon,umpet:gUmpet},inggris:{abc:engAbc,vocab:engVocab,dengar:engDengar,warna:engWarna,gerak:engGerak},jam:{waktu:jamWaktu,hari:jamHari,baca:jamBaca,atur:jamAtur},toko:{kenal:tokoKenal,bayar:tokoBayar,cukup:tokoCukup,kembali:tokoKembali},hitung:{kenal:hitungKenal,hitung:hitungAyo,pasangan:hitungPasangan,tambah:hitungTambah,bentuk:hitungBentuk,pola:hitungPola,ukuran:hitungUkuran,data:hitungData}})[mod][tabOf[mod]](p);
 }
 
 /* ---------- beranda ---------- */
@@ -1603,6 +1802,12 @@ function renderHome(){
     ${card("g tkc","main",tkHeadSVG("tertawa",88),"Main","Main & Tantangan","6 game seru bareng Tongki")}
     ${card("c","cerita",`<span class="artill">${ill("buku",96)}</span>`,"Cerita","Cerita Tongki",`${STORIES.length} cerita bergambar`)}
     ${card("w","warna",`<span class="artill">${ICW.pal.replace(/width="34" height="34"/,'width="96" height="96"')}</span>`,"Kreasi","Mewarnai","Isi warna & gambar bebas")}
+  </div>
+  <h2 class="grp">Dunia Sehari-hari</h2>
+  <div class="menu mcompact">
+    ${card("j","jam",`<span class="artill">${clockSVG(new Date().getHours(),new Date().getMinutes(),96,{ring:"#1C1B22"})}</span>`,"Jam","Jam & Hari","Pagi-malam, nama hari, jam")}
+    ${card("o","toko",`<span class="artill coins">${moneySVG(500,1.5)}${moneySVG(1000,1.3)}</span>`,"Toko","Toko Tongki","Kenal uang & belanja")}
+    ${(()=>{const[a,b]=rtnCount();return card("r rwide","rutin",`<span class="artill rarts">${ill("sikat",64)}${ill("piring",64)}${ill("bulan",64)}</span>`,"Rutinitas","Rutinitasku",b?`${a} dari ${b} selesai hari ini`:"Atur kebiasaan harian")})()}
   </div>
   <h2 class="grp">Koleksiku</h2>
   <div class="koleksi">
@@ -1998,6 +2203,7 @@ function openPeta(){
     ["Matematika: Pola & Data","Pattern, Statistics and Probability",[["Pola",`Melanjutkan pola ${st.pat.join(", ")}`],["Data",young()?"Membaca piktogram: mana yang paling banyak":"Membaca piktogram: paling banyak, paling sedikit, selisih"]]],
     ["Bahasa Inggris dasar","English as a Second Language",[["ABC","Abjad A–Z dengan kata dan gambar: A is for apple"],["Kosakata",'Hewan, makanan, benda, alam, warna, dan angka 1–10'],["Dengar & Pilih","Mendengar kata bahasa Inggris lalu memilih gambarnya"],["Colours",store.stage>=3?"Menyebut dan membaca nama warna":"Mengenal nama warna lewat suara"],["Ayo Bergerak","Memahami perintah sederhana: Jump! Sit down. lewat gerakan Tongki"]]],
     ["Main & Tantangan","Fokus, daya ingat, dan urutan",[["Tangkap","Perhatian dan kecepatan mengenali huruf, angka, atau hasil penjumlahan"],["Memori","Daya ingat visual sambil mencocokkan huruf, angka, kata, atau kosakata Inggris"],["Jembatan","Campuran soal bertahap untuk membantu Tongki menyeberang"],["Balon","Urutan bilangan, hitung mundur, loncat dua-dua, dan abjad"],["Tongki Bilang","Daya ingat urutan (working memory) dengan warna dan bunyi"],["Petak Umpet","Fokus visual mengikuti benda yang berpindah"],["Tantangan Harian","3 tugas berganti tiap hari, dengan piala tanpa hukuman"]]],
+    ["Dunia sehari-hari","Measurement: time & money · Personal, Social and Emotional Development",[["Pagi Siang Malam","Mengenal waktu dalam sehari dan mengurutkan kegiatan"],["Nama Hari",store.stage>=3?"Tujuh hari dalam seminggu, kemarin, hari ini, dan besok":"Nama-nama hari dan urutannya lewat kereta hari"],["Baca & Atur Jam",store.stage>=4?"Membaca dan mengatur jam tepat dan setengah jam":"Membaca jam tepat (jarum pendek menunjuk jam)"],["Toko Tongki",store.stage>=3?"Mengenal nilai uang, membayar pas, cukup atau kurang, dan kembalian":"Mengenal uang, menghitung koin, dan membayar dengan uang pas"],["Rutinitasku","Kebiasaan mandiri harian: dicentang bersama orang tua"]]],
     ["Belajar lewat bermain","Play-based learning",[["Kuis Tongki",`${kplan().n} soal animasi: ${kplan().types.map(t=>KTYPES[t]).join(", ")}`]]]
   ];
   sheet(`<div class="plate peta-plate"><p class="kick2">Peta belajar</p><div class="peta-t">${st.code}</div><p class="peta-s">${st.name} · ${st.age}</p></div>
@@ -2580,7 +2786,7 @@ function openRecap(){
 }
 
 /* ---------- Laporan untuk orang tua ---------- */
-const TALK_TIPS={"baca:huruf":"Ajak anak mencari huruf awal namanya di bungkus makanan atau papan nama toko.","baca:bunyi":"Main tebak-tebakan: \"Benda apa di dapur yang dimulai bunyi /s/?\"","baca:suku":"Tepuk tangan tiap suku kata saat menyebut nama anggota keluarga: Ma-ma, Pa-pa.","baca:rangkai":"Pecah kata sehari-hari jadi suku kata saat makan: na-si, sa-yur.","baca:tebak":"Tulis satu huruf di kertas, minta anak mencari benda berawalan huruf itu.",
+const TALK_TIPS={"jam:waktu":"Saat makan, tanya: tadi pagi kita ngapain? nanti malam mau ngapain?","jam:hari":"Nyanyikan nama hari saat bangun tidur, lalu tanya: besok hari apa?","jam:baca":"Tunjukkan jam dinding saat waktu makan: jarum pendek di angka berapa?","jam:atur":"Pakai jam mainan dari piring kertas, minta anak mengatur jam tidur malam.","toko:kenal":"Ajak anak memilah koin di rumah berdasarkan angkanya.","toko:bayar":"Biarkan anak membayar sendiri jajanan kecil di warung dengan uang pas.","toko:cukup":"Main toko-tokoan: beri anak beberapa koin dan tanya apakah cukup untuk membeli.","toko:kembali":"Saat belanja, hitung kembalian bersama anak sebelum kasir memberikannya.","rutin:":"Pujilah usahanya, bukan hasilnya: \"Kamu sudah berusaha sikat gigi sendiri, keren!\"","baca:huruf":"Ajak anak mencari huruf awal namanya di bungkus makanan atau papan nama toko.","baca:bunyi":"Main tebak-tebakan: \"Benda apa di dapur yang dimulai bunyi /s/?\"","baca:suku":"Tepuk tangan tiap suku kata saat menyebut nama anggota keluarga: Ma-ma, Pa-pa.","baca:rangkai":"Pecah kata sehari-hari jadi suku kata saat makan: na-si, sa-yur.","baca:tebak":"Tulis satu huruf di kertas, minta anak mencari benda berawalan huruf itu.",
   "tulis:garis":"Ajak menggambar garis zig-zag dan lingkaran di pasir atau dengan krayon besar.","tulis:kecil":"Biarkan anak menulis huruf di udara dengan jari besar-besar.","tulis:besar":"Tempel huruf besar nama anak di pintu kamarnya.","tulis:angka":"Minta anak menulis nomor rumah atau tanggal hari ini.",
   "hitung:kenal":"Hitung anak tangga bersama setiap naik tangga.","hitung:hitung":"Minta anak menghitung sendok saat menata meja makan.","hitung:pasangan":"Pakai 10 kancing: \"Ada 7 di tangan, berapa lagi supaya 10?\"","hitung:tambah":"Tambah-kurang buah di piring saat makan buah bersama.","hitung:bentuk":"Cari bentuk lingkaran, segitiga, dan persegi di dalam rumah.","hitung:pola":"Susun pola dengan sendok-garpu atau kaus kaki berwarna.","hitung:ukuran":"Bandingkan panjang sepatu ayah, ibu, dan anak.","hitung:data":"Hitung mainan per jenis lalu tanyakan mana yang paling banyak.",
   "kuis:":"Minta anak menirukan gerakan Tongki: lompat, tepuk, jongkok, sambil menghitung.","inggris:abc":"Nyanyikan lagu ABC bersama sebelum tidur.","inggris:vocab":"Sebut nama benda di rumah dalam Bahasa Inggris: table, cup, door.","inggris:dengar":"Main \"Where is the…?\" dengan mainan di rumah.","inggris:warna":"Tanya warna baju hari ini dalam Bahasa Inggris.","inggris:gerak":"Main perintah: Jump! Sit down! Clap your hands!",
@@ -2757,7 +2963,7 @@ const DPOOL=[
   {k:"g:tangkap",l:"Selesaikan game Tangkap"},{k:"g:memori",l:"Temukan semua pasangan di Memori"},{k:"g:jembatan",l:"Bantu Tongki menyeberang jembatan"},
   {k:"g:balon",l:"Pecahkan balon berurutan"},{k:"g:simon",l:"Ikuti urutan Tongki Bilang"},{k:"g:umpet",l:"Temukan Tongki di Petak Umpet"},
   {k:"g:cerita",l:"Baca satu cerita bersama Tongki"},{k:"g:warna",l:"Warnai satu gambar"},{k:"m:baca",n:5,l:"Jawab 5 soal Membaca"},{k:"m:hitung",n:5,l:"Jawab 5 soal Berhitung"},{k:"m:tulis",n:3,l:"Tebalkan 3 huruf atau angka"},
-  {k:"m:inggris",n:4,l:"Jawab 4 soal English"},{k:"m:kuis",n:3,l:"Jawab 3 soal Kuis Tongki"}];
+  {k:"m:inggris",n:4,l:"Jawab 4 soal English"},{k:"m:jam",n:4,l:"Jawab 4 soal Jam & Hari"},{k:"m:toko",n:3,l:"Belanja 3 kali di Toko Tongki"},{k:"m:rutin",n:3,l:"Centang 3 rutinitas hari ini"},{k:"m:kuis",n:3,l:"Jawab 3 soal Kuis Tongki"}];
 function dailyTasks(){
   const d=today();let h=7;for(const c of d)h=(h*31+c.charCodeAt(0))>>>0;
   const gs=DPOOL.filter(x=>x.k[0]==="g"),ms=DPOOL.filter(x=>x.k[0]==="m"),a=gs[h%gs.length],b=ms[(h>>>4)%ms.length];
@@ -3069,6 +3275,330 @@ function warnaCanvas(p,art){
   say(tool==="fill"?`Ayo warnai ${art.n}! Pilih warna, lalu ketuk bagian gambarnya.`:"Ayo menggambar bebas! Pilih warna, lalu gerakkan jarimu.");
 }
 
+/* ================= DUNIA SEHARI-HARI: Jam & Hari · Toko Tongki · Rutinitas ================= */
+
+/* --- angka ke kata (Indonesia), dipakai untuk rupiah dan jam --- */
+const SAT=["nol","satu","dua","tiga","empat","lima","enam","tujuh","delapan","sembilan","sepuluh","sebelas"];
+function kata(n){n=Math.floor(n);
+  if(n<12)return SAT[n];if(n<20)return SAT[n-10]+" belas";
+  if(n<100){const r=n%10;return SAT[Math.floor(n/10)]+" puluh"+(r?" "+SAT[r]:"")}
+  if(n<200){const r=n-100;return "seratus"+(r?" "+kata(r):"")}
+  if(n<1000){const r=n%100;return SAT[Math.floor(n/100)]+" ratus"+(r?" "+kata(r):"")}
+  if(n<2000){const r=n-1000;return "seribu"+(r?" "+kata(r):"")}
+  if(n<1e6){const r=n%1000;return kata(Math.floor(n/1000))+" ribu"+(r?" "+kata(r):"")}
+  return String(n)}
+const rpT=n=>"Rp"+n.toLocaleString("id-ID");
+const rpS=n=>kata(n)+" rupiah";
+
+/* --- ilustrasi tambahan (gaya potongan kertas yang sama, kotak 100x100) --- */
+(()=>{const{R,O,Y,G,B,K,P,Pk}=C,L="#BFE6F7";
+Object.assign(ICON,{
+sikat:`<rect x="14" y="58" width="58" height="12" rx="6" fill="${B}" transform="rotate(-30 43 64)"/><g transform="rotate(-30 43 64)"><rect x="64" y="46" width="22" height="12" rx="3" fill="${P}"/><path d="M66 46v-8M71 46v-8M76 46v-8M81 46v-8" stroke="${P}" stroke-width="4" stroke-linecap="round"/></g><path d="M70 22c4-7 12-7 14 0-3 6-10 7-14 0z" fill="${L}"/><circle cx="62" cy="16" r="5" fill="${L}"/>`,
+mandi:`<path d="M10 52h80v8c0 16-12 26-28 26H38C22 86 10 76 10 60z" fill="${B}"/><path d="M22 86l-4 8M78 86l4 8" stroke="${K}" stroke-width="5" stroke-linecap="round"/><circle cx="30" cy="44" r="10" fill="${P}"/><circle cx="46" cy="40" r="12" fill="${P}"/><circle cx="64" cy="44" r="10" fill="${P}"/><circle cx="76" cy="24" r="6" fill="${L}"/><circle cx="62" cy="16" r="4" fill="${L}"/><path d="M14 52V26a10 10 0 0 1 20 0" stroke="${K}" stroke-width="5" fill="none" stroke-linecap="round"/>`,
+kasur:`<rect x="10" y="50" width="80" height="26" rx="5" fill="${B}"/><rect x="10" y="30" width="10" height="56" rx="3" fill="${O}"/><rect x="80" y="44" width="10" height="42" rx="3" fill="${O}"/><rect x="24" y="38" width="24" height="14" rx="6" fill="${P}"/><path d="M48 50h32v-4c0-4-3-6-7-6H48z" fill="${Y}"/>`,
+piring:`<ellipse cx="50" cy="60" rx="40" ry="22" fill="${P}"/><ellipse cx="50" cy="58" rx="28" ry="14" fill="${Y}"/><circle cx="40" cy="54" r="6" fill="${G}"/><circle cx="58" cy="56" r="7" fill="${R}"/><path d="M14 20v24M8 20v12a6 6 0 0 0 12 0V20M86 20c-6 4-6 16 0 20v12" stroke="${K}" stroke-width="4" fill="none" stroke-linecap="round"/>`,
+tas:`<path d="M34 26a16 16 0 0 1 32 0" stroke="${K}" stroke-width="6" fill="none"/><rect x="20" y="26" width="60" height="64" rx="14" fill="${R}"/><rect x="30" y="54" width="40" height="26" rx="6" fill="${Y}"/><path d="M30 64h40" stroke="${O}" stroke-width="3"/><rect x="44" y="34" width="12" height="10" rx="3" fill="${P}"/>`,
+tangan:`<path d="M30 92V52c0-5 8-5 8 0V30c0-5 8-5 8 0v-6c0-5 8-5 8 0v6c0-5 8-5 8 0v22c4-6 12-3 9 4l-9 22c-3 8-8 14-14 14z" fill="${O}"/><circle cx="20" cy="34" r="7" fill="${L}"/><circle cx="80" cy="24" r="6" fill="${L}"/><circle cx="84" cy="44" r="4" fill="${L}"/><circle cx="16" cy="58" r="5" fill="${L}"/>`,
+gelas:`<path d="M28 14h44l-6 76H34z" fill="${L}"/><path d="M31 40h38l-4 50H35z" fill="${B}"/><path d="M28 14h44" stroke="${K}" stroke-width="4" stroke-linecap="round"/><ellipse cx="42" cy="56" rx="3" ry="8" fill="${P}" opacity=".6"/>`,
+bantal:`<path d="M12 40c0-10 6-14 14-12 16 4 32 4 48 0 8-2 14 2 14 12v20c0 10-6 14-14 12-16-4-32-4-48 0-8 2-14-2-14-12z" fill="${Pk}"/><path d="M62 24l4-8h-8l4-8" stroke="${B}" stroke-width="4" fill="none" stroke-linejoin="round"/><path d="M78 14l3-5h-6l3-5" stroke="${B}" stroke-width="3" fill="none"/>`,
+kotak:`<rect x="16" y="46" width="68" height="44" rx="4" fill="${O}"/><rect x="12" y="40" width="76" height="12" rx="3" fill="${R}"/><circle cx="34" cy="30" r="12" fill="${B}"/><rect x="52" y="20" width="20" height="22" rx="3" fill="${G}"/><path d="M58 26h8M58 34h8" stroke="${P}" stroke-width="3"/>`,
+siram:`<path d="M24 46h40v34a6 6 0 0 1-6 6H30a6 6 0 0 1-6-6z" fill="${G}"/><path d="M64 54l22-16" stroke="${G}" stroke-width="8" stroke-linecap="round"/><path d="M30 46a14 14 0 0 1 28 0" stroke="${K}" stroke-width="5" fill="none"/><path d="M88 46v6M80 50v8M94 54v6" stroke="${B}" stroke-width="3" stroke-linecap="round"/><path d="M14 90c0-10 4-16 10-18" stroke="${G}" stroke-width="4" fill="none"/>`,
+doa:`<path d="M48 18c-4 0-6 4-6 8v34l-14 14 8 10 16-16V26c0-4-2-8-4-8z" fill="${O}"/><path d="M52 18c4 0 6 4 6 8v34l14 14-8 10-16-16V26c0-4 2-8 4-8z" fill="${Y}"/><path d="M30 14l4 4M70 14l-4 4M50 6v6" stroke="${O}" stroke-width="4" stroke-linecap="round"/>`,
+sepatu:`<path d="M10 66V40h22c2 10 10 14 22 16l28 6c6 1 8 6 8 12v6H10z" fill="${R}"/><rect x="10" y="74" width="80" height="10" rx="3" fill="${K}"/><path d="M34 46l6-4M40 52l6-4" stroke="${P}" stroke-width="3" stroke-linecap="round"/>`,
+toko:`<rect x="14" y="40" width="72" height="50" fill="${P}"/><path d="M8 40l8-24h68l8 24z" fill="${R}"/><path d="M26 16l-4 24M42 16l-2 24M58 16l2 24M74 16l4 24" stroke="${P}" stroke-width="5"/><rect x="24" y="54" width="22" height="36" fill="${B}"/><rect x="54" y="54" width="24" height="18" fill="${Y}"/>`,
+jam:`<circle cx="50" cy="52" r="38" fill="${P}"/><circle cx="50" cy="52" r="38" fill="none" stroke="${B}" stroke-width="8"/><path d="M50 52V28M50 52l14 8" stroke="${K}" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="52" r="5" fill="${R}"/><path d="M26 12l-10 10M74 12l10 10" stroke="${R}" stroke-width="8" stroke-linecap="round"/>`
+})})();
+
+/* ======================= JAM & HARI ======================= */
+const DAYS=["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"];
+const DAYC=["#E5412D","#F58A1F","#FFC21A","#10A260","#2F5BD3","#6C4AB6","#F49AB9"];
+const todayIdx=()=>(new Date().getDay()+6)%7;
+const PERIODS={pagi:{l:"Pagi",sky:"#BFE6F7",sun:[30,58],c:"#FFC21A"},siang:{l:"Siang",sky:"#6FC3EE",sun:[50,26],c:"#FFC21A"},sore:{l:"Sore",sky:"#F7B26A",sun:[70,62],c:"#E5412D"},malam:{l:"Malam",sky:"#1F2A55",moon:true}};
+function skySVG(k,s=72){const p=PERIODS[k];
+  return `<svg class="sky" viewBox="0 0 100 80" width="${s}" height="${s*.8}" aria-hidden="true"><rect width="100" height="80" rx="10" fill="${p.sky}"/>
+  ${p.moon?`<circle cx="66" cy="28" r="15" fill="#FFC21A"/><circle cx="73" cy="23" r="13" fill="${p.sky}"/><path d="M22 18l2 5 5 2-5 2-2 5-2-5-5-2 5-2zM40 40l1.5 3.5 3.5 1.5-3.5 1.5L40 50l-1.5-3.5-3.5-1.5 3.5-1.5z" fill="#FFFDF6"/>`
+    :`<circle cx="${p.sun[0]}" cy="${p.sun[1]}" r="13" fill="${p.c}"/>`}
+  <path d="M0 64c18-8 34-8 52 0s32 8 48 0v16H0z" fill="${k==="malam"?"#0E1636":"#10A260"}"/></svg>`}
+/* kegiatan Tongki + waktunya (jam: angka 0-23, ½ = setengah) */
+const KEG=[
+  {l:"bangun tidur",p:"pagi",i:"kasur",h:6},{l:"sarapan",p:"pagi",i:"roti",h:7},{l:"mandi pagi",p:"pagi",i:"mandi",h:6.5},{l:"berangkat sekolah",p:"pagi",i:"tas",h:7.5},
+  {l:"makan siang",p:"siang",i:"piring",h:12},{l:"tidur siang",p:"siang",i:"bantal",h:13},{l:"minum es jus",p:"siang",i:"jus",h:11},
+  {l:"main layangan",p:"sore",i:"layang",h:16},{l:"menyiram tanaman",p:"sore",i:"siram",h:16.5},{l:"mandi sore",p:"sore",i:"mandi",h:17},
+  {l:"makan malam",p:"malam",i:"piring",h:19},{l:"membaca buku cerita",p:"malam",i:"buku",h:19.5},{l:"tidur malam",p:"malam",i:"bulan",h:20},{l:"melihat bintang",p:"malam",i:"bintang",h:20.5}
+];
+const h12=h=>{const x=Math.floor(h)%12;return x===0?12:x};
+const jamSay=(h,half)=>half?`setengah ${kata(h12(h+1))}`:`jam ${kata(h12(h))}`;
+const jamTxt=(h,half)=>`${h12(h)}.${half?"30":"00"}`;
+/* jam analog; mm: menit 0-59 */
+function clockSVG(hh,mm,s=220,o={}){
+  const ha=((hh%12)+mm/60)*30,ma=mm*6,nums=Array.from({length:12},(_,i)=>{const n=i+1,a=n*Math.PI/6;return `<text x="${(50+Math.sin(a)*36).toFixed(1)}" y="${(50-Math.cos(a)*36+4.4).toFixed(1)}" text-anchor="middle" font-size="${n%3===0?13:11}" font-weight="800" fill="${n%3===0?C.K:"#5B5866"}" font-family="var(--f-display),system-ui">${n}</text>`}).join("");
+  const ticks=Array.from({length:60},(_,i)=>{const a=i*Math.PI/30,r1=i%5?44:42.5;return `<path d="M${(50+Math.sin(a)*r1).toFixed(2)} ${(50-Math.cos(a)*r1).toFixed(2)}L${(50+Math.sin(a)*46).toFixed(2)} ${(50-Math.cos(a)*46).toFixed(2)}" stroke="${C.K}" stroke-width="${i%5?.6:1.4}"/>`}).join("");
+  return `<svg class="clock${o.cls?" "+o.cls:""}" viewBox="0 0 100 100" width="${s}" height="${s}" ${o.id?`id="${o.id}"`:""} aria-hidden="true">
+    <circle cx="50" cy="50" r="48" fill="${o.ring||C.B}"/><circle cx="50" cy="50" r="45" fill="${C.P}"/>${ticks}${nums}
+    <g class="hh" style="transform:rotate(${ha}deg)"><path d="M50 54V27" stroke="${C.K}" stroke-width="5.5" stroke-linecap="round"/></g>
+    ${o.noMin?"":`<g class="mh" style="transform:rotate(${ma}deg)"><path d="M50 56V12" stroke="${C.R}" stroke-width="3.2" stroke-linecap="round"/></g>`}
+    <circle cx="50" cy="50" r="4" fill="${C.Y}" stroke="${C.K}" stroke-width="1.5"/></svg>`}
+const trainHTML=(hide,mark)=>`<div class="train lvv" role="img" aria-label="Kereta hari"><span class="loco">${tkHeadSVG("senang",40)}</span>${DAYS.map((d,i)=>`<button class="car${i===hide?" q":""}${i===mark?" mk":""}" data-a="car" data-v="${i}" style="--dc:${DAYC[i]}"><b>${i===hide?"?":d}</b><i></i><i></i></button>`).join("")}</div>`;
+
+function jamWaktu(p){
+  const st=store.stage||1,per=st>=3?["pagi","siang","sore","malam"]:["pagi","siang","malam"];
+  const pool=KEG.filter(k=>per.includes(k.p));
+  if(st>=2&&Math.random()<.4){/* urutkan kegiatan */
+    const ps=st>=3?shuffle(per).slice(0,st>=4?4:3).sort((a,b)=>per.indexOf(a)-per.indexOf(b)):per.slice(0,3);
+    const seq=ps.map(x=>pick(KEG.filter(k=>k.p===x)));let k=0;lock=false;
+    const cards=shuffle(seq.map((s,i)=>({...s,o:i})));
+    p.innerHTML=`<div class="quiz"><p class="ask">Urutkan kegiatan Tongki dari pagi sampai malam</p>
+      <div class="seqrow">${cards.map(c=>`<button class="seqc btn" data-a="seq" data-v="${c.o}">${ill(c.i,72)}<small>${c.l}</small><em></em></button>`).join("")}</div>
+      <p class="hint">Ketuk satu per satu: mana yang paling dulu?</p>
+      <button class="ghost" data-a="skip">Ganti soal</button></div>`;
+    say("Urutkan kegiatan Tongki. Mana yang dilakukan paling dulu?");
+    acts.skip=()=>jamWaktu(p);
+    acts.seq=(v,el)=>{if(lock||el.classList.contains("done"))return;
+      if(+v===k){el.classList.add("done");el.querySelector("em").textContent=k+1;tone([520+k*90],.08);say(seq[k].l);k++;
+        if(k===seq.length){lock=true;win(el);setTimeout(()=>{if(el.isConnected&&curMod()==="jam"&&tabOf.jam==="waktu")jamWaktu(p)},2200)}}
+      else{el.classList.add("shake");setTimeout(()=>el.classList.remove("shake"),450);lose(`Hmm, ${seq[+v].l} itu waktu ${PERIODS[seq[+v].p].l.toLowerCase()}. Cari yang lebih dulu ya`)}};
+    return}
+  const q=pick(pool),opts=st===1?shuffle(["pagi","malam"].includes(q.p)?["pagi","malam"]:["siang","malam"]):shuffle([...per]);lock=false;
+  p.innerHTML=`<div class="quiz lv"><div class="kegscene lvv">${ill(q.i,96)}<span class="ktk">${tkFigure("senang",{armR:-130})}</span></div>
+    <p class="ask">Kapan Tongki ${q.l}?</p>
+    <div class="opts skyopts n${opts.length}" style="--n:${opts.length}">${opts.map(o=>`<button class="opt btn qpic" data-a="pick" data-v="${o}">${skySVG(o,76)}<small>${PERIODS[o].l}</small></button>`).join("")}</div>
+    <button class="ghost" data-a="skip">Ganti soal</button></div>`;
+  const ask=`Kapan Tongki ${q.l}? Pagi, siang${per.includes("sore")?", sore":""}, atau malam?`;say(ask);acts.skip=()=>jamWaktu(p);
+  setPick(q.p,()=>jamWaktu(p),v=>`Hmm, kalau ${PERIODS[v].l.toLowerCase()} biasanya hari ${v==="malam"?"gelap":"terang"}. Coba lagi ya`,()=>setTimeout(()=>say(`Betul! Tongki ${q.l} waktu ${PERIODS[q.p].l.toLowerCase()}.`),900));
+}
+
+function jamHari(p){
+  const st=store.stage||1,ti=todayIdx();let type=pick(st===1?["ini","sesudah","sesudah"]:st===2?["ini","sesudah","sebelum"]:st===3?["sesudah","sebelum","besok","kemarin","jumlah"]:["sesudah","sebelum","besok","kemarin","lusa","libur"]);
+  let ans,ask,hide=-1,mark=-1,x=rand(0,6);
+  if(type==="ini"){ans=DAYS[ti];hide=ti;ask="Hari ini hari apa?"}
+  else if(type==="sesudah"){ans=DAYS[(x+1)%7];hide=(x+1)%7;mark=x;ask=`Sesudah hari ${DAYS[x]}, hari apa?`}
+  else if(type==="sebelum"){x=rand(1,6);ans=DAYS[x-1];hide=x-1;mark=x;ask=`Sebelum hari ${DAYS[x]}, hari apa?`}
+  else if(type==="besok"){ans=DAYS[(ti+1)%7];mark=ti;hide=(ti+1)%7;ask=`Hari ini hari ${DAYS[ti]}. Besok hari apa?`}
+  else if(type==="kemarin"){ans=DAYS[(ti+6)%7];mark=ti;hide=(ti+6)%7;ask=`Hari ini hari ${DAYS[ti]}. Kemarin hari apa?`}
+  else if(type==="lusa"){ans=DAYS[(x+2)%7];mark=x;hide=(x+2)%7;ask=`Dua hari sesudah hari ${DAYS[x]}, hari apa?`}
+  else if(type==="libur"){ans="Minggu";hide=6;ask="Hari libur yang warnanya merah di kalender, hari apa?"}
+  if(type==="jumlah"){ans=7;ask="Ada berapa hari dalam satu minggu?"}
+  const n=st===1?2:st===2?3:4;
+  const opts=type==="jumlah"?shuffle([7,5,6,8].slice(0,n)):shuffle([ans,...shuffle(DAYS.filter(d=>d!==ans&&!(mark>=0&&d===DAYS[mark]))).slice(0,n-1)]);lock=false;
+  p.innerHTML=`<div class="quiz lv">${trainHTML(type==="jumlah"?-1:hide,mark)}
+    <p class="ask">${ask}</p>
+    <button class="say btn fill" data-a="again">${IC.spk(24)} Dengar soal</button>
+    ${type==="jumlah"?numOpts(opts):`<div class="opts days n${n}" style="--n:${n}">${opts.map(o=>`<button class="opt btn word dayopt" data-a="pick" data-v="${o}" style="--dc:${DAYC[DAYS.indexOf(o)]}">${o}</button>`).join("")}</div>`}
+    <p class="hint">Ketuk gerbong kereta untuk mendengar nama hari.</p>
+    <button class="ghost" data-a="skip">Ganti soal</button></div>`;
+  say(ask);acts.again=()=>say(ask);acts.skip=()=>jamHari(p);
+  acts.car=v=>{const i=+v;if(i===hide&&type!=="jumlah")return say("Ini yang kita cari!");tone([400+i*60],.08);say(DAYS[i])};
+  setPick(ans,()=>jamHari(p),v=>type==="jumlah"?"Coba hitung gerbong keretanya":`Itu hari ${v}. Lihat keretanya ya`,()=>{const c=p.querySelector(".car.q");if(c){c.classList.remove("q");c.querySelector("b").textContent=type==="jumlah"?c.querySelector("b").textContent:ans}
+    if(type==="jumlah")setTimeout(()=>say("Betul! Senin, Selasa, Rabu, Kamis, Jumat, Sabtu, Minggu. Tujuh hari!"),900)});
+}
+
+function jamTarget(){const st=store.stage||1;
+  const half=st>=4&&Math.random()<.5,h=rand(1,12);return{h,half}}
+function jamBaca(p){
+  const st=store.stage||1,{h,half}=jamTarget(),n=st===1?2:st===2?3:4;
+  const keg=Math.random()<.5?pick(KEG.filter(k=>(k.h%1===.5)===half)):null,tgt=keg?{h:h12(Math.floor(keg.h)),half:keg.h%1===.5}:{h,half};
+  const pool=new Set([tgt.h+(tgt.half?.5:0)]);let g=0;while(pool.size<n&&g++<99){const d=rand(1,12)+(st>=4&&Math.random()<.5?.5:0);pool.add(d)}
+  const opts=shuffle([...pool]).map(v=>({h:Math.floor(v),half:v%1===.5})),key=o=>o.h+(o.half?"h":"");
+  const picMode=st<=2||Math.random()<.35;lock=false;
+  const ask=keg?`Tongki ${keg.l} ${jamSay(tgt.h,tgt.half)}. ${picMode?"Mana jamnya?":"Jam berapa ini?"}`:picMode?`Mana ${jamSay(tgt.h,tgt.half)}?`:"Jam berapa ini?";
+  p.innerHTML=`<div class="quiz${picMode?"":" lv"}">${picMode?"":`<div class="clockbig lvv">${clockSVG(tgt.h,tgt.half?30:0,220)}${keg?`<span class="kegtag">${ill(keg.i,52)}</span>`:""}</div>`}
+    ${picMode&&keg?`<div class="kegscene sm">${ill(keg.i,72)}</div>`:""}
+    <p class="ask">${picMode?(keg?`Tongki ${keg.l} <mark>${jamTxt(tgt.h,tgt.half)}</mark>. Mana jamnya?`:`Mana jam <mark>${jamTxt(tgt.h,tgt.half)}</mark>?`):"Jam berapa ini?"}</p>
+    <button class="say btn fill" data-a="again">${IC.spk(24)} Dengar soal</button>
+    ${picMode?`<div class="opts clockopts n${n}" style="--n:${n}">${opts.map(o=>`<button class="opt btn qpic" data-a="pick" data-v="${key(o)}" aria-label="Jam">${clockSVG(o.h,o.half?30:0,96,{ring:C.Y})}</button>`).join("")}</div>`
+      :`<div class="opts n${n} timeopts" style="--n:${n}">${opts.map(o=>`<button class="opt btn word" data-a="pick" data-v="${key(o)}"><b>${jamTxt(o.h,o.half)}</b><small>${jamSay(o.h,o.half)}</small></button>`).join("")}</div>`}
+    <p class="hint">${st>=4?"Jarum pendek menunjuk jam. Jarum panjang di angka 6 berarti setengah.":"Jarum pendek menunjuk jam. Jarum panjang di angka 12."}</p>
+    <button class="ghost" data-a="skip">Ganti soal</button></div>`;
+  say(ask);acts.again=()=>say(ask);acts.skip=()=>jamBaca(p);
+  setPick(key(tgt),()=>jamBaca(p),v=>{const o={h:parseInt(v),half:/h/.test(v)};return `Itu ${jamSay(o.h,o.half)}. Lihat jarum pendeknya ya`},()=>setTimeout(()=>say(`Betul, ${jamSay(tgt.h,tgt.half)}!`),900));
+}
+
+function jamAtur(p){
+  const st=store.stage||1,keg=pick(KEG.filter(k=>st>=4||k.h%1===0)),tgt={h:h12(Math.floor(keg.h)),half:keg.h%1===.5};
+  let H=rand(1,12),M=0;while(H===tgt.h)H=rand(1,12);let hand="h";lock=false;
+  p.innerHTML=`<div class="quiz atur lv"><p class="ask">Tongki ${keg.l} <mark>${jamTxt(tgt.h,tgt.half)}</mark>. Atur jamnya!</p>
+    <div class="aturrow lvv"><span class="kegside">${ill(keg.i,64)}</span><div class="clockbig drag" id="cwrap">${clockSVG(H,M,240,{id:"dclock"})}</div></div>
+    ${st>=4?`<div class="seg hands" role="group" aria-label="Pilih jarum"><button data-a="hand" data-v="h" aria-pressed="true">Jarum pendek</button><button data-a="hand" data-v="m" aria-pressed="false">Jarum panjang</button></div>`:""}
+    <div class="row turn"><button class="ibtn btn" data-a="turn" data-v="-1" aria-label="Putar mundur">${IC.back}</button><button class="say btn fill" data-a="cek">Sudah!</button><button class="ibtn btn flip" data-a="turn" data-v="1" aria-label="Putar maju">${IC.back}</button></div>
+    <p class="hint">Geser atau ketuk jamnya untuk memutar ${st>=4?"jarum yang dipilih":"jarum pendek"}.</p>
+    <button class="ghost" data-a="skip">Ganti soal</button></div>`;
+  const ask=`Tongki ${keg.l} ${jamSay(tgt.h,tgt.half)}. Ayo putar jarum ${st>=4?"jam":"pendek"} sampai ${jamSay(tgt.h,tgt.half)}!`;say(ask);
+  const svg=$("#dclock"),draw=()=>{svg.querySelector(".hh").style.transform=`rotate(${((H%12)+M/60)*30}deg)`;const mh=svg.querySelector(".mh");if(mh)mh.style.transform=`rotate(${M*6}deg)`};
+  const setFrom=e=>{const b=svg.getBoundingClientRect(),dx=e.clientX-(b.left+b.width/2),dy=e.clientY-(b.top+b.height/2);let a=Math.atan2(dx,-dy)*180/Math.PI;if(a<0)a+=360;
+    if(hand==="m"){const nm=(Math.round(a/30)*5)%60;if(nm!==M){if(M>=45&&nm<15)H=H%12+1;else if(M<15&&nm>=45)H=(H+10)%12+1;M=nm;tone([700],.03)}}
+    else{const nh=Math.round(((a/30)-M/60+12)%12)||12;if(nh!==H){H=nh;tone([500+H*20],.04)}}draw()};
+  let down=false;
+  svg.addEventListener("pointerdown",e=>{if(lock)return;e.preventDefault();down=true;try{svg.setPointerCapture(e.pointerId)}catch(_){}setFrom(e)});
+  svg.addEventListener("pointermove",e=>{if(down&&!lock)setFrom(e)});
+  ["pointerup","pointercancel"].forEach(t=>svg.addEventListener(t,()=>{down=false}));
+  acts.hand=(v,el)=>{hand=v;p.querySelectorAll(".hands button").forEach(b=>b.setAttribute("aria-pressed",b===el));say(v==="h"?"Jarum pendek untuk jam":"Jarum panjang untuk menit")};
+  acts.turn=v=>{if(lock)return;if(hand==="m"){M+=+v*5;if(M>=60){M-=60;H=H%12+1}if(M<0){M+=60;H=(H+10)%12+1}}else H=((H-1+(+v)+12)%12)+1;tone([520],.04);draw()};
+  acts.skip=()=>jamAtur(p);acts.again=()=>say(ask);
+  acts.cek=()=>{if(lock)return;const okH=H===(tgt.half?tgt.h:tgt.h)&&M===(tgt.half?30:0);
+    if(okH){lock=true;const w=$("#cwrap");w.classList.add("ok");win(w);setTimeout(()=>say(`Tepat sekali, ${jamSay(tgt.h,tgt.half)}!`),900);setTimeout(()=>{if(svg.isConnected&&curMod()==="jam"&&tabOf.jam==="atur")jamAtur(p)},2600)}
+    else{wrongN++;const msg=tgt.half&&M!==30?"Jarum panjang harus di angka enam untuk setengah":H!==tgt.h?(tgt.half?`Jarum pendek di antara ${kata(tgt.h)} dan ${kata(h12(tgt.h+1))} ya`:`Jarum pendek harus menunjuk angka ${kata(tgt.h)}`):"Jarum panjang harus di angka dua belas";
+      tone([330,247],.16,"sine",.13,.18);tkLook={expr:"bingung",move:"shrug",after:"senang"};
+      if(wrongN>=3){H=tgt.h;M=tgt.half?30:0;draw();say("Tongki bantu ya. Begini jamnya. Tekan Sudah!")}else say(msg)}};
+}
+/* catatan: untuk setengah jam, H tetap jam sebelumnya (setengah empat = H 3, M 30) */
+
+/* ======================= TOKO TONGKI ======================= */
+const MONEY={100:{t:"coin",c:"#C9CCD2",r:13},200:{t:"coin",c:"#B4B8C0",r:15},500:{t:"coin",c:"#E7B53C",r:16},1000:{t:"coin",c:"#D8A52F",r:18,ring:"#C9CCD2"},
+  2000:{t:"note",c:"#8FA6C9"},5000:{t:"note",c:"#B98A5B"},10000:{t:"note",c:"#9B7BC4"},20000:{t:"note",c:"#6FB58A"}};
+const moneyShort=v=>v>=1000?(v/1000)+"rb":String(v);
+function moneySVG(v,s=1){const m=MONEY[v];
+  if(m.t==="coin"){const R=m.r*2.4*s;return `<svg class="money coin" viewBox="0 0 44 44" width="${R}" height="${R}" aria-hidden="true">${m.ring?`<circle cx="22" cy="22" r="21" fill="${m.ring}"/><circle cx="22" cy="22" r="15.5" fill="${m.c}"/>`:`<circle cx="22" cy="22" r="21" fill="${m.c}"/><circle cx="22" cy="22" r="17" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="1.5"/>`}
+    <text x="22" y="27" text-anchor="middle" font-size="${v>=1000?12:14}" font-weight="900" fill="#1C1B22" font-family="var(--f-display),system-ui">${v}</text></svg>`}
+  return `<svg class="money note" viewBox="0 0 120 60" width="${108*s}" height="${54*s}" aria-hidden="true"><rect x="1" y="1" width="118" height="58" rx="6" fill="${m.c}" stroke="#1C1B22" stroke-width="2"/>
+    <rect x="8" y="8" width="104" height="44" rx="4" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-dasharray="4 3"/>
+    <circle cx="90" cy="30" r="15" fill="rgba(255,255,255,.4)"/><g transform="translate(76 15)">${tkHeadSVG("senang",28)}</g>
+    <text x="12" y="38" font-size="22" font-weight="900" fill="#1C1B22" font-family="var(--f-display),system-ui">${v.toLocaleString("id-ID")}</text><text x="12" y="51" font-size="8" font-weight="800" fill="#1C1B22" letter-spacing="1">UANG MAINAN</text></svg>`}
+const TOKOSET=[[100,500,1000],[100,200,500,1000],[100,200,500,1000,2000,5000],[500,1000,2000,5000,10000,20000]];
+const WALLET=[[100],[100],[100,200,500],[500,1000,2000,5000]];
+const BARANG=[["apel","apel"],["pisang","pisang"],["roti","roti"],["susu","susu"],["kue","kue"],["eskrim","es krim"],["jeruk","jeruk"],["jus","jus"],["bola","bola"],["balon","balon"],["yoyo","yoyo"],["topi","topi"],["buku","buku"],["layang","layangan"],["wortel","wortel"],["semangka","semangka"]];
+function hargaAcak(){const st=store.stage||1;
+  return st===1?rand(1,5)*100:st===2?rand(2,10)*100:st===3?rand(3,10)*100:rand(2,20)*500}
+const sumCoins=a=>a.reduce((x,y)=>x+y,0);
+function stall(it,price,dots){return `<div class="stall"><span class="awning"></span><div class="goods">${ill(it[0],96)}<span class="tag"><b>${rpT(price)}</b>${dots?`<i class="cdots">${"<u></u>".repeat(price/100)}</i>`:""}</span></div></div>`}
+
+function tokoKenal(p){
+  const st=store.stage||1,set=TOKOSET[st-1];lock=false;
+  if(st<=2&&Math.random()<.45){/* hitung koin */
+    const n=rand(2,st===1?5:10);p.innerHTML=`<div class="quiz"><p class="ask">Ada berapa koin di dompet Tongki?</p>
+      <div class="purse">${Array.from({length:n},()=>moneySVG(100,1)).join("")}</div>${numOpts(choices(st===1?3:3,n,1,st===1?5:10))}
+      <button class="ghost" data-a="skip">Ganti soal</button></div>`;
+    say("Ada berapa koin di dompet Tongki? Ayo hitung!");acts.skip=()=>tokoKenal(p);
+    setPick(n,()=>tokoKenal(p),"Ayo hitung lagi koinnya satu per satu",()=>setTimeout(()=>say(`Betul, ${kata(n)} koin. Kalau koin seratusan, jadi ${rpS(n*100)}!`),900));return}
+  const most=st>=3&&Math.random()<.35,n=Math.min(set.length,st===1?3:4),opts=shuffle(set).slice(0,n),ans=most?Math.max(...opts):pick(opts);
+  const ask=most?"Mana uang yang nilainya paling besar?":`Mana uang ${rpS(ans)}?`;
+  p.innerHTML=`<div class="quiz"><p class="ask">${most?"Mana yang nilainya <mark>paling besar</mark>?":`Mana uang <mark>${rpT(ans)}</mark>?`}</p>
+    <button class="say btn fill" data-a="again">${IC.spk(24)} Dengar soal</button>
+    <div class="opts moneyopts n${n}" style="--n:${n}">${opts.map(o=>`<button class="opt btn qpic" data-a="pick" data-v="${o}" aria-label="${rpT(o)}">${moneySVG(o,MONEY[o].t==="coin"?1.5:1)}</button>`).join("")}</div>
+    <p class="hint">Uang mainan Tongki. Lihat angka di uangnya.</p>
+    <button class="ghost" data-a="skip">Ganti soal</button></div>`;
+  say(ask);acts.again=()=>say(ask);acts.skip=()=>tokoKenal(p);
+  setPick(ans,()=>tokoKenal(p),v=>`Itu ${rpS(+v)}. Coba lagi ya`,()=>setTimeout(()=>say(most?`Betul! ${rpS(ans)} paling besar.`:`Betul, ini ${rpS(ans)}!`),900));
+}
+
+function tokoBayar(p){
+  const st=store.stage||1,it=pick(BARANG),price=hargaAcak(),wal=WALLET[st-1],dots=st<=2;let tray=[];lock=false;
+  p.innerHTML=`<div class="shop">${stall(it,price,dots)}
+    <div class="shopr"><p class="ask">Bayar ${it[1]} dengan uang pas!</p>
+    <div class="tray" id="tray" aria-label="Uang yang dibayar"><span class="tempty">Ketuk uang di bawah untuk membayar</span></div>
+    ${st>=3?`<p class="ttot">Uangmu: <b id="ttot">Rp0</b></p>`:`<p class="ttot"><b id="ttot">0 koin</b></p>`}
+    <div class="wallet">${wal.map(v=>`<button class="wbtn btn" data-a="add" data-v="${v}" aria-label="Tambah ${rpT(v)}">${moneySVG(v,MONEY[v].t==="coin"?1.25:.8)}</button>`).join("")}</div>
+    <div class="row"><button class="say btn fill" data-a="bayar">Bayar</button><button class="ghost" data-a="reset">Ulangi</button><button class="ghost" data-a="skip">Ganti barang</button></div></div></div>`;
+  const ask=`${it[1].charAt(0).toUpperCase()+it[1].slice(1)} harganya ${rpS(price)}.${dots?` Itu ${kata(price/100)} koin.`:""} Ayo bayar dengan uang pas!`;say(ask);
+  const draw=()=>{const t=$("#tray");t.innerHTML=tray.length?tray.map((v,i)=>`<button class="tc" data-a="rm" data-v="${i}" aria-label="Ambil kembali">${moneySVG(v,MONEY[v].t==="coin"?1:.66)}</button>`).join(""):`<span class="tempty">Ketuk uang di bawah untuk membayar</span>`;
+    $("#ttot").textContent=st>=3?rpT(sumCoins(tray)):`${tray.length} koin`};
+  acts.add=v=>{if(lock)return;if(tray.length>=20)return say("Wah, uangnya sudah banyak sekali!");tray.push(+v);tone([600+tray.length*25],.05);draw();if(dots)say(kata(tray.length))};
+  acts.rm=v=>{if(lock)return;tray.splice(+v,1);tone([380],.05);draw()};
+  acts.reset=()=>{if(lock)return;tray=[];draw()};acts.skip=()=>tokoBayar(p);acts.again=()=>say(ask);
+  acts.bayar=(v,el)=>{if(lock)return;const s=sumCoins(tray);
+    if(!tray.length)return say("Ketuk uangnya dulu, lalu bayar");
+    if(s===price){lock=true;win(el);setTimeout(()=>say(`Uangnya pas! Terima kasih, ini ${it[1]}nya.`),900);p.querySelector(".stall").classList.add("sold");
+      setTimeout(()=>{if(el.isConnected&&curMod()==="toko"&&tabOf.toko==="bayar")tokoBayar(p)},2800)}
+    else{lose(s<price?(dots?`Masih kurang. Harganya ${kata(price/100)} koin`:`Masih kurang ${rpS(price-s)}`):(dots?"Kelebihan. Ambil kembali satu koin ya":`Uangnya kelebihan ${rpS(s-price)}. Ambil kembali sebagian ya`),null,null)}};
+}
+
+function tokoCukup(p){
+  const st=store.stage||1;lock=false;
+  if(st>=3&&Math.random()<.45){/* mana yang bisa dibeli */
+    const money=st===3?rand(5,10)*100:rand(4,16)*500,items=shuffle(BARANG).slice(0,3),cheap=st===3?rand(2,money/100)*100:rand(2,money/500)*500;
+    const prices=[cheap,...[0,1].map(()=>st===3?rand(money/100+1,money/100+6)*100:rand(money/500+1,money/500+6)*500)];
+    const opts=items.map((it,i)=>({it,pr:prices[i],k:it[0]})),ans=opts[0].k;const sh=shuffle(opts);
+    p.innerHTML=`<div class="quiz"><p class="ask">Uang Tongki <mark>${rpT(money)}</mark>. Barang mana yang bisa dibeli?</p>
+      <div class="opts n3" style="--n:3">${sh.map(o=>`<button class="opt btn qpic" data-a="pick" data-v="${o.k}">${ill(o.it[0],64)}<small>${rpT(o.pr)}</small></button>`).join("")}</div>
+      <button class="ghost" data-a="skip">Ganti soal</button></div>`;
+    const ask=`Uang Tongki ${rpS(money)}. Barang mana yang bisa dibeli?`;say(ask);acts.skip=()=>tokoCukup(p);
+    setPick(ans,()=>tokoCukup(p),v=>{const o=opts.find(x=>x.k===v);return `${o.it[1]} harganya ${rpS(o.pr)}. Uangnya tidak cukup`});return}
+  const it=pick(BARANG),price=hargaAcak(),enough=Math.random()<.5,wal=WALLET[st-1];
+  let purse=[],g=0,target=enough?price+(Math.random()<.5?0:wal[0]*rand(0,2)):price-wal[0]*rand(1,st<=2?2:3);if(target<wal[0])target=wal[0];
+  {let r=target;const ws=[...wal].sort((a,b)=>b-a);while(r>0&&g++<50){const c=ws.find(x=>x<=r&&(st<=2||Math.random()<.7))||ws.find(x=>x<=r)||wal[0];purse.push(c);r-=c}}
+  const have=sumCoins(purse),ans=have>=price?"cukup":"kurang";
+  p.innerHTML=`<div class="shop">${stall(it,price,st<=2)}
+    <div class="shopr"><p class="ask">Uang Tongki cukup untuk beli ${it[1]}?</p>
+    <div class="purse">${purse.map(v=>moneySVG(v,MONEY[v].t==="coin"?1:.7)).join("")}</div>
+    <div class="opts n2 yn" style="--n:2"><button class="opt btn word yes" data-a="pick" data-v="cukup"><span class="ynic">✓</span><span>Cukup</span></button><button class="opt btn word no" data-a="pick" data-v="kurang"><span class="ynic">✕</span><span>Kurang</span></button></div>
+    <button class="ghost" data-a="skip">Ganti soal</button></div></div>`;
+  const ask=`${it[1].charAt(0).toUpperCase()+it[1].slice(1)} harganya ${rpS(price)}. Uang Tongki cukup atau kurang?`;say(ask);acts.skip=()=>tokoCukup(p);
+  setPick(ans,()=>tokoCukup(p),st<=2?"Ayo hitung koin Tongki dan titik di harganya":"Coba jumlahkan uang Tongki dulu",()=>setTimeout(()=>say(ans==="cukup"?`Betul, uangnya ${rpS(have)}, cukup!`:`Betul, uangnya cuma ${rpS(have)}, masih kurang ${rpS(price-have)}.`),900));
+}
+
+function tokoKembali(p){
+  const st=store.stage||1,it=pick(BARANG);let price,paid;
+  if(st<=3){paid=1000;price=rand(3,9)*100}else{paid=pick([5000,10000,20000]);price=rand(2,paid/500-1)*500}
+  const ans=paid-price,step=st<=3?100:500,set=new Set([ans]);let g=0;while(set.size<4&&g++<99){const d=ans+rand(-3,3)*step;if(d>0&&d<paid)set.add(d)}
+  const opts=shuffle([...set]);lock=false;
+  p.innerHTML=`<div class="shop">${stall(it,price,false)}
+    <div class="shopr"><p class="ask">Tongki bayar <mark>${rpT(paid)}</mark>. Berapa kembaliannya?</p>
+    <div class="purse">${moneySVG(paid,MONEY[paid].t==="coin"?1.4:1)}</div>
+    <div class="opts n4 kopts" style="--n:4">${opts.map(o=>`<button class="opt btn word" data-a="pick" data-v="${o}">${rpT(o)}</button>`).join("")}</div>
+    <p class="hint">Kembalian = uang yang dibayar − harga.</p>
+    <button class="ghost" data-a="skip">Ganti soal</button></div></div>`;
+  const ask=`${it[1].charAt(0).toUpperCase()+it[1].slice(1)} harganya ${rpS(price)}. Tongki bayar ${rpS(paid)}. Berapa kembaliannya?`;say(ask);acts.skip=()=>tokoKembali(p);
+  setPick(ans,()=>tokoKembali(p),`Coba hitung: ${rpS(paid)} dikurangi ${rpS(price)}`,()=>setTimeout(()=>say(`Betul, kembaliannya ${rpS(ans)}.`),900));
+}
+
+/* ======================= RUTINITAS HARIAN ======================= */
+const RTN=[
+  {k:"bangun",l:"Bangun & rapikan kasur",i:"kasur",s:"pagi"},{k:"sikat",l:"Sikat gigi",i:"sikat",s:"pagi"},{k:"mandi",l:"Mandi pagi",i:"mandi",s:"pagi"},
+  {k:"baju",l:"Pakai baju sendiri",i:"baju",s:"pagi"},{k:"sarapan",l:"Sarapan",i:"roti",s:"pagi"},{k:"tas",l:"Siapkan tas",i:"tas",s:"pagi"},{k:"sepatu",l:"Pakai sepatu sendiri",i:"sepatu",s:"pagi"},
+  {k:"cuci",l:"Cuci tangan",i:"tangan",s:"siang"},{k:"makan",l:"Makan siang",i:"piring",s:"siang"},{k:"minum",l:"Minum air putih",i:"gelas",s:"siang"},
+  {k:"tsiang",l:"Tidur siang",i:"bantal",s:"siang"},{k:"beres",l:"Bereskan mainan",i:"kotak",s:"siang"},{k:"siram",l:"Siram tanaman",i:"siram",s:"siang"},
+  {k:"mandis",l:"Mandi sore",i:"mandi",s:"malam"},{k:"makanm",l:"Makan malam",i:"piring",s:"malam"},{k:"sikatm",l:"Sikat gigi sebelum tidur",i:"sikat",s:"malam"},
+  {k:"buku",l:"Baca buku cerita",i:"buku",s:"malam"},{k:"doa",l:"Berdoa",i:"doa",s:"malam"},{k:"tidur",l:"Tidur tepat waktu",i:"bulan",s:"malam"}];
+const RSEG={pagi:"Pagi",siang:"Siang",malam:"Malam"};
+const RDEF={pagi:["bangun","sikat","mandi","sarapan"],siang:["cuci","makan","beres"],malam:["sikatm","buku","tidur"]};
+function rtnCfg(){if(!store.rutin||!store.rutin.pagi){store.rutin=JSON.parse(JSON.stringify(RDEF));save()}return store.rutin}
+function rtnDay(){const d=today();if(!store.rdone||store.rdone.d!==d){store.rdone={d,ids:[],aw:[],segw:[]};save()}return store.rdone}
+const rtnSegNow=()=>{const h=new Date().getHours();return h<11?"pagi":h<17?"siang":"malam"};
+let rtnSeg=null;
+function rtnCount(){const c=rtnCfg(),d=rtnDay(),all=[...c.pagi,...c.siang,...c.malam];return[all.filter(k=>d.ids.includes(k)).length,all.length]}
+function rtnLog(){const d=rtnDay(),c=rtnCfg(),n=[...c.pagi,...c.siang,...c.malam].filter(k=>d.ids.includes(k)).length;store.rlog=store.rlog||{};store.rlog[d.d]=n;
+  const keys=Object.keys(store.rlog).sort();while(keys.length>21)delete store.rlog[keys.shift()];save()}
+function weekStrip(){const now=new Date(),ti=todayIdx(),c=rtnCfg(),tot=c.pagi.length+c.siang.length+c.malam.length||1;
+  return `<div class="week" aria-label="Rutinitas minggu ini">${DAYS.map((d,i)=>{const dt=new Date(now);dt.setDate(now.getDate()-ti+i);
+    const k=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,"0")}-${String(dt.getDate()).padStart(2,"0")}`,n=(store.rlog||{})[k]||0,f=Math.min(1,n/tot);
+    return `<span class="wd${i===ti?" now":""}${i>ti?" fut":""}" style="--dc:${DAYC[i]};--f:${f}"><b>${d.slice(0,3)}</b><i>${f>=1?IC.check:n?n:""}</i></span>`}).join("")}</div>`}
+function rutinPage(p){
+  const c=rtnCfg(),d=rtnDay();if(!rtnSeg)rtnSeg=rtnSegNow();const seg=rtnSeg,list=c[seg].map(k=>RTN.find(r=>r.k===k)).filter(Boolean);
+  const done=list.filter(r=>d.ids.includes(r.k)).length;
+  p.innerHTML=`<div class="rtn">
+    <div class="rhead"><div class="seg rseg" role="group" aria-label="Waktu">${Object.keys(RSEG).map(s=>`<button data-a="rseg" data-v="${s}" aria-pressed="${s===seg}">${skySVG(s,34)}<span>${RSEG[s]}</span><small>${c[s].filter(k=>d.ids.includes(k)).length}/${c[s].length}</small></button>`).join("")}</div></div>
+    <p class="ask">${list.length?`Rutinitas ${RSEG[seg].toLowerCase()} ${store.name?esc(store.name):"kamu"}`:"Belum ada rutinitas di sini"}</p>
+    <div class="rbar"><i style="width:${list.length?done/list.length*100:0}%"></i></div>
+    <div class="rgrid">${list.map(r=>{const ok=d.ids.includes(r.k);return `<button class="rcard btn${ok?" ok":""}" data-a="rtick" data-v="${r.k}" aria-pressed="${ok}">${ill(r.i,64)}<span>${r.l}</span><i class="rchk">${ok?IC.check:""}</i></button>`}).join("")}</div>
+    <h3 class="wk">Minggu ini</h3>${weekStrip()}
+    <p class="hint">Centang bersama Ayah atau Bunda setelah selesai ya. Tiap rutinitas dapat 1 bintang.</p>
+    <div class="ortu"><button class="holdbtn" data-hold="rtn"><b>Atur rutinitas</b><small>Orang tua · tahan 2 detik</small></button></div></div>`;
+  tkLook={expr:"senang",move:"ask"};
+  acts.rseg=v=>{rtnSeg=v;rutinPage(p);say(`Rutinitas ${RSEG[v].toLowerCase()}`)};
+  acts.rtick=(v,el)=>{const dd=rtnDay(),r=RTN.find(x=>x.k===v);
+    if(dd.ids.includes(v)){dd.ids=dd.ids.filter(x=>x!==v);save();rtnLog();rutinPage(p);return}
+    dd.ids.push(v);save();rtnLog();
+    if(!dd.aw.includes(v)){dd.aw.push(v);save();win(el)}else tone([523,784],.1);
+    say(pick([`Hebat! Kamu sudah ${r.l.toLowerCase()}.`,`Keren, ${r.l.toLowerCase()} selesai!`,`Mantap! ${r.l} sudah.`]));
+    const all=c[seg].every(k=>dd.ids.includes(k));
+    rutinPage(p);
+    if(all&&!dd.segw.includes(seg)){dd.segw.push(seg);store.stars+=2;save();renderBar("rutin");
+      setTimeout(()=>{if(curMod()!=="rutin")return;sheet(`<div class="sheet-in unlock"><p class="kick3">Rutinitas ${RSEG[seg].toLowerCase()} selesai!</p><div class="moodtk">${tkFigure("semangat",{armR:-150,armL:150})}</div>
+        <p class="lead">Bonus +2 bintang untukmu.</p><button class="say btn fill" data-sa="ok">Hore!</button></div>`,{ok:()=>closeSheet()});
+        tkLook={expr:"semangat",move:"cheer"};say(`Luar biasa${store.name?", "+store.name:""}! Semua rutinitas ${RSEG[seg].toLowerCase()} sudah selesai. Bonus dua bintang!`)},1800)}};
+  bindHold(p.querySelector("[data-hold=rtn]"),()=>openRtnEdit(()=>{if(curMod()==="rutin")rutinPage(p)}));
+}
+function openRtnEdit(after){
+  const c=rtnCfg();
+  sheet(`<div class="plate peta-plate"><p class="kick2">Khusus orang tua</p><div class="peta-t">Atur Rutinitas</div><p class="peta-s">Pilih kebiasaan untuk ${esc(store.name||"anak")}. Disimpan per profil.</p></div>
+    <div class="sheet-in room">${Object.keys(RSEG).map(s=>`<section><h3>${RSEG[s]}<small>${c[s].length} dipilih</small></h3>
+      <div class="rpick">${RTN.map(r=>{const on=c[s].includes(r.k);return `<button class="rp${on?" on":""}" data-sa="rtg" data-v="${s}:${r.k}" aria-pressed="${on}">${ill(r.i,30)}<span>${r.l}</span></button>`}).join("")}</div></section>`).join("")}
+      <div class="row"><button class="say btn fill" data-sa="rdone">Selesai</button><button class="ghost" data-sa="rdef">Kembalikan bawaan</button></div>
+      <p class="disc">Maksimal 6 kebiasaan per waktu supaya tetap ringan untuk anak.</p></div>`,{
+    rtg:v=>{const[s,k]=v.split(":"),a=c[s];if(a.includes(k))c[s]=a.filter(x=>x!==k);else{if(a.length>=6)return toast("Maksimal 6");c[s]=[...a,k].sort((x,y)=>RTN.findIndex(r=>r.k===x)-RTN.findIndex(r=>r.k===y))}save();rtnLog();openRtnEdit(after)},
+    rdef:()=>{store.rutin=JSON.parse(JSON.stringify(RDEF));save();rtnLog();openRtnEdit(after)},
+    rdone:()=>{closeSheet();if(after)after()}});
+}
+
 /* ---------- MUSIK LATAR (dibuat langsung dengan Web Audio, tanpa file) ---------- */
 // derajat tangga nada; null = jeda. 32 ketukan seperdelapan = 4 birama
 const _=null;
@@ -3089,6 +3619,12 @@ const THEMES={
     mel:[0,_,_,4,_,_,7,_, 4,_,_,2,_,_,_,_, 0,_,_,2,_,_,4,_, 2,_,_,0,_,_,_,_],bass:[0,0,3,3,4,4,0,0]},
   warna:{bpm:96,root:69,scale:[0,2,4,7,9],wave:"triangle",dec:.5,spark:true,
     mel:[4,_,2,_,4,_,7,_, 5,_,4,_,2,_,_,_, 4,_,2,_,0,_,2,_, 4,_,_,_,_,_,_,_],bass:[0,0,3,3,1,1,0,0]},
+  jam:{bpm:100,root:69,scale:[0,2,4,7,9],wave:"triangle",dec:.25,perc:true,spark:true,
+    mel:[0,_,4,_,0,_,4,_, 2,_,5,_,2,_,_,_, 4,_,7,_,4,_,7,_, 5,4,2,1, 0,_,_,_],bass:[0,0,4,4,3,3,0,0]},
+  toko:{bpm:112,root:67,scale:[0,2,4,5,7,9,11],wave:"triangle",dec:.3,perc:true,
+    mel:[7,_,9,7, 11,_,9,_, 8,_,7,_,9,_,_,_, 7,_,9,7, 11,_,12,_, 11,9,8,9, 7,_,_,_],bass:[0,0,3,3,4,4,0,0]},
+  rutin:{bpm:84,root:72,scale:[0,2,4,7,9],wave:"sine",dec:.8,spark:true,
+    mel:[0,_,2,_,4,_,_,_, 7,_,4,_,2,_,_,_, 0,_,2,_,4,_,7,_, 4,_,_,_,_,_,_,_],bass:[0,0,3,3,4,4,0,0]},
   kuis:{bpm:132,root:70,scale:[0,2,4,5,7,9,11],wave:"triangle",dec:.2,perc:true,spark:true,
     mel:[11,_,9,11, 14,_,11,_, 12,_,10,12, 13,_,_,_, 11,_,9,11, 14,_,16,_, 15,13,12,10, 11,_,_,_],bass:[0,0,3,3,1,4,0,0]}
 };
