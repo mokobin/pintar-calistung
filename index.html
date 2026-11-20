@@ -1271,6 +1271,9 @@ html,body{overflow:hidden}
   .mgrid{max-width:min(520px,calc(100dvh - 350px))}
   .kuis .stage{max-width:min(600px,calc(30dvh*1.6))}
 }
+
+.opts>.opt{min-width:0}
+.qpic small{font-size:clamp(12px,min(3.6vw,2.6dvh),16px);max-width:100%;overflow-wrap:anywhere;line-height:1.1}
 </style>
 
 <div id="app" data-mod="home">
@@ -1498,6 +1501,7 @@ $("#sheet").addEventListener("click",e=>{
   const f=sheetActs[b.dataset.sa];if(f)f(b.dataset.v,b);
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#sheet").hidden)closeSheet()});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.closest&&e.target.closest("#sheet input:not([type=range])")){const b=e.target.parentElement.querySelector("button");if(b){e.preventDefault();b.click()}}});
 
 /* ---------- navigasi ---------- */
 const MODS={
@@ -1666,7 +1670,7 @@ function bacaTebak(p){
   const ask=()=>say("Mana huruf "+LET[t][3]+"?");ask();
   acts.again=ask;acts.skip=()=>bacaTebak(p);
   acts.pick=(v,el)=>{if(lock)return;
-    if(+v===t){lock=true;el.classList.add("right");win(el);setTimeout(()=>{if(tabOf.baca==="tebak"&&curMod()==="baca")bacaTebak(p)},1600)}
+    if(+v===t){lock=true;el.classList.add("right");win(el);setTimeout(()=>{if(el.isConnected&&tabOf.baca==="tebak"&&curMod()==="baca")bacaTebak(p)},1600)}
     else{el.classList.add("wrong");el.disabled=true;lose("Itu huruf "+LET[+v][3]+". Coba lagi ya",el,t)}};
 }
 
@@ -1735,7 +1739,7 @@ function tulisPad(p){
   acts.check=()=>{
     if(!T.strokes.length)return say("Ayo tebalkan dulu garis putus-putusnya");
     const r=scoreTrace(ch),need=S().trace[0];
-    if(r.cov>=need&&r.out<=S().trace[1]){pad.classList.add("ok");win(pad);setTimeout(()=>{if(curMod()==="tulis")go(1)},1700)}
+    if(r.cov>=need&&r.out<=S().trace[1]){if(pad.classList.contains("ok"))return;pad.classList.add("ok");win(pad);setTimeout(()=>{if(pad.isConnected&&pad.classList.contains("ok")&&curMod()==="tulis")go(1)},1700)}
     else if(r.cov<need)lose("Hampir! Tebalkan semua garisnya ya");
     else lose("Coba lebih rapi, ikuti garis putus-putus");
   };
@@ -1788,7 +1792,7 @@ function hitungAyo(p){
   acts.cnt=(v,el)=>countTap(el);
   acts.reset=()=>{const b=p.querySelector(".items");b.dataset.n=0;b.querySelectorAll(".it").forEach(i=>{i.classList.remove("c");const bd=i.querySelector(".bd");if(bd)bd.remove()})};
   acts.pick=(v,el)=>{if(lock)return;
-    if(+v===n){lock=true;el.classList.add("right");win(el);setTimeout(()=>{if(curMod()==="hitung"&&tabOf.hitung==="hitung")hitungAyo(p)},1900)}
+    if(+v===n){lock=true;el.classList.add("right");win(el);setTimeout(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="hitung")hitungAyo(p)},1900)}
     else{el.classList.add("wrong");el.disabled=true;lose("Belum tepat. Ayo hitung lagi, ketuk satu-satu",el,n)}};
 }
 function hitungTambah(p){
@@ -1805,7 +1809,7 @@ function hitungTambah(p){
     <button class="ghost" data-a="skip">Ganti soal</button></div>`;
   say(ask);acts.again=()=>say(ask);acts.skip=()=>hitungTambah(p);
   acts.pick=(v,el)=>{if(lock)return;
-    if(+v===ans){lock=true;el.classList.add("right");p.querySelector(".q").textContent=ans;win(el);setTimeout(()=>{if(curMod()==="hitung"&&tabOf.hitung==="tambah")hitungTambah(p)},1900)}
+    if(+v===ans){lock=true;el.classList.add("right");p.querySelector(".q").textContent=ans;win(el);setTimeout(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="tambah")hitungTambah(p)},1900)}
     else{el.classList.add("wrong");el.disabled=true;lose(op==="+"?"Coba hitung semua gambarnya":"Hitung yang tidak dicoret ya",el,ans)}};
 }
 
@@ -1824,7 +1828,7 @@ const young=()=>(store.stage||1)<=2;
 function setPick(ans,again,wrong,onRight){
   wrongN=0;acts.pick=(v,el)=>{if(lock)return;
     if(String(v)===String(ans)){lock=true;el.classList.add("right");win(el);if(onRight)onRight();
-      const mod=curMod(),tab=tabOf[mod];setTimeout(()=>{if(curMod()===mod&&tabOf[mod]===tab)again()},2000)}
+      const mod=curMod(),tab=tabOf[mod];setTimeout(()=>{if(el.isConnected&&curMod()===mod&&tabOf[mod]===tab)again()},2000)}
     else{el.classList.add("wrong");el.disabled=true;lose(typeof wrong==="function"?wrong(v):wrong,el,ans)}};
 }
 const numOpts=(opts)=>`<div class="opts nums n${opts.length}" style="--n:${opts.length}">${opts.map(o=>`<button class="opt num btn" data-a="pick" data-v="${o}">${o}</button>`).join("")}</div>`;
@@ -1859,8 +1863,8 @@ function bacaRangkai(p){
   acts.rtile=(v,el)=>{if(lock||el.disabled||filled.length>=syl.length)return;
     const t=tiles.find(x=>String(x.i)===v);filled.push(t.s);el.disabled=true;p.querySelectorAll(".slotw")[filled.length-1].textContent=t.s;say(t.s);
     if(filled.length===syl.length){
-      if(filled.join("")===word){lock=true;p.querySelector(".slots").classList.add("ok");win(p.querySelector(".slots"));setTimeout(()=>say(syl.join(" - ")+". "+word),900);
-        setTimeout(()=>{lock=false;if(curMod()==="baca"&&tabOf.baca==="rangkai")bacaRangkai(p)},2600)}
+      if(filled.join("")===word){lock=true;const sl=p.querySelector(".slots");p.querySelector(".slots").classList.add("ok");win(p.querySelector(".slots"));setTimeout(()=>say(syl.join(" - ")+". "+word),900);
+        setTimeout(()=>{lock=false;if(sl.isConnected&&curMod()==="baca"&&tabOf.baca==="rangkai")bacaRangkai(p)},2600)}
       else{p.querySelectorAll(".slotw").forEach(s=>s.classList.add("bad"));lose("Belum pas. Dengar lagi, "+word);setTimeout(reset,1100)}
     }};
   lock=false;
@@ -2285,10 +2289,10 @@ function showOpts(){
   say((q.kind==="word"||q.kind==="face")&&young()&&q.type!=="arah"?ask+" "+q.opts.map(v=>q.label(v)).join(", "):ask);
 }
 function kuisActs(){
-  acts.kgo=()=>kuisBegin();acts.replay=()=>runScene();
+  acts.kgo=()=>kuisBegin();acts.replay=()=>{if(Q.q&&!Q.q.done)runScene()};
   acts.kpick=(v,el)=>{const q=Q.q;if(!q||q.done)return;
     const hit=String(v)===String(q.ans),hold=q.type==="balon"?{ra1:125,ra2:5}:{};
-    if(hit){q.done=true;if(!q.tries)Q.score++;el.classList.add("right");win(el);Ktok++;tkExpr(pick(["tertawa","semangat"]));
+    if(hit){q.done=true;if(!q.tries)Q.score++;{const r=$("#replay");if(r)r.hidden=true}el.classList.add("right");win(el);Ktok++;tkExpr(pick(["tertawa","semangat"]));
       if(q.type==="inggris")setTimeout(()=>say(`${ACT_EN[q.ans]}!`,"en"),900);
       else if(RIGHT[q.type])setTimeout(()=>say(RIGHT[q.type](q)),900);
       const base=["posisi","garis","loncat","arah","benda"].includes(q.type)?{x:cur.x,gy:cur.gy,f:cur.f}:{};
@@ -2936,7 +2940,7 @@ function storyPage(p){
   acts.sprev=()=>{if(SR.pg>0){SR.pg--;storyPage(p)}};
   acts.snext=()=>{if(last){storyQ(p,0)}else{SR.pg++;storyPage(p)}};
   acts.sword=(v,el)=>{stRead++;sayEvt=null;el.classList.add("tap");setTimeout(()=>el.classList.remove("tap"),400);say(v)};
-  setTimeout(()=>{if(curMod()==="cerita"&&$("#stext"))readText($("#stext"),pg.x)},350);
+  {const te=$("#stext");setTimeout(()=>{if(te&&te.isConnected&&curMod()==="cerita")readText(te,pg.x)},350)}
 }
 function storyQ(p,i){
   const s=SR.s,q=s.q[i];stRead++;sayEvt=null;lock=false;
