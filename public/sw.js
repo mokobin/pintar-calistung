@@ -1,4 +1,4 @@
-const CACHE = 'calistung-v18';
+const CACHE = 'tongki-v1';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE))); self.skipWaiting(); });
 self.addEventListener('activate', e => {
@@ -8,6 +8,7 @@ self.addEventListener('activate', e => {
 // Cache-first: aplikasi tetap jalan tanpa internet setelah dibuka sekali (termasuk font).
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  if (new URL(e.request.url).pathname.startsWith('/api/')) return;   // server lisensi tidak di-cache
   e.respondWith(caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
     if (res.ok || res.type === 'opaque') { const cp = res.clone(); caches.open(CACHE).then(c => c.put(e.request, cp)); }
     return res;

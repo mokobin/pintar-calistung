@@ -1,0 +1,21 @@
+# Tongki Calistung — Cloudflare Workers (aplikasi + server lisensi dalam satu proyek)
+name = "tongki-calistung"
+main = "worker/index.js"
+compatibility_date = "2025-09-01"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
+[[kv_namespaces]]
+binding = "LISENSI"
+id = "GANTI_DENGAN_ID_KV_NAMESPACE"
+
+[vars]
+MAX_PERANGKAT = "3"
+MAYAR_BASE = "https://api.mayar.id"
+# MAYAR_PRODUCT_ID diisi di sini atau di dashboard (Variables)
+MAYAR_PRODUCT_ID = ""
+# Rahasia (JANGAN ditulis di file ini). Atur lewat dashboard > Settings > Variables and Secrets:
+#   MAYAR_API_KEY, ADMIN_TOKEN
