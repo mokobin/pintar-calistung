@@ -1468,6 +1468,28 @@ h3.wk{margin:6px 0 0;font:800 16px var(--f-display);text-transform:uppercase;let
 .yn .opt.word{display:grid!important;grid-template-columns:auto auto;place-content:center;align-items:center;gap:10px;padding:0 8px;max-width:none;width:100%;font-size:clamp(20px,6vw,28px)}
 .ynic{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:900 20px/1 system-ui;font-style:normal;color:#fff;border:3px solid var(--ink)}
 .yes .ynic{background:var(--green)}.no .ynic{background:var(--red)}
+
+/* ===== LISENSI ===== */
+.lockic{display:inline-block;vertical-align:-2px;margin-left:5px;flex:none}
+.tab .lockic{opacity:.7}
+.lk{position:relative}
+.lk .lockic{margin:0 5px 0 0}
+.acard.lk,.scard.lk{opacity:.82}
+.acard.lk::after,.scard.lk::after{content:"";position:absolute;inset:0;background:rgba(246,243,234,.35);border-radius:inherit;pointer-events:none}
+.lockp{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:10px 8px 20px;max-width:520px;margin:0 auto}
+.lockp .lkfig svg{width:clamp(110px,22dvh,170px);height:auto}
+.lockp h2{margin:0;font:800 clamp(24px,6vw,32px)/1.05 var(--f-display);font-stretch:85%}
+.lockp .lead{margin:0;color:var(--muted);font-weight:600}
+.lockp .kick3 .lockic,.unlock .kick3 .lockic{margin:0 4px 0 0}
+.prochip{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:18px 0 0;padding:12px;border:2px dashed var(--ink);border-radius:12px;background:var(--card);font-weight:600;font-size:14px}
+.prochip .lockic{margin:0}
+.beli .perks{margin:0 0 14px;padding-left:20px;display:grid;gap:6px;font-weight:600;text-align:left}
+.beli section{text-align:left}
+.sheet-in .holdbtn{display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;padding:12px;margin:6px 0}
+.beli .buy{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;width:100%}
+.kodein input{flex:1;min-width:0;letter-spacing:.04em;font-weight:700}
+.lmsg{margin:8px 0 0;padding:10px 12px;border-radius:10px;background:var(--red-s);border:2px solid var(--red);font-weight:700;font-size:14px}
+.room .row{display:flex;gap:8px;flex-wrap:wrap}
 </style>
 
 <div id="app" data-mod="home">
@@ -1615,7 +1637,23 @@ let speechBad=false,pendingSay=null,spUnlocked=false;
 const spKeep=[];let spNoStart=0,spOK=0,spWarned=false,spLast="";
 // Catatan Chrome: membatalkan lalu langsung berbicara bisa membuat ucapan hilang, jadi beri jeda setelah cancel.
 // Ucapan juga disimpan di spKeep supaya tidak terhapus memori sebelum selesai (bug Chrome).
-function say(t,lang,retry){return new Promise(res=>{
+// Hitung ucapan yang sedang berjalan, supaya pindah soal menunggu Tongki selesai bicara.
+let talkN=0,talkEnd=0;
+let talkEnds=[];
+function say(t,lang,retry){
+  if(!retry){talkEnds.forEach(f=>f());talkEnds=[]}   // ucapan baru menggantikan yang lama
+  talkN++;let ended=false;const end=()=>{if(ended)return;ended=true;talkN=Math.max(0,talkN-1);talkEnd=Date.now()};
+  talkEnds.push(end);const cap=setTimeout(end,4500+String(t).length*120);   // jaga-jaga browser tidak memberi kabar selesai
+  return sayRaw(t,lang,retry).finally(()=>{clearTimeout(cap);end()})}
+// Jalankan fn minimal setelah `min` ms DAN setelah Tongki selesai bicara (maks. tambahan 12 detik).
+let talkQ=0;
+// Suara tidak pernah berhasil keluar di perangkat ini: jangan tunggu ucapan.
+const spDead=()=>!store.sound||!("speechSynthesis" in window)||(spOK===0&&spNoStart>0);
+function afterTalk(fn,min=1500){const t0=Date.now();const tick=()=>{const now=Date.now();
+  if(now-t0>=min&&((talkN===0&&talkQ===0&&now-talkEnd>=350)||spDead()||now-t0>=min+12000))fn();else setTimeout(tick,120)};setTimeout(tick,Math.min(min,400))}
+// Ucapkan t SETELAH ucapan yang sedang berjalan selesai (tidak memotong pujian).
+function sayNext(t,lang){talkQ++;const t0=Date.now();const go=()=>{if((talkN===0&&Date.now()-talkEnd>=200)||spDead()||Date.now()-t0>10000){say(t,lang);talkQ=Math.max(0,talkQ-1)}else setTimeout(go,100)};setTimeout(go,300)}
+function sayRaw(t,lang,retry){return new Promise(res=>{
   if(!store.sound||!("speechSynthesis" in window))return res();
   try{
     if(navigator.userActivation&&!navigator.userActivation.hasBeenActive){pendingSay=[t,lang];const tt=tkTalkStart(t,lang);setTimeout(()=>{tkTalkEnd(tt);res()},1200+t.length*60);return}
@@ -1764,11 +1802,12 @@ function renderMod(mod){
   if(M.groups){const gi=Math.max(0,M.groups.findIndex(g=>g[1].includes(tabOf[mod])));
     grpH=`<div class="grps" role="group" aria-label="Kelompok">${M.groups.map((g,i)=>`<button data-a="grp" data-v="${i}" aria-pressed="${i===gi}">${g[0]}</button>`).join("")}</div>`;
     t=M.groups[gi][1].map(k=>t.find(x=>x[0]===k))}
-  main.innerHTML=`${grpH}<div class="tabs" role="tablist">${t.map(([k,l])=>`<button class="tab btn" role="tab" data-a="tab" data-v="${k}" aria-selected="${tabOf[mod]===k}">${l}</button>`).join("")}</div><div id="panel"></div>`;
+  main.innerHTML=`${grpH}<div class="tabs" role="tablist">${t.map(([k,l])=>`<button class="tab btn" role="tab" data-a="tab" data-v="${k}" aria-selected="${tabOf[mod]===k}">${l}${tabFree(mod,k)?"":LOCK}</button>`).join("")}</div><div id="panel"></div>`;
   acts={tab:v=>{tabOf[mod]=v;renderMod(mod);applyMusic()},grp:v=>{tabOf[mod]=M.groups[+v][1][0];renderMod(mod);applyMusic()}};
   if(padRO){padRO.disconnect();padRO=null}
   const p=$("#panel");
   try{const at=main.querySelector('.tab[aria-selected="true"]');if(at)at.parentElement.scrollLeft=at.offsetLeft-at.parentElement.clientWidth/2+at.offsetWidth/2}catch(e){}
+  if(!tabFree(mod,tabOf[mod])){lockPanel(p);return}
   ({baca:{huruf:bacaHuruf,bunyi:bacaBunyi,suku:bacaSuku,rangkai:bacaRangkai,tebak:bacaTebak},tulis:{garis:tulisPad,besar:tulisPad,kecil:tulisPad,angka:tulisPad},main:{tangkap:gTangkap,memori:gMemori,jembatan:gJembatan,balon:gBalon,simon:gSimon,umpet:gUmpet},inggris:{abc:engAbc,vocab:engVocab,dengar:engDengar,warna:engWarna,gerak:engGerak},jam:{waktu:jamWaktu,hari:jamHari,baca:jamBaca,atur:jamAtur},toko:{kenal:tokoKenal,bayar:tokoBayar,cukup:tokoCukup,kembali:tokoKembali},hitung:{kenal:hitungKenal,hitung:hitungAyo,pasangan:hitungPasangan,tambah:hitungTambah,bentuk:hitungBentuk,pola:hitungPola,ukuran:hitungUkuran,data:hitungData}})[mod][tabOf[mod]](p);
 }
 
@@ -1817,6 +1856,7 @@ function renderHome(){
   </div>
   <button class="btn donebtn" data-a="recap">${tkHeadSVG("cinta",36)}<span>Selesai belajar, dadah Tongki!</span></button>
   <div class="ortu"><button class="holdbtn" data-hold="parent"><b>Ruang Orang Tua</b><small>Tahan 2 detik · profil, tahap belajar, laporan</small></button></div>
+  ${pro()?"":`<button class="prochip" data-a="pro">${LOCK}<span>Versi gratis · <b>Lihat Tongki Lengkap</b></span></button>`}
   <footer class="credit"><span class="ctk">${tkHeadSVG("senang",30)}</span><span>© ${new Date().getFullYear()} <b>Ayah Akhtar Creative</b> <i>x</i> <b>Opus</b><small>Tongki Calistung · Hak cipta dilindungi</small></span></footer>`;
   const f=$("#namef");
   if(f)f.addEventListener("submit",e=>{e.preventDefault();
@@ -1827,7 +1867,7 @@ function renderHome(){
   acts.skipName=()=>{skipName=true;renaming=false;renderHome()};
   acts.go=(v,el)=>{inApp=true;tone([523,784],.1);if(el&&el.dataset.t)tabOf[v]=el.dataset.t;location.hash=v};
   acts.dgo=v=>{inApp=true;tone([523,784],.1);const n=v.slice(2);if(v[0]==="g"){if(n==="cerita"||n==="warna")location.hash=n;else{tabOf.main=n;location.hash="main"}}else location.hash=n};
-  acts.albumh=()=>openAlbum();acts.recap=()=>openRecap();acts.karya=()=>openKarya();
+  acts.pro=()=>lockSheet();acts.albumh=()=>openAlbum();acts.recap=()=>openRecap();acts.karya=()=>openKarya();
   acts.piala=()=>{tkLook={expr:"semangat",move:"cheer",after:"senang"};say((store.trophies||0)?`Kamu punya ${numWord(store.trophies)} piala! Selesaikan tantangan hari ini untuk dapat piala lagi.`:"Selesaikan tiga tantangan hari ini untuk dapat piala pertamamu!")};
   acts.poke=()=>{tkLook={expr:"tertawa",move:"cheer"};say(pick([`Hihi, geli! Ayo pilih permainan${store.name?", "+store.name:""}!`,"Halo! Aku Tongki. Ayo main sambil belajar!","Tongki siap menemani kamu belajar!"]))};
   bindHold(main.querySelector("[data-hold=parent]"),openRoom);
@@ -1875,7 +1915,7 @@ function bacaTebak(p){
   const ask=()=>say("Mana huruf "+LET[t][3]+"?");ask();
   acts.again=ask;acts.skip=()=>bacaTebak(p);
   acts.pick=(v,el)=>{if(lock)return;
-    if(+v===t){lock=true;el.classList.add("right");win(el);setTimeout(()=>{if(el.isConnected&&tabOf.baca==="tebak"&&curMod()==="baca")bacaTebak(p)},1600)}
+    if(+v===t){lock=true;el.classList.add("right");win(el);afterTalk(()=>{if(el.isConnected&&tabOf.baca==="tebak"&&curMod()==="baca")bacaTebak(p)},1600)}
     else{el.classList.add("wrong");el.disabled=true;lose("Itu huruf "+LET[+v][3]+". Coba lagi ya",el,t)}};
 }
 
@@ -1944,7 +1984,7 @@ function tulisPad(p){
   acts.check=()=>{
     if(!T.strokes.length)return say("Ayo tebalkan dulu garis putus-putusnya");
     const r=scoreTrace(ch),need=S().trace[0];
-    if(r.cov>=need&&r.out<=S().trace[1]){if(pad.classList.contains("ok"))return;pad.classList.add("ok");win(pad);setTimeout(()=>{if(pad.isConnected&&pad.classList.contains("ok")&&curMod()==="tulis")go(1)},1700)}
+    if(r.cov>=need&&r.out<=S().trace[1]){if(pad.classList.contains("ok"))return;pad.classList.add("ok");win(pad);afterTalk(()=>{if(pad.isConnected&&pad.classList.contains("ok")&&curMod()==="tulis")go(1)},1700)}
     else if(r.cov<need)lose("Hampir! Tebalkan semua garisnya ya");
     else lose("Coba lebih rapi, ikuti garis putus-putus");
   };
@@ -1997,7 +2037,7 @@ function hitungAyo(p){
   acts.cnt=(v,el)=>countTap(el);
   acts.reset=()=>{const b=p.querySelector(".items");b.dataset.n=0;b.querySelectorAll(".it").forEach(i=>{i.classList.remove("c");const bd=i.querySelector(".bd");if(bd)bd.remove()})};
   acts.pick=(v,el)=>{if(lock)return;
-    if(+v===n){lock=true;el.classList.add("right");win(el);setTimeout(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="hitung")hitungAyo(p)},1900)}
+    if(+v===n){lock=true;el.classList.add("right");win(el);afterTalk(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="hitung")hitungAyo(p)},1900)}
     else{el.classList.add("wrong");el.disabled=true;lose("Belum tepat. Ayo hitung lagi, ketuk satu-satu",el,n)}};
 }
 function hitungTambah(p){
@@ -2014,7 +2054,7 @@ function hitungTambah(p){
     <button class="ghost" data-a="skip">Ganti soal</button></div>`;
   say(ask);acts.again=()=>say(ask);acts.skip=()=>hitungTambah(p);
   acts.pick=(v,el)=>{if(lock)return;
-    if(+v===ans){lock=true;el.classList.add("right");p.querySelector(".q").textContent=ans;win(el);setTimeout(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="tambah")hitungTambah(p)},1900)}
+    if(+v===ans){lock=true;el.classList.add("right");p.querySelector(".q").textContent=ans;win(el);afterTalk(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="tambah")hitungTambah(p)},1900)}
     else{el.classList.add("wrong");el.disabled=true;lose(op==="+"?"Coba hitung semua gambarnya":"Hitung yang tidak dicoret ya",el,ans)}};
 }
 
@@ -2033,7 +2073,7 @@ const young=()=>(store.stage||1)<=2;
 function setPick(ans,again,wrong,onRight){
   wrongN=0;acts.pick=(v,el)=>{if(lock)return;
     if(String(v)===String(ans)){lock=true;el.classList.add("right");win(el);if(onRight)onRight();
-      const mod=curMod(),tab=tabOf[mod];setTimeout(()=>{if(el.isConnected&&curMod()===mod&&tabOf[mod]===tab)again()},2000)}
+      const mod=curMod(),tab=tabOf[mod];afterTalk(()=>{if(el.isConnected&&curMod()===mod&&tabOf[mod]===tab)again()},2000)}
     else{el.classList.add("wrong");el.disabled=true;lose(typeof wrong==="function"?wrong(v):wrong,el,ans)}};
 }
 const numOpts=(opts)=>`<div class="opts nums n${opts.length}" style="--n:${opts.length}">${opts.map(o=>`<button class="opt num btn" data-a="pick" data-v="${o}">${o}</button>`).join("")}</div>`;
@@ -2068,8 +2108,8 @@ function bacaRangkai(p){
   acts.rtile=(v,el)=>{if(lock||el.disabled||filled.length>=syl.length)return;
     const t=tiles.find(x=>String(x.i)===v);filled.push(t.s);el.disabled=true;p.querySelectorAll(".slotw")[filled.length-1].textContent=t.s;say(t.s);
     if(filled.length===syl.length){
-      if(filled.join("")===word){lock=true;const sl=p.querySelector(".slots");p.querySelector(".slots").classList.add("ok");win(p.querySelector(".slots"));setTimeout(()=>say(syl.join(" - ")+". "+word),900);
-        setTimeout(()=>{lock=false;if(sl.isConnected&&curMod()==="baca"&&tabOf.baca==="rangkai")bacaRangkai(p)},2600)}
+      if(filled.join("")===word){lock=true;const sl=p.querySelector(".slots");p.querySelector(".slots").classList.add("ok");win(p.querySelector(".slots"));sayNext(syl.join(" - ")+". "+word);
+        afterTalk(()=>{lock=false;if(sl.isConnected&&curMod()==="baca"&&tabOf.baca==="rangkai")bacaRangkai(p)},2600)}
       else{p.querySelectorAll(".slotw").forEach(s=>s.classList.add("bad"));lose("Belum pas. Dengar lagi, "+word);setTimeout(reset,1100)}
     }};
   lock=false;
@@ -2459,14 +2499,14 @@ const RIGHT={posisi:q=>{const p=POS.find(x=>x[0]===q.pos);return `Betul, Tongki 
 const Q={i:0,n:5,score:0,last:"",q:null,tok:0,p:null,deck:[]};
 function pips(){return `<div class="pips" aria-label="Soal ${Math.min(Q.i+1,Q.n)} dari ${Q.n}">${Array.from({length:Q.n},(_,i)=>`<i class="${i<Q.i?"done":i===Q.i?"now":""}"></i>`).join("")}</div>`}
 function kuisStart(p){
-  Q.p=p;Q.tok++;Ktok++;const pl=kplan(),st=S();
+  Q.p=p;Q.tok++;Ktok++;if(!kuisFreeLeft()){lockPanel(p,"Kuis gratis hari ini sudah dimainkan. Besok main lagi ya!");return}const pl=kplan(),st=S();
   p.innerHTML=`<div class="kuis">${stageSVG()}<p class="kick3">Kuis Tongki · ${st.code}</p><h2 class="done">${pl.n} soal seru</h2>
     <div class="ktypes">${pl.types.map(t=>`<span>${KTYPES[t]}</span>`).join("")}</div>
     <button class="say btn fill" data-a="kgo">Mulai kuis</button></div>`;
   resetStage();cur={...KB,x:160};startLoop();
   say(`Halo${store.name?" "+store.name:""}! Ayo main kuis bersama Tongki.`);play([{d:320,p:PO.wave1},{d:300,p:PO.wave2}],6);
 }
-function kuisBegin(){const pl=kplan();Q.i=0;Q.score=0;Q.n=pl.n;Q.last="";Q.deck=[];kuisNext()}
+function kuisBegin(){if(!pro()){store.kuisFreeD=today();save()}const pl=kplan();Q.i=0;Q.score=0;Q.n=pl.n;Q.last="";Q.deck=[];kuisNext()}
 function drawType(){
   const pl=kplan();if(!Q.deck.length)Q.deck=shuffle([...pl.types]);
   let i=Q.deck.findIndex(t=>t!==Q.last);if(i<0)i=0;return Q.deck.splice(i,1)[0];
@@ -2499,12 +2539,12 @@ function kuisActs(){
   acts.kpick=(v,el)=>{const q=Q.q;if(!q||q.done)return;
     const hit=String(v)===String(q.ans),hold=q.type==="balon"?{ra1:125,ra2:5}:{};
     if(hit){q.done=true;if(!q.tries)Q.score++;{const r=$("#replay");if(r)r.hidden=true}el.classList.add("right");win(el);Ktok++;tkExpr(pick(["tertawa","semangat"]));
-      if(q.type==="inggris")setTimeout(()=>say(`${ACT_EN[q.ans]}!`,"en"),900);
-      else if(RIGHT[q.type])setTimeout(()=>say(RIGHT[q.type](q)),900);
+      if(q.type==="inggris")sayNext(`${ACT_EN[q.ans]}!`,"en");
+      else if(RIGHT[q.type])sayNext(RIGHT[q.type](q));
       const base=["posisi","garis","loncat","arah","benda"].includes(q.type)?{x:cur.x,gy:cur.gy,f:cur.f}:{};
       if(q.type==="posisi"&&q.pos==="bawah")play([{d:300,p:{...PO.low,x:cur.x}},{d:300,p:{...PO.low,h:12,x:cur.x}},{d:300,p:{...PO.low,x:cur.x}}]);
       else play([{d:160,p:{...PO.crouch,...base}},{d:240,p:{...PO.cheer,...hold,...base}},{d:200,p:{...PO.crouch,...base}},{d:200,p:{...(q.type==="balon"?PO.hold:{}),...base}}]);
-      const tok=Q.tok;setTimeout(()=>{if(tok!==Q.tok||curMod()!=="kuis")return;Q.i++;Q.i>=Q.n?kuisEnd():kuisNext()},RIGHT[q.type]?3200:2100)}
+      const tok=Q.tok;afterTalk(()=>{if(tok!==Q.tok||curMod()!=="kuis")return;Q.i++;Q.i>=Q.n?kuisEnd():kuisNext()},1500)}
     else{q.tries++;el.classList.add("wrong");el.disabled=true;lose("Belum tepat. Mau lihat lagi?",el,q.ans);Ktok++;tkExpr("bingung");setTimeout(()=>{if(!q.done)tkExpr(q.type==="emosi"?q.emo:"senang")},1400);
       if(!(q.type==="posisi"&&q.pos==="bawah")){const base=q.type==="posisi"?{x:cur.x,gy:cur.gy}:{};
         play([{d:250,p:{...PO.shrug,...hold,...base}},{d:500,p:{...PO.shrug,...hold,...base}},{d:250,p:{...(q.type==="balon"?PO.hold:{}),...base}}])}}};
@@ -2612,7 +2652,7 @@ function engGerak(p){
     $("#gq").innerHTML="";sayEN("Look!");await ACTPLAY[act]();
     $("#gq").innerHTML=`<div class="opts words">${opts.map(o=>`<button class="opt word btn" data-a="pick" data-v="${o}">${pool[o][0]}</button>`).join("")}</div>`;
     if(young())sayEN(opts.map(o=>pool[o][0]).join(" "));
-    setPick(t,()=>{$("#gq").innerHTML="";cap("Tap a sentence · Ketuk kalimatnya")},"Belum tepat. Coba lagi",()=>{setTimeout(()=>sayEN(en),700)});
+    setPick(t,()=>{$("#gq").innerHTML="";cap("Tap a sentence · Ketuk kalimatnya")},"Belum tepat. Coba lagi",()=>sayNext(en,"en"));
   };
 }
 
@@ -2885,7 +2925,7 @@ function gJembatan(p){
         if(done>=N){cap("Berhasil menyeberang!");await hop(282,172);if(!gAlive(tok))return;tkExpr("semangat");play([{d:160,p:PO.crouch},{d:240,p:PO.cheer},{d:200,p:PO.crouch},{d:200,p:{}}]);
           $("#jq").innerHTML=`<button class="say btn fill" data-a="again">Main lagi</button>`;acts.again=()=>gJembatan(p);
           gameDone("jembatan",$(".stage"),"Hore! Tongki berhasil menyeberang. Terima kasih sudah membantu Tongki!")}
-        else setTimeout(ask,700)}
+        else afterTalk(()=>{if(gAlive(tok))ask()},900)}
       else{el.classList.add("wrong");el.disabled=true;tkExpr("bingung");setTimeout(()=>tkExpr("mikir"),1300);lose("Hmm, belum tepat. Coba lagi ya!",el,q.ans)}};
   };
   cap("Sungainya lebar!");say(`Sungainya lebar! Jawab ${numWord(N)} soal untuk memasang papan jembatan.`).then(ask);
@@ -2928,8 +2968,8 @@ function gSimon(p){
   acts.pad=v=>{if(busy)return;const i=+v;flash(i,260);
     if(i===seq[inp]){inp++;if(inp<seq.length)return;
       if(seq.length>=goal){busy=true;gameDone("simon",p.querySelector(".pads"),`Kamu ingat ${numWord(seq.length)} warna berurutan. Ingatanmu hebat!`);return}
-      busy=true;level++;$("#gc").textContent=`Level ${level}`;tkLook={expr:"tertawa",move:"cheer"};say("Betul! Tambah satu warna lagi ya.");seq.push(rand(0,3));setTimeout(()=>{if(gAlive(tok))show()},1700)}
-    else{busy=true;tone([300,220],.15,"sine",.12,.15);tkLook={expr:"bingung",move:"shrug",after:"senang"};say("Hampir! Tongki ulangi ya, perhatikan baik-baik.");setTimeout(()=>{if(gAlive(tok))show()},1900)}};
+      busy=true;level++;$("#gc").textContent=`Level ${level}`;tkLook={expr:"tertawa",move:"cheer"};say("Betul! Tambah satu warna lagi ya.");seq.push(rand(0,3));afterTalk(()=>{if(gAlive(tok))show()},1700)}
+    else{busy=true;tone([300,220],.15,"sine",.12,.15);tkLook={expr:"bingung",move:"shrug",after:"senang"};say("Hampir! Tongki ulangi ya, perhatikan baik-baik.");afterTalk(()=>{if(gAlive(tok))show()},1900)}};
   setTimeout(()=>{if(gAlive(tok))show()},600);
 }
 
@@ -2951,7 +2991,7 @@ function gUmpet(p){
   acts.cup=(v,el)=>{if(busy||el.classList.contains("up"))return;const i=+v;el.classList.add("up");
     if(i===tk){busy=true;round++;tone([660,880,1040],.12);$("#gc").textContent=`Ronde ${Math.min(round+1,rounds)} / ${rounds}`;
       if(round>=rounds){gameDone("umpet",$("#cups"),"Cilukba! Matamu jeli, kamu selalu menemukan Tongki!");return}
-      tkLook={expr:"tertawa",move:"cheer"};say("Cilukba! Ketemu! Sekarang lebih cepat ya.");swaps++;setTimeout(()=>{if(gAlive(tok))startRound()},2200)}
+      tkLook={expr:"tertawa",move:"cheer"};say("Cilukba! Ketemu! Sekarang lebih cepat ya.");swaps++;afterTalk(()=>{if(gAlive(tok))startRound()},2200)}
     else{miss++;tone([300],.12,"sine");tkLook={expr:"bingung",move:"shrug",after:"senang"};
       if(miss>=2){cups[tk].classList.add("wig");say("Ssst… Tongki di sini, yang bergoyang!")}else say("Kosong! Coba kotak lain.");
       setTimeout(()=>el.classList.remove("up"),900)}};
@@ -2966,8 +3006,8 @@ const DPOOL=[
   {k:"m:inggris",n:4,l:"Jawab 4 soal English"},{k:"m:jam",n:4,l:"Jawab 4 soal Jam & Hari"},{k:"m:toko",n:3,l:"Belanja 3 kali di Toko Tongki"},{k:"m:rutin",n:3,l:"Centang 3 rutinitas hari ini"},{k:"m:kuis",n:3,l:"Jawab 3 soal Kuis Tongki"}];
 function dailyTasks(){
   const d=today();let h=7;for(const c of d)h=(h*31+c.charCodeAt(0))>>>0;
-  const gs=DPOOL.filter(x=>x.k[0]==="g"),ms=DPOOL.filter(x=>x.k[0]==="m"),a=gs[h%gs.length],b=ms[(h>>>4)%ms.length];
-  const rest=DPOOL.filter(x=>x!==a&&x!==b);return[a,b,rest[(h>>>9)%rest.length]];
+  const POOL=DPOOL.filter(x=>freeTask(x.k)),gs=POOL.filter(x=>x.k[0]==="g"),ms=POOL.filter(x=>x.k[0]==="m"),a=gs[h%gs.length],b=ms[(h>>>4)%ms.length];
+  const rest=POOL.filter(x=>x!==a&&x!==b);return[a,b,rest[(h>>>9)%rest.length]];
 }
 function taskProg(t){
   const L=(store.log||{})[today()]||{c:{},g:{}};
@@ -3040,6 +3080,8 @@ function openRoom(){
     <section><h3>Tahap belajar ${esc(store.name||"")}<small>Kerangka Cambridge. Soal, angka, dan pilihan menyesuaikan tahap.</small></h3>
       <div class="seg stages" role="group" aria-label="Tahap belajar">${STAGES.map((x,i)=>`<button data-sa="lvl" data-v="${i+1}" aria-pressed="${store.stage===i+1}"><b>${x.code}</b><small>${x.age}</small></button>`).join("")}</div>
       <button class="ghost" data-sa="peta">Lihat peta belajar ${st.code}</button></section>
+    ${LIS.previewFull?"":`<section><h3>Tongki Lengkap<small>${pro()?"Aktif di perangkat ini. Terima kasih!":"Versi gratis. Bayar sekali untuk membuka semua fitur."}</small></h3><button class="btn sm" data-sa="lis">${pro()?"Lihat status lisensi":"Buka Tongki Lengkap"}</button></section>`}
+    <section><h3>Cadangan progres<small>Simpan bintang, stiker, dan karya semua anak ke file. Pulihkan saat ganti HP.</small></h3><div class="row"><button class="btn sm" data-sa="eksp">Simpan cadangan</button><button class="btn sm" data-sa="impc">Pulihkan dari file</button></div></section>
     <section><h3>Laporan belajar<small>Catatan 7 hari terakhir dan ide ngobrol di rumah.</small></h3><button class="btn sm" data-sa="lap">Buka laporan ${esc(store.name||"")}</button></section>
     <section><h3>Suara<small>Pengaturan suara dan musik ada di tombol speaker di atas.</small></h3><p class="hint">Suara terbaik: buka aplikasi di Microsoft Edge, otomatis memakai suara Gadis (Natural). Tanpa internet, aplikasi memakai suara bawaan HP.</p></section>
     ${deferredInstall?`<button class="btn ink" data-sa="inst">Pasang aplikasi di layar utama</button>`:""}
@@ -3054,7 +3096,7 @@ function openRoom(){
     raddf:()=>{room.add=true;openRoom();setTimeout(()=>{const i=$("#rnew");if(i)i.focus()},50)},
     radd:()=>{const n=cleanName($("#rnew").value);if(!n)return;room.add=false;addProfile(n)},
     lvl:v=>{store.stage=+v;save();openRoom();if(!curMod())renderHome()},
-    peta:()=>openPeta(),lap:()=>openParent(),
+    peta:()=>openPeta(),lap:()=>openParent(),lis:()=>openBeli(),eksp:()=>eksporCadangan(),impc:()=>imporCadangan(),
     inst:async()=>{if(!deferredInstall)return;deferredInstall.prompt();try{await deferredInstall.userChoice}catch(e){}deferredInstall=null;openRoom()}
   });
 }
@@ -3129,8 +3171,8 @@ async function readText(box,text){
 }
 function ceritaList(p){
   stRead++;sayEvt=null;const done=store.stories||{};
-  p.innerHTML=`<h2 class="sec">Pilih cerita</h2><div class="slist">${STORIES.map((s,i)=>`<button class="scard btn" data-a="sopen" data-v="${i}">${sceneHTML(s.pages[0],true)}<span class="stitle"><b>${s.t}</b><small>${s.pages.length} halaman · ${s.q.length} pertanyaan</small></span>${done[s.id]?`<i class="sdone-chip">${IC.check} Sudah dibaca</i>`:""}</button>`).join("")}</div>`;
-  acts.sopen=v=>{SR.s=STORIES[+v];SR.pg=0;storyPage(p)};
+  p.innerHTML=`<h2 class="sec">Pilih cerita</h2><div class="slist">${STORIES.map((s,i)=>`<button class="scard btn${storyFree(i)?"":" lk"}" data-a="sopen" data-v="${i}">${sceneHTML(s.pages[0],true)}<span class="stitle"><b>${storyFree(i)?"":LOCK}${s.t}</b><small>${s.pages.length} halaman · ${s.q.length} pertanyaan</small></span>${done[s.id]?`<i class="sdone-chip">${IC.check} Sudah dibaca</i>`:""}</button>`).join("")}</div>`;
+  acts.sopen=v=>{if(!storyFree(+v))return lockSheet();SR.s=STORIES[+v];SR.pg=0;storyPage(p)};
   tkLook={expr:"senang",move:"ask"};say("Mau baca cerita yang mana?");
 }
 function storyPage(p){
@@ -3220,8 +3262,8 @@ function openKarya(view){
 }
 function warnaList(p){
   p.innerHTML=`<div class="whead"><h2 class="sec">Pilih gambar</h2><button class="btn sm" data-a="karya">${ICW.pal} Karyaku (${artList().length})</button></div>
-    <div class="agrid">${ARTS.map((a,i)=>`<button class="acard btn" data-a="wopen" data-v="${i}">${artThumb(a)}<b>${a.n}</b></button>`).join("")}</div>`;
-  acts.wopen=v=>warnaCanvas(p,ARTS[+v]);acts.karya=()=>openKarya();
+    <div class="agrid">${ARTS.map((a,i)=>`<button class="acard btn${artFree(a.id)?"":" lk"}" data-a="wopen" data-v="${i}">${artThumb(a)}<b>${artFree(a.id)?"":LOCK}${a.n}</b></button>`).join("")}</div>`;
+  acts.wopen=v=>{if(!artFree(ARTS[+v].id))return lockSheet();warnaCanvas(p,ARTS[+v])};acts.karya=()=>openKarya();
   tkLook={expr:"senang",move:"ask"};say("Mau mewarnai gambar apa?");
 }
 const CW=600;
@@ -3355,7 +3397,7 @@ function jamWaktu(p){
     acts.skip=()=>jamWaktu(p);
     acts.seq=(v,el)=>{if(lock||el.classList.contains("done"))return;
       if(+v===k){el.classList.add("done");el.querySelector("em").textContent=k+1;tone([520+k*90],.08);say(seq[k].l);k++;
-        if(k===seq.length){lock=true;win(el);setTimeout(()=>{if(el.isConnected&&curMod()==="jam"&&tabOf.jam==="waktu")jamWaktu(p)},2200)}}
+        if(k===seq.length){lock=true;win(el);afterTalk(()=>{if(el.isConnected&&curMod()==="jam"&&tabOf.jam==="waktu")jamWaktu(p)},2200)}}
       else{el.classList.add("shake");setTimeout(()=>el.classList.remove("shake"),450);lose(`Hmm, ${seq[+v].l} itu waktu ${PERIODS[seq[+v].p].l.toLowerCase()}. Cari yang lebih dulu ya`)}};
     return}
   const q=pick(pool),opts=st===1?shuffle(["pagi","malam"].includes(q.p)?["pagi","malam"]:["siang","malam"]):shuffle([...per]);lock=false;
@@ -3364,7 +3406,7 @@ function jamWaktu(p){
     <div class="opts skyopts n${opts.length}" style="--n:${opts.length}">${opts.map(o=>`<button class="opt btn qpic" data-a="pick" data-v="${o}">${skySVG(o,76)}<small>${PERIODS[o].l}</small></button>`).join("")}</div>
     <button class="ghost" data-a="skip">Ganti soal</button></div>`;
   const ask=`Kapan Tongki ${q.l}? Pagi, siang${per.includes("sore")?", sore":""}, atau malam?`;say(ask);acts.skip=()=>jamWaktu(p);
-  setPick(q.p,()=>jamWaktu(p),v=>`Hmm, kalau ${PERIODS[v].l.toLowerCase()} biasanya hari ${v==="malam"?"gelap":"terang"}. Coba lagi ya`,()=>setTimeout(()=>say(`Betul! Tongki ${q.l} waktu ${PERIODS[q.p].l.toLowerCase()}.`),900));
+  setPick(q.p,()=>jamWaktu(p),v=>`Hmm, kalau ${PERIODS[v].l.toLowerCase()} biasanya hari ${v==="malam"?"gelap":"terang"}. Coba lagi ya`,()=>sayNext(`Betul! Tongki ${q.l} waktu ${PERIODS[q.p].l.toLowerCase()}.`));
 }
 
 function jamHari(p){
@@ -3389,7 +3431,7 @@ function jamHari(p){
   say(ask);acts.again=()=>say(ask);acts.skip=()=>jamHari(p);
   acts.car=v=>{const i=+v;if(i===hide&&type!=="jumlah")return say("Ini yang kita cari!");tone([400+i*60],.08);say(DAYS[i])};
   setPick(ans,()=>jamHari(p),v=>type==="jumlah"?"Coba hitung gerbong keretanya":`Itu hari ${v}. Lihat keretanya ya`,()=>{const c=p.querySelector(".car.q");if(c){c.classList.remove("q");c.querySelector("b").textContent=type==="jumlah"?c.querySelector("b").textContent:ans}
-    if(type==="jumlah")setTimeout(()=>say("Betul! Senin, Selasa, Rabu, Kamis, Jumat, Sabtu, Minggu. Tujuh hari!"),900)});
+    if(type==="jumlah")sayNext("Betul! Senin, Selasa, Rabu, Kamis, Jumat, Sabtu, Minggu. Tujuh hari!")});
 }
 
 function jamTarget(){const st=store.stage||1;
@@ -3410,7 +3452,7 @@ function jamBaca(p){
     <p class="hint">${st>=4?"Jarum pendek menunjuk jam. Jarum panjang di angka 6 berarti setengah.":"Jarum pendek menunjuk jam. Jarum panjang di angka 12."}</p>
     <button class="ghost" data-a="skip">Ganti soal</button></div>`;
   say(ask);acts.again=()=>say(ask);acts.skip=()=>jamBaca(p);
-  setPick(key(tgt),()=>jamBaca(p),v=>{const o={h:parseInt(v),half:/h/.test(v)};return `Itu ${jamSay(o.h,o.half)}. Lihat jarum pendeknya ya`},()=>setTimeout(()=>say(`Betul, ${jamSay(tgt.h,tgt.half)}!`),900));
+  setPick(key(tgt),()=>jamBaca(p),v=>{const o={h:parseInt(v),half:/h/.test(v)};return `Itu ${jamSay(o.h,o.half)}. Lihat jarum pendeknya ya`},()=>sayNext(`Betul, ${jamSay(tgt.h,tgt.half)}!`));
 }
 
 function jamAtur(p){
@@ -3435,7 +3477,7 @@ function jamAtur(p){
   acts.turn=v=>{if(lock)return;if(hand==="m"){M+=+v*5;if(M>=60){M-=60;H=H%12+1}if(M<0){M+=60;H=(H+10)%12+1}}else H=((H-1+(+v)+12)%12)+1;tone([520],.04);draw()};
   acts.skip=()=>jamAtur(p);acts.again=()=>say(ask);
   acts.cek=()=>{if(lock)return;const okH=H===(tgt.half?tgt.h:tgt.h)&&M===(tgt.half?30:0);
-    if(okH){lock=true;const w=$("#cwrap");w.classList.add("ok");win(w);setTimeout(()=>say(`Tepat sekali, ${jamSay(tgt.h,tgt.half)}!`),900);setTimeout(()=>{if(svg.isConnected&&curMod()==="jam"&&tabOf.jam==="atur")jamAtur(p)},2600)}
+    if(okH){lock=true;const w=$("#cwrap");w.classList.add("ok");win(w);sayNext(`Tepat sekali, ${jamSay(tgt.h,tgt.half)}!`);afterTalk(()=>{if(svg.isConnected&&curMod()==="jam"&&tabOf.jam==="atur")jamAtur(p)},2600)}
     else{wrongN++;const msg=tgt.half&&M!==30?"Jarum panjang harus di angka enam untuk setengah":H!==tgt.h?(tgt.half?`Jarum pendek di antara ${kata(tgt.h)} dan ${kata(h12(tgt.h+1))} ya`:`Jarum pendek harus menunjuk angka ${kata(tgt.h)}`):"Jarum panjang harus di angka dua belas";
       tone([330,247],.16,"sine",.13,.18);tkLook={expr:"bingung",move:"shrug",after:"senang"};
       if(wrongN>=3){H=tgt.h;M=tgt.half?30:0;draw();say("Tongki bantu ya. Begini jamnya. Tekan Sudah!")}else say(msg)}};
@@ -3468,7 +3510,7 @@ function tokoKenal(p){
       <div class="purse">${Array.from({length:n},()=>moneySVG(100,1)).join("")}</div>${numOpts(choices(st===1?3:3,n,1,st===1?5:10))}
       <button class="ghost" data-a="skip">Ganti soal</button></div>`;
     say("Ada berapa koin di dompet Tongki? Ayo hitung!");acts.skip=()=>tokoKenal(p);
-    setPick(n,()=>tokoKenal(p),"Ayo hitung lagi koinnya satu per satu",()=>setTimeout(()=>say(`Betul, ${kata(n)} koin. Kalau koin seratusan, jadi ${rpS(n*100)}!`),900));return}
+    setPick(n,()=>tokoKenal(p),"Ayo hitung lagi koinnya satu per satu",()=>sayNext(`Betul, ${kata(n)} koin. Kalau koin seratusan, jadi ${rpS(n*100)}!`));return}
   const most=st>=3&&Math.random()<.35,n=Math.min(set.length,st===1?3:4),opts=shuffle(set).slice(0,n),ans=most?Math.max(...opts):pick(opts);
   const ask=most?"Mana uang yang nilainya paling besar?":`Mana uang ${rpS(ans)}?`;
   p.innerHTML=`<div class="quiz"><p class="ask">${most?"Mana yang nilainya <mark>paling besar</mark>?":`Mana uang <mark>${rpT(ans)}</mark>?`}</p>
@@ -3477,7 +3519,7 @@ function tokoKenal(p){
     <p class="hint">Uang mainan Tongki. Lihat angka di uangnya.</p>
     <button class="ghost" data-a="skip">Ganti soal</button></div>`;
   say(ask);acts.again=()=>say(ask);acts.skip=()=>tokoKenal(p);
-  setPick(ans,()=>tokoKenal(p),v=>`Itu ${rpS(+v)}. Coba lagi ya`,()=>setTimeout(()=>say(most?`Betul! ${rpS(ans)} paling besar.`:`Betul, ini ${rpS(ans)}!`),900));
+  setPick(ans,()=>tokoKenal(p),v=>`Itu ${rpS(+v)}. Coba lagi ya`,()=>sayNext(most?`Betul! ${rpS(ans)} paling besar.`:`Betul, ini ${rpS(ans)}!`));
 }
 
 function tokoBayar(p){
@@ -3496,8 +3538,8 @@ function tokoBayar(p){
   acts.reset=()=>{if(lock)return;tray=[];draw()};acts.skip=()=>tokoBayar(p);acts.again=()=>say(ask);
   acts.bayar=(v,el)=>{if(lock)return;const s=sumCoins(tray);
     if(!tray.length)return say("Ketuk uangnya dulu, lalu bayar");
-    if(s===price){lock=true;win(el);setTimeout(()=>say(`Uangnya pas! Terima kasih, ini ${it[1]}nya.`),900);p.querySelector(".stall").classList.add("sold");
-      setTimeout(()=>{if(el.isConnected&&curMod()==="toko"&&tabOf.toko==="bayar")tokoBayar(p)},2800)}
+    if(s===price){lock=true;win(el);sayNext(`Uangnya pas! Terima kasih, ini ${it[1]}nya.`);p.querySelector(".stall").classList.add("sold");
+      afterTalk(()=>{if(el.isConnected&&curMod()==="toko"&&tabOf.toko==="bayar")tokoBayar(p)},2800)}
     else{lose(s<price?(dots?`Masih kurang. Harganya ${kata(price/100)} koin`:`Masih kurang ${rpS(price-s)}`):(dots?"Kelebihan. Ambil kembali satu koin ya":`Uangnya kelebihan ${rpS(s-price)}. Ambil kembali sebagian ya`),null,null)}};
 }
 
@@ -3522,7 +3564,7 @@ function tokoCukup(p){
     <div class="opts n2 yn" style="--n:2"><button class="opt btn word yes" data-a="pick" data-v="cukup"><span class="ynic">✓</span><span>Cukup</span></button><button class="opt btn word no" data-a="pick" data-v="kurang"><span class="ynic">✕</span><span>Kurang</span></button></div>
     <button class="ghost" data-a="skip">Ganti soal</button></div></div>`;
   const ask=`${it[1].charAt(0).toUpperCase()+it[1].slice(1)} harganya ${rpS(price)}. Uang Tongki cukup atau kurang?`;say(ask);acts.skip=()=>tokoCukup(p);
-  setPick(ans,()=>tokoCukup(p),st<=2?"Ayo hitung koin Tongki dan titik di harganya":"Coba jumlahkan uang Tongki dulu",()=>setTimeout(()=>say(ans==="cukup"?`Betul, uangnya ${rpS(have)}, cukup!`:`Betul, uangnya cuma ${rpS(have)}, masih kurang ${rpS(price-have)}.`),900));
+  setPick(ans,()=>tokoCukup(p),st<=2?"Ayo hitung koin Tongki dan titik di harganya":"Coba jumlahkan uang Tongki dulu",()=>sayNext(ans==="cukup"?`Betul, uangnya ${rpS(have)}, cukup!`:`Betul, uangnya cuma ${rpS(have)}, masih kurang ${rpS(price-have)}.`));
 }
 
 function tokoKembali(p){
@@ -3537,7 +3579,7 @@ function tokoKembali(p){
     <p class="hint">Kembalian = uang yang dibayar − harga.</p>
     <button class="ghost" data-a="skip">Ganti soal</button></div></div>`;
   const ask=`${it[1].charAt(0).toUpperCase()+it[1].slice(1)} harganya ${rpS(price)}. Tongki bayar ${rpS(paid)}. Berapa kembaliannya?`;say(ask);acts.skip=()=>tokoKembali(p);
-  setPick(ans,()=>tokoKembali(p),`Coba hitung: ${rpS(paid)} dikurangi ${rpS(price)}`,()=>setTimeout(()=>say(`Betul, kembaliannya ${rpS(ans)}.`),900));
+  setPick(ans,()=>tokoKembali(p),`Coba hitung: ${rpS(paid)} dikurangi ${rpS(price)}`,()=>sayNext(`Betul, kembaliannya ${rpS(ans)}.`));
 }
 
 /* ======================= RUTINITAS HARIAN ======================= */
@@ -3598,6 +3640,126 @@ function openRtnEdit(after){
     rdef:()=>{store.rutin=JSON.parse(JSON.stringify(RDEF));save();rtnLog();openRtnEdit(after)},
     rdone:()=>{closeSheet();if(after)after()}});
 }
+
+/* ================= LISENSI: beli sekali, buka semua fitur ================= */
+/* Atur bagian ini sebelum jualan. Nilai lain tidak perlu diubah. */
+const LIS={
+  nama:"Tongki Calistung Lengkap",
+  harga:"",                 // contoh: "Rp79.000" (kosong = harga tidak ditampilkan)
+  beli:"",                  // link halaman produk Mayar, contoh: "https://namatoko.myr.id/pl/tongki-lengkap"
+  api:"/api/aktivasi",
+  maxDev:3,
+  kontak:"",                // email/WA bantuan, contoh: "halo@tongki.id"
+  pubkey:"__TONGKI_PUBKEY__",   // diisi otomatis oleh server saat aplikasi dibuka
+  previewFull:true         // true = semua terbuka (versi pratinjau)
+};
+/* Yang gratis. Selain ini butuh Tongki Lengkap. Rutinitas selalu gratis. */
+const GRATIS={baca:["huruf","bunyi"],tulis:["garis"],hitung:["kenal","hitung"],inggris:["abc"],main:["tangkap","memori"],jam:["waktu"],toko:["kenal"],cerita:1,warna:["tongki","rumah","bebas"],kuisPerHari:1};
+
+let licOK=false,licInfo=null;
+const pro=()=>LIS.previewFull||licOK;
+const tabFree=(mod,tab)=>pro()||!GRATIS[mod]||!Array.isArray(GRATIS[mod])||GRATIS[mod].includes(tab);
+const storyFree=i=>pro()||i<GRATIS.cerita;
+const artFree=id=>pro()||GRATIS.warna.includes(id);
+const kuisFreeLeft=()=>pro()||(store.kuisFreeD!==today());
+const LOCK=`<svg class="lockic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="11" rx="2.5" fill="currentColor"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="2.6"/></svg>`;
+const freeTask=k=>{if(pro())return true;const[t,n]=[k[0],k.slice(2)];if(t==="g")return n==="cerita"||n==="warna"||GRATIS.main.includes(n);return true};
+
+/* --- perangkat & token --- */
+function devId(){let d=lsGet("calistung.dev");if(!d||!/^[a-z0-9-]{8,64}$/.test(d)){d=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2,12));lsSet("calistung.dev",d)}return d}
+const b64u=s=>Uint8Array.from(atob(s.replace(/-/g,"+").replace(/_/g,"/")+"===".slice((s.length+3)%4)),c=>c.charCodeAt(0));
+async function cekToken(tok){
+  try{if(!tok||LIS.pubkey.startsWith("__")||!(crypto&&crypto.subtle))return null;
+    const [p,s]=tok.split(".");if(!p||!s)return null;
+    const jwk=JSON.parse(new TextDecoder().decode(b64u(LIS.pubkey)));
+    const key=await crypto.subtle.importKey("jwk",jwk,{name:"ECDSA",namedCurve:"P-256"},false,["verify"]);
+    const ok=await crypto.subtle.verify({name:"ECDSA",hash:"SHA-256"},key,b64u(s),new TextEncoder().encode(p));if(!ok)return null;
+    const pl=JSON.parse(new TextDecoder().decode(b64u(p)));return pl.d===devId()?pl:null}catch(e){return null}}
+async function initLisensi(){
+  if(LIS.previewFull)return;
+  let rec=null;try{rec=JSON.parse(lsGet("calistung.lisensi")||"null")}catch(e){}
+  const pl=rec&&await cekToken(rec.tok);
+  if(pl){licOK=true;licInfo={hint:pl.c,at:pl.t};route()}
+}
+
+/* --- tampilan kunci --- */
+function lockPanel(p,msg){
+  p.innerHTML=`<div class="lockp"><div class="lkfig">${tkFigure("cinta",{armR:-135})}</div>
+    <p class="kick3">${LOCK} Tongki Lengkap</p><h2>${msg?"Sampai jumpa besok!":"Bagian ini masih terkunci"}</h2>
+    <p class="lead">${msg?esc(msg)+" Atau minta Ayah dan Bunda membuka Tongki Lengkap.":"Minta Ayah atau Bunda membukanya ya. Sambil menunggu, coba menu yang gratis dulu!"}</p>
+    <button class="say btn fill" data-a="unlock">${LOCK} Buka Tongki Lengkap</button></div>`;
+  acts.unlock=()=>lockSheet();
+  tkLook={expr:"senang",move:"ask"};say(msg||"Bagian ini untuk Tongki Lengkap. Minta Ayah atau Bunda membukanya ya!");
+}
+function lockSheet(){
+  sheet(`<div class="sheet-in unlock"><p class="kick3">${LOCK} Tongki Lengkap</p><div class="moodtk">${tkFigure("cinta",{armR:-140,armL:140})}</div>
+    <p class="lead">Ada banyak permainan seru lagi bersama Tongki! Minta Ayah atau Bunda untuk membukanya ya.</p>
+    <button class="holdbtn" data-hold="beli"><b>Untuk orang tua</b><small>Tahan 2 detik</small></button>
+    <button class="ghost" data-sa="close">Nanti saja</button></div>`,{});
+  bindHold($("#sheetBody [data-hold=beli]"),openBeli);
+  tkLook={expr:"cinta",move:"wave"};say("Ada banyak permainan seru lagi! Minta Ayah atau Bunda membukanya ya.");
+}
+let beliMsg="",beliBusy=false;
+function openBeli(){
+  try{speechSynthesis.cancel()}catch(e){}
+  const n=()=>Object.values(MODS).reduce((a,m)=>a+(m.tabs||[]).length,0);
+  sheet(`<div class="plate peta-plate"><p class="kick2">Khusus orang tua</p><div class="peta-t">${pro()?"Tongki Lengkap aktif":"Tongki Lengkap"}</div><p class="peta-s">${pro()?"Terima kasih sudah mendukung Tongki!":"Bayar sekali, semua fitur terbuka selamanya."}</p></div>
+    <div class="sheet-in room beli">
+    ${pro()?`<section><h3>Status<small>Kode ${esc(licInfo&&licInfo.hint||"")} · aktif di perangkat ini</small></h3><p class="hint">Lisensi berlaku untuk satu keluarga, maksimal ${LIS.maxDev} perangkat.</p></section>`:`
+    <section><h3>Yang kamu dapat</h3><ul class="perks">
+      <li>Semua ${n()} latihan Baca, Tulis, Hitung, English, Jam & Hari, dan Toko</li>
+      <li>Kuis Tongki tanpa batas, 6 game, ${STORIES.length} cerita, ${ARTS.length} gambar mewarnai</li>
+      <li>Semua tahap EY1 sampai Stage 1, untuk sampai 4 anak</li>
+      <li>Sekali bayar, tanpa langganan, tanpa iklan. Dipakai di ${LIS.maxDev} perangkat</li></ul>
+      ${LIS.beli?`<a class="say btn fill buy" href="${esc(LIS.beli)}" target="_blank" rel="noopener">Beli sekarang${LIS.harga?` · ${esc(LIS.harga)}`:""}</a>`:`<p class="hint">Link pembelian belum diatur.</p>`}</section>
+    <section><h3>Sudah beli?<small>Kode lisensi dikirim Mayar ke email pembelian.</small></h3>
+      <div class="prow2 kodein"><input id="licIn" maxlength="64" placeholder="Kode lisensi" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Kode lisensi"><button class="btn ink sm" data-sa="aktif"${beliBusy?" disabled":""}>${beliBusy?"Memeriksa…":"Aktifkan"}</button></div>
+      ${beliMsg?`<p class="lmsg">${esc(beliMsg)}</p>`:""}
+      <p class="hint">Aktivasi butuh internet sekali saja. Setelah itu Tongki bisa dipakai tanpa internet.</p></section>`}
+    <p class="disc"><a href="privasi.html" target="_blank" rel="noopener">Kebijakan privasi</a> · <a href="syarat.html" target="_blank" rel="noopener">Syarat penggunaan</a>${LIS.kontak?` · Bantuan: ${esc(LIS.kontak)}`:""}</p></div>`,{
+    aktif:async()=>{const i=$("#licIn"),kode=(i&&i.value||"").replace(/\s+/g,"");if(beliBusy)return;
+      if(kode.length<4){beliMsg="Kodenya belum lengkap.";return openBeli()}
+      beliBusy=true;beliMsg="";openBeli();
+      let r=null;
+      try{const res=await fetch(LIS.api,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({kode,perangkat:devId()})});r=await res.json().catch(()=>null);
+        if(!r)r={ok:false,pesan:`Server belum siap (kode ${res.status}). Coba lagi nanti.`}}
+      catch(e){r={ok:false,pesan:navigator.onLine===false?"Tidak ada internet. Sambungkan internet dulu, aktivasi cuma sekali.":"Server lisensi tidak bisa dihubungi. Coba lagi sebentar lagi."}}
+      beliBusy=false;
+      if(r.ok&&r.token){const pl=await cekToken(r.token);
+        if(pl){lsSet("calistung.lisensi",JSON.stringify({tok:r.token,at:Date.now()}));licOK=true;licInfo={hint:pl.c,at:pl.t};beliMsg="";
+          sheet(`<div class="sheet-in unlock"><p class="kick3">Tongki Lengkap aktif!</p><div class="moodtk">${tkFigure("semangat",{armR:-150,armL:150})}</div>
+            <p class="lead">Semua menu sudah terbuka. Selamat belajar bersama Tongki!</p><button class="say btn fill" data-sa="ok">Hore!</button></div>`,{ok:()=>{closeSheet();route()}});
+          tkLook={expr:"semangat",move:"cheer"};say(`Hore! Tongki Lengkap sudah aktif. Ayo main semua permainan bersama Tongki!`);return}
+        r={ok:false,pesan:"Kode diterima, tapi tanda tangan lisensi tidak cocok. Hubungi bantuan."}}
+      beliMsg=r.pesan||"Kode tidak bisa diaktifkan.";openBeli()}});
+  const i=$("#licIn");if(i&&!beliBusy)setTimeout(()=>{try{i.focus()}catch(e){}},60);
+}
+
+/* --- cadangan progres (semua profil + karya) --- */
+function cadanganData(){
+  const out={app:"tongki-calistung",v:1,at:new Date().toISOString(),profiles:PROF,p:{},art:{}};
+  for(const pr of PROF.list){const a=lsGet("calistung.p."+pr.id),b=lsGet("calistung.art."+pr.id);if(a)out.p[pr.id]=a;if(b)out.art[pr.id]=b}
+  if(PROF.cur)out.p[PROF.cur]=JSON.stringify(store);
+  return out}
+function eksporCadangan(){
+  try{const d=cadanganData(),blob=new Blob([JSON.stringify(d)],{type:"application/json"}),a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);a.download=`tongki-cadangan-${today()}.json`;document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast("File cadangan disimpan")}catch(e){toast("Gagal membuat cadangan")}}
+let impData=null;
+function imporCadangan(){
+  const f=document.createElement("input");f.type="file";f.accept="application/json,.json";
+  f.onchange=()=>{const file=f.files&&f.files[0];if(!file)return;const rd=new FileReader();
+    rd.onload=()=>{try{const d=JSON.parse(rd.result);if(d.app!=="tongki-calistung"||!d.profiles||!Array.isArray(d.profiles.list))throw 0;impData=d;konfirmImpor()}catch(e){toast("File ini bukan cadangan Tongki")}};rd.readAsText(file)};
+  f.click()}
+function konfirmImpor(){const d=impData,nm=d.profiles.list.map(p=>{try{return JSON.parse(d.p[p.id]||"{}").name||"Tanpa nama"}catch(e){return "?"}});
+  sheet(`<div class="sheet-in unlock"><p class="kick3">Pulihkan cadangan</p>
+    <p class="lead">Cadangan tanggal <b>${esc(new Date(d.at).toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"}))}</b> berisi ${nm.length} profil: ${nm.map(esc).join(", ")}.</p>
+    <p class="hint">Data anak di perangkat ini akan diganti dengan isi cadangan.</p>
+    <button class="say btn fill" data-sa="imp">Ya, pulihkan</button><button class="ghost" data-sa="close">Batal</button></div>`,{
+    imp:()=>{for(const k of Object.keys(localStorage))if(/^calistung\.(p|art)\./.test(k))lsDel(k);
+      for(const[id,v]of Object.entries(d.p))if(/^[\w-]+$/.test(id)&&typeof v==="string")lsSet("calistung.p."+id,v);
+      for(const[id,v]of Object.entries(d.art||{}))if(/^[\w-]+$/.test(id)&&typeof v==="string")lsSet("calistung.art."+id,v);
+      lsSet("calistung.profiles",JSON.stringify(d.profiles));location.hash="";location.reload()}})}
 
 /* ---------- MUSIK LATAR (dibuat langsung dengan Web Audio, tanpa file) ---------- */
 // derajat tangga nada; null = jeda. 32 ketukan seperdelapan = 4 birama
@@ -3671,7 +3833,7 @@ document.addEventListener("keydown",unlockAudio,true);
 document.addEventListener("visibilitychange",()=>{if(document.hidden)stopMusic();else applyMusic()});
 
 /* ---------- mulai ---------- */
-route();
+route();initLisensi();
 try{if("serviceWorker" in navigator&&location.protocol==="https:"&&!/claude|anthropic/.test(location.hostname))navigator.serviceWorker.register("sw.js").catch(()=>{})}catch(e){}
 </script>
 </body>
