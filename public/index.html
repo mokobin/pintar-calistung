@@ -1490,6 +1490,66 @@ h3.wk{margin:6px 0 0;font:800 16px var(--f-display);text-transform:uppercase;let
 .kodein input{flex:1;min-width:0;letter-spacing:.04em;font-weight:700}
 .lmsg{margin:8px 0 0;padding:10px 12px;border-radius:10px;background:var(--red-s);border:2px solid var(--red);font-weight:700;font-size:14px}
 .room .row{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ===== PENALTI ===== */
+.game.pen{gap:10px}
+.pscene{position:relative;width:min(560px,100%,calc((100dvh - 360px)*1.333));min-width:min(280px,100%);aspect-ratio:4/3;border:3px solid var(--ink);border-radius:16px;overflow:hidden;box-shadow:6px 6px 0 var(--ink);background:#2E9447}
+.pensvg{display:block;width:100%;height:100%}
+.pensvg .fan{animation:fanbob 1.6s ease-in-out infinite;transform-box:fill-box}
+@keyframes fanbob{50%{transform:translateY(-1.5px)}}
+.pscene.cheer .fan{animation:fanjump .42s ease-in-out infinite}
+@keyframes fanjump{50%{transform:translateY(-6px)}}
+.pscene.cheer .farm{transform:scaleY(1.3)}
+.pscene.sad .fan{animation-duration:3s}
+.keeper{transition:transform .5s}
+.keeper .kbody{animation:ksway 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes ksway{0%,100%{transform:translateX(-7px)}50%{transform:translateX(7px)}}
+.keeper.diveL .kbody,.keeper.diveR .kbody{animation:none}
+.pball{transition:transform .75s}
+.pscene.kick .bspin{animation:bspin .75s linear}
+@keyframes bspin{to{transform:rotate(720deg)}}
+.pscene.shake .net{animation:netshake .5s ease-out 2}
+@keyframes netshake{30%{transform:translateY(-2px) scaleX(1.01)}60%{transform:translateY(1.5px)}}
+.net{transform-box:fill-box;transform-origin:50% 0}
+.ptk{position:absolute;left:18%;bottom:1%;width:24%;transition:transform .5s ease-in;pointer-events:none}
+.ptk .tkfig{width:100%;height:auto;display:block}
+.ptk.run{transform:translate(48%,-6%) scale(.94)}
+.ptk.run .legR{--a:-58deg!important}
+.ptk.run .armL{--a:70deg!important}
+.ptk.run .armR{--a:-40deg!important}
+.gol{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%) rotate(-6deg);font:900 clamp(34px,11vw,64px)/1 var(--f-display);color:var(--yellow);-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--ink);letter-spacing:.02em;animation:golpop .6s cubic-bezier(.2,1.6,.4,1);pointer-events:none;white-space:nowrap}
+@keyframes golpop{from{transform:translate(-50%,-50%) scale(.2) rotate(-20deg);opacity:0}}
+.pscore{display:flex;gap:5px}
+.pscore i{width:24px;height:24px;border-radius:50%;border:2.5px solid var(--ink);background:var(--card);display:grid;place-items:center;font:900 15px/1 system-ui;font-style:normal;color:#fff}
+.pscore i svg{width:14px;height:14px}
+.pscore i.now{background:var(--yellow);animation:pop .6s}
+.pscore i.g{background:var(--green)}
+.pscore i.m{background:var(--red)}
+.pq{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:560px}
+.pask{margin:0;text-align:center}
+.peq{font:800 clamp(26px,7vw,36px) var(--f-display);white-space:nowrap}
+.pitems{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;max-width:360px}
+.pitems.one{margin:-4px 0}
+.psay{height:46px}
+.pq .opts .opt.word{font-size:clamp(22px,6vw,30px);text-transform:none}
+.pend{display:flex;flex-direction:column;align-items:center;gap:8px}
+.pbig{font:900 56px/1 var(--f-display)}
+.pbig small{font-size:20px}
+@media (orientation:landscape) and (min-width:720px),(orientation:landscape) and (max-height:560px){
+  .game.pen{display:grid!important;grid-template-columns:auto minmax(240px,380px);grid-template-areas:"s h" "s q";column-gap:22px;row-gap:10px;align-items:start;justify-content:center}
+  .game.pen>.ghead{grid-area:h!important;max-width:none}
+  .game.pen>.pscene{grid-area:s!important;width:min(640px,calc((100dvh - 140px)*1.333),58vw);min-width:0}
+  .game.pen>.pq{grid-area:q!important}
+}
+@media (orientation:landscape) and (max-height:560px){
+  .game.pen>.pscene{width:min(calc((100dvh - 150px)*1.333),56vw)}
+  .pq .psay{display:none}
+  .pq .opt{height:clamp(52px,16dvh,80px)!important}
+  .pitems .ill{width:22px;height:22px}
+  .pask{font-size:20px}
+}
+@media (orientation:portrait) and (max-height:760px){.pitems .ill{width:26px;height:26px}.psay{display:none}.pq{gap:6px}.pscene{width:min(560px,100%,calc((100dvh - 400px)*1.333))}.pq .opt{height:clamp(56px,11dvh,80px)!important}}
+.pask{cursor:pointer}
 </style>
 
 <div id="app" data-mod="home">
@@ -1741,7 +1801,7 @@ const MODS={
   tulis:{title:"Menulis",tabs:[["garis","Pola Garis"],["kecil","Huruf Kecil"],["besar","Huruf Besar"],["angka","Angka"]]},
   hitung:{title:"Berhitung",tabs:[["kenal","Kenal Angka"],["hitung","Ayo Hitung"],["pasangan","Pasangan"],["tambah","Tambah"],["bentuk","Bentuk"],["pola","Pola"],["ukuran","Ukuran"],["data","Data"]],groups:[["Bilangan",["kenal","hitung","pasangan","tambah"]],["Bentuk & Data",["bentuk","pola","ukuran","data"]]]},
   kuis:{title:"Kuis",tabs:[]},
-  main:{title:"Main",tabs:[["tangkap","Tangkap"],["memori","Memori"],["jembatan","Jembatan"],["balon","Balon"],["simon","Tongki Bilang"],["umpet","Petak Umpet"]],groups:[["Cepat & Fokus",["tangkap","balon","umpet"]],["Ingat & Pikir",["memori","simon","jembatan"]]]},
+  main:{title:"Main",tabs:[["tangkap","Tangkap"],["memori","Memori"],["jembatan","Jembatan"],["balon","Balon"],["simon","Tongki Bilang"],["umpet","Petak Umpet"],["penalti","Penalti"]],groups:[["Cepat & Fokus",["tangkap","balon","umpet"]],["Ingat & Pikir",["memori","simon","jembatan","penalti"]]]},
   cerita:{title:"Cerita",tabs:[]},
   warna:{title:"Mewarnai",tabs:[]},
   rutin:{title:"Rutinitas",tabs:[]},
@@ -1793,7 +1853,7 @@ function route(){
 window.addEventListener("hashchange",route);
 function renderMod(mod){
   Ktok++;Q.tok++;wrongN=0;stRead++;sayEvt=null;gTok++;
-  buddyShow(!["kuis","cerita","warna"].includes(mod)&&!(mod==="inggris"&&tabOf.inggris==="gerak")&&!(mod==="main"&&tabOf.main==="jembatan"));
+  buddyShow(!["kuis","cerita","warna"].includes(mod)&&!(mod==="inggris"&&tabOf.inggris==="gerak")&&!(mod==="main"&&["jembatan","penalti"].includes(tabOf.main)));
   if(mod==="kuis"){main.innerHTML=`<div id="panel"></div>`;acts={};kuisActs();kuisStart($("#panel"));return}
   if(mod==="rutin"){main.innerHTML=`<div id="panel"></div>`;acts={};rtnSeg=rtnSegNow();rutinPage($("#panel"));const[a,b]=rtnCount();tkLook={expr:"senang",move:"wave"};say(a>=b&&b?"Wah, semua rutinitas hari ini sudah selesai. Hebat!":`Ayo cek rutinitas ${RSEG[rtnSeg].toLowerCase()}! Mana yang sudah kamu kerjakan?`);return}
   if(mod==="cerita"||mod==="warna"){main.innerHTML=`<div id="panel"></div>`;acts={};(mod==="cerita"?ceritaList:warnaList)($("#panel"));return}
@@ -1808,7 +1868,7 @@ function renderMod(mod){
   const p=$("#panel");
   try{const at=main.querySelector('.tab[aria-selected="true"]');if(at)at.parentElement.scrollLeft=at.offsetLeft-at.parentElement.clientWidth/2+at.offsetWidth/2}catch(e){}
   if(!tabFree(mod,tabOf[mod])){lockPanel(p);return}
-  ({baca:{huruf:bacaHuruf,bunyi:bacaBunyi,suku:bacaSuku,rangkai:bacaRangkai,tebak:bacaTebak},tulis:{garis:tulisPad,besar:tulisPad,kecil:tulisPad,angka:tulisPad},main:{tangkap:gTangkap,memori:gMemori,jembatan:gJembatan,balon:gBalon,simon:gSimon,umpet:gUmpet},inggris:{abc:engAbc,vocab:engVocab,dengar:engDengar,warna:engWarna,gerak:engGerak},jam:{waktu:jamWaktu,hari:jamHari,baca:jamBaca,atur:jamAtur},toko:{kenal:tokoKenal,bayar:tokoBayar,cukup:tokoCukup,kembali:tokoKembali},hitung:{kenal:hitungKenal,hitung:hitungAyo,pasangan:hitungPasangan,tambah:hitungTambah,bentuk:hitungBentuk,pola:hitungPola,ukuran:hitungUkuran,data:hitungData}})[mod][tabOf[mod]](p);
+  ({baca:{huruf:bacaHuruf,bunyi:bacaBunyi,suku:bacaSuku,rangkai:bacaRangkai,tebak:bacaTebak},tulis:{garis:tulisPad,besar:tulisPad,kecil:tulisPad,angka:tulisPad},main:{penalti:gPenalti,tangkap:gTangkap,memori:gMemori,jembatan:gJembatan,balon:gBalon,simon:gSimon,umpet:gUmpet},inggris:{abc:engAbc,vocab:engVocab,dengar:engDengar,warna:engWarna,gerak:engGerak},jam:{waktu:jamWaktu,hari:jamHari,baca:jamBaca,atur:jamAtur},toko:{kenal:tokoKenal,bayar:tokoBayar,cukup:tokoCukup,kembali:tokoKembali},hitung:{kenal:hitungKenal,hitung:hitungAyo,pasangan:hitungPasangan,tambah:hitungTambah,bentuk:hitungBentuk,pola:hitungPola,ukuran:hitungUkuran,data:hitungData}})[mod][tabOf[mod]](p);
 }
 
 /* ---------- beranda ---------- */
@@ -2826,7 +2886,7 @@ function openRecap(){
 }
 
 /* ---------- Laporan untuk orang tua ---------- */
-const TALK_TIPS={"jam:waktu":"Saat makan, tanya: tadi pagi kita ngapain? nanti malam mau ngapain?","jam:hari":"Nyanyikan nama hari saat bangun tidur, lalu tanya: besok hari apa?","jam:baca":"Tunjukkan jam dinding saat waktu makan: jarum pendek di angka berapa?","jam:atur":"Pakai jam mainan dari piring kertas, minta anak mengatur jam tidur malam.","toko:kenal":"Ajak anak memilah koin di rumah berdasarkan angkanya.","toko:bayar":"Biarkan anak membayar sendiri jajanan kecil di warung dengan uang pas.","toko:cukup":"Main toko-tokoan: beri anak beberapa koin dan tanya apakah cukup untuk membeli.","toko:kembali":"Saat belanja, hitung kembalian bersama anak sebelum kasir memberikannya.","rutin:":"Pujilah usahanya, bukan hasilnya: \"Kamu sudah berusaha sikat gigi sendiri, keren!\"","baca:huruf":"Ajak anak mencari huruf awal namanya di bungkus makanan atau papan nama toko.","baca:bunyi":"Main tebak-tebakan: \"Benda apa di dapur yang dimulai bunyi /s/?\"","baca:suku":"Tepuk tangan tiap suku kata saat menyebut nama anggota keluarga: Ma-ma, Pa-pa.","baca:rangkai":"Pecah kata sehari-hari jadi suku kata saat makan: na-si, sa-yur.","baca:tebak":"Tulis satu huruf di kertas, minta anak mencari benda berawalan huruf itu.",
+const TALK_TIPS={"main:penalti":"Main tebak-tebakan sambil menendang bola di halaman: jawab benar, boleh menendang!","jam:waktu":"Saat makan, tanya: tadi pagi kita ngapain? nanti malam mau ngapain?","jam:hari":"Nyanyikan nama hari saat bangun tidur, lalu tanya: besok hari apa?","jam:baca":"Tunjukkan jam dinding saat waktu makan: jarum pendek di angka berapa?","jam:atur":"Pakai jam mainan dari piring kertas, minta anak mengatur jam tidur malam.","toko:kenal":"Ajak anak memilah koin di rumah berdasarkan angkanya.","toko:bayar":"Biarkan anak membayar sendiri jajanan kecil di warung dengan uang pas.","toko:cukup":"Main toko-tokoan: beri anak beberapa koin dan tanya apakah cukup untuk membeli.","toko:kembali":"Saat belanja, hitung kembalian bersama anak sebelum kasir memberikannya.","rutin:":"Pujilah usahanya, bukan hasilnya: \"Kamu sudah berusaha sikat gigi sendiri, keren!\"","baca:huruf":"Ajak anak mencari huruf awal namanya di bungkus makanan atau papan nama toko.","baca:bunyi":"Main tebak-tebakan: \"Benda apa di dapur yang dimulai bunyi /s/?\"","baca:suku":"Tepuk tangan tiap suku kata saat menyebut nama anggota keluarga: Ma-ma, Pa-pa.","baca:rangkai":"Pecah kata sehari-hari jadi suku kata saat makan: na-si, sa-yur.","baca:tebak":"Tulis satu huruf di kertas, minta anak mencari benda berawalan huruf itu.",
   "tulis:garis":"Ajak menggambar garis zig-zag dan lingkaran di pasir atau dengan krayon besar.","tulis:kecil":"Biarkan anak menulis huruf di udara dengan jari besar-besar.","tulis:besar":"Tempel huruf besar nama anak di pintu kamarnya.","tulis:angka":"Minta anak menulis nomor rumah atau tanggal hari ini.",
   "hitung:kenal":"Hitung anak tangga bersama setiap naik tangga.","hitung:hitung":"Minta anak menghitung sendok saat menata meja makan.","hitung:pasangan":"Pakai 10 kancing: \"Ada 7 di tangan, berapa lagi supaya 10?\"","hitung:tambah":"Tambah-kurang buah di piring saat makan buah bersama.","hitung:bentuk":"Cari bentuk lingkaran, segitiga, dan persegi di dalam rumah.","hitung:pola":"Susun pola dengan sendok-garpu atau kaus kaki berwarna.","hitung:ukuran":"Bandingkan panjang sepatu ayah, ibu, dan anak.","hitung:data":"Hitung mainan per jenis lalu tanyakan mana yang paling banyak.",
   "kuis:":"Minta anak menirukan gerakan Tongki: lompat, tepuk, jongkok, sambil menghitung.","inggris:abc":"Nyanyikan lagu ABC bersama sebelum tidur.","inggris:vocab":"Sebut nama benda di rumah dalam Bahasa Inggris: table, cup, door.","inggris:dengar":"Main \"Where is the…?\" dengan mainan di rumah.","inggris:warna":"Tanya warna baju hari ini dalam Bahasa Inggris.","inggris:gerak":"Main perintah: Jump! Sit down! Clap your hands!",
@@ -3001,7 +3061,7 @@ function gUmpet(p){
 /* ---------- TANTANGAN HARIAN ---------- */
 const DPOOL=[
   {k:"g:tangkap",l:"Selesaikan game Tangkap"},{k:"g:memori",l:"Temukan semua pasangan di Memori"},{k:"g:jembatan",l:"Bantu Tongki menyeberang jembatan"},
-  {k:"g:balon",l:"Pecahkan balon berurutan"},{k:"g:simon",l:"Ikuti urutan Tongki Bilang"},{k:"g:umpet",l:"Temukan Tongki di Petak Umpet"},
+  {k:"g:balon",l:"Pecahkan balon berurutan"},{k:"g:simon",l:"Ikuti urutan Tongki Bilang"},{k:"g:umpet",l:"Temukan Tongki di Petak Umpet"},{k:"g:penalti",l:"Main Penalti Tongki sampai selesai"},
   {k:"g:cerita",l:"Baca satu cerita bersama Tongki"},{k:"g:warna",l:"Warnai satu gambar"},{k:"m:baca",n:5,l:"Jawab 5 soal Membaca"},{k:"m:hitung",n:5,l:"Jawab 5 soal Berhitung"},{k:"m:tulis",n:3,l:"Tebalkan 3 huruf atau angka"},
   {k:"m:inggris",n:4,l:"Jawab 4 soal English"},{k:"m:jam",n:4,l:"Jawab 4 soal Jam & Hari"},{k:"m:toko",n:3,l:"Belanja 3 kali di Toko Tongki"},{k:"m:rutin",n:3,l:"Centang 3 rutinitas hari ini"},{k:"m:kuis",n:3,l:"Jawab 3 soal Kuis Tongki"}];
 function dailyTasks(){
@@ -3029,6 +3089,117 @@ function checkDaily(){
     <div class="trophy">${TROPHY.replace(/width="26" height="26"/,'width="72" height="72"')}<b>Piala ke-${store.trophies}</b></div><button class="say btn fill" data-sa="ok">Hore!</button></div>`,{ok:()=>closeSheet()});
     tkLook={expr:"semangat",move:"cheer"};say(`Luar biasa${store.name?", "+store.name:""}! Semua tantangan hari ini selesai. Ini piala ke-${numWord(store.trophies)} untukmu!`)},2400);
   return true;
+}
+
+/* ================= PENALTI TONGKI =================
+   Tongki menendang penalti. Jawaban benar = GOL. Jawaban salah = ditangkap kiper. 5 tendangan. */
+const PEN_N=5;
+const FANC=["#E5412D","#2F5BD3","#FFC21A","#10A260","#F58A1F","#6C4AB6","#F49AB9","#FFFDF6"];
+const SKIN=["#F3C9A0","#E0A97E","#C68B5E","#8D5A3B","#F7D6B5"];
+function penCrowd(){let s="",i=0;
+  for(let r=0;r<4;r++){const y=26+r*19,off=r%2?8:0;
+    for(let x=6+off;x<400;x+=16){i++;const c=FANC[(i*7+r*3)%FANC.length],sk=SKIN[(i*5+r)%SKIN.length],d=((i*37)%100)/100;
+      const flag=(i%9===0)?`<path d="M6 -10v-14" stroke="#1C1B22" stroke-width="1.4"/><path d="M6 -24h11l-3 4 3 4H6z" fill="${i%18===0?"#FF8A3D":"#FFFDF6"}"/>`:"";
+      const arms=(i%4===0)?`<path class="farm" d="M-1 -2l-5 -9M13 -2l5 -9" stroke="${c}" stroke-width="3" stroke-linecap="round"/>`:"";
+      s+=`<g transform="translate(${x} ${y})"><g class="fan" style="animation-delay:-${d.toFixed(2)}s">${arms}${flag}<rect x="-1" y="-2" width="14" height="12" rx="5" fill="${c}"/><circle cx="6" cy="-6" r="5.2" fill="${sk}"/></g></g>`}}
+  return s}
+function penScene(){
+  const stripes=Array.from({length:7},(_,i)=>`<rect x="0" y="${112+i*28}" width="400" height="14" fill="#3FAA55" opacity=".55"/>`).join("");
+  const netV=Array.from({length:15},(_,i)=>`<path d="M${136+i*9.1} 106L${146+i*7.8} 92"/><path d="M${136+i*9.1} 106V160"/>`).join("");
+  const netH=Array.from({length:6},(_,i)=>`<path d="M134 ${112+i*9}H266"/>`).join("");
+  return `<svg class="pensvg" viewBox="0 0 400 300" aria-hidden="true">
+  <defs><linearGradient id="pnSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F2A55"/><stop offset="1" stop-color="#36407A"/></linearGradient></defs>
+  <rect width="400" height="104" fill="url(#pnSky)"/>
+  <g class="lights"><path d="M14 0v20M386 0v20" stroke="#5B5866" stroke-width="3"/><rect x="4" y="0" width="22" height="9" rx="2" fill="#FFFDF6"/><rect x="374" y="0" width="22" height="9" rx="2" fill="#FFFDF6"/></g>
+  <path d="M0 14H400M0 33H400M0 52H400M0 71H400" stroke="#0E1636" stroke-width="2" opacity=".6"/>
+  <g class="crowd">${penCrowd()}</g>
+  <rect x="0" y="88" width="400" height="17" fill="#1C1B22"/>
+  <g font-family="system-ui,sans-serif" font-weight="900" font-size="9.5" letter-spacing="1.5">
+    <rect x="4" y="91" width="92" height="11" rx="2" fill="#FF8A3D"/><text x="50" y="99.6" text-anchor="middle" fill="#1C1B22">TONGKI CUP</text>
+    <rect x="104" y="91" width="92" height="11" rx="2" fill="#FFC21A"/><text x="150" y="99.6" text-anchor="middle" fill="#1C1B22">CALISTUNG</text>
+    <rect x="204" y="91" width="92" height="11" rx="2" fill="#2F5BD3"/><text x="250" y="99.6" text-anchor="middle" fill="#fff">AYO GOL!</text>
+    <rect x="304" y="91" width="92" height="11" rx="2" fill="#E5412D"/><text x="350" y="99.6" text-anchor="middle" fill="#fff">TONGKI CUP</text></g>
+  <rect x="0" y="105" width="400" height="195" fill="#2E9447"/>${stripes}
+  <g stroke="#FFFDF6" stroke-width="2.4" fill="none" opacity=".95"><path d="M-10 160H410"/><path d="M96 160L60 232H340L304 160"/><path d="M150 160L140 182H260L250 160"/><path d="M150 232a52 24 0 0 0 100 0"/></g>
+  <circle cx="200" cy="252" r="2.6" fill="#FFFDF6"/>
+  <g class="net" stroke="#FFFDF6" stroke-width=".9" opacity=".55" fill="none"><path d="M136 106L146 92H254L264 106" stroke-width="1.4"/>${netV}${netH}</g>
+  <g class="posts" stroke="#FFFDF6" stroke-width="5" stroke-linecap="round" fill="none"><path d="M134 161V104H266V161"/></g>
+  <g id="keeper" class="keeper" style="transform:translate(200px,160px)"><g class="kbody">
+    <ellipse cx="0" cy="1" rx="14" ry="3" fill="#000" opacity=".18"/>
+    <path d="M-4 -12L-7 0M4 -12L7 0" stroke="#1C1B22" stroke-width="3.4" stroke-linecap="round"/>
+    <rect x="-9" y="-30" width="18" height="20" rx="6" fill="#6C4AB6" stroke="#1C1B22" stroke-width="2"/><text x="0" y="-16" text-anchor="middle" font-size="9" font-weight="900" fill="#FFC21A" font-family="system-ui">1</text>
+    <g class="karms"><path d="M-8 -27L-19 -40M8 -27L19 -40" stroke="#6C4AB6" stroke-width="4.4" stroke-linecap="round"/><circle cx="-20" cy="-42" r="4.6" fill="#10A260" stroke="#1C1B22" stroke-width="1.6"/><circle cx="20" cy="-42" r="4.6" fill="#10A260" stroke="#1C1B22" stroke-width="1.6"/></g>
+    <circle cx="0" cy="-38" r="8.5" fill="#F3C9A0" stroke="#1C1B22" stroke-width="2"/><path d="M-8.5 -40a8.5 8.5 0 0 1 17 0z" fill="#1C1B22"/>
+    <circle cx="-3" cy="-37" r="1.3" fill="#1C1B22"/><circle cx="3" cy="-37" r="1.3" fill="#1C1B22"/><path d="M-3 -33q3 2 6 0" stroke="#1C1B22" stroke-width="1.3" fill="none"/></g></g>
+  <g id="pball" class="pball" style="transform:translate(200px,252px)"><g class="bspin"><circle r="11" fill="#FFFDF6" stroke="#1C1B22" stroke-width="2"/><path d="M0 -4.5l4.3 3.1-1.6 5h-5.4l-1.6-5z" fill="#1C1B22"/><path d="M0 -4.5V-11M4.3 -1.4l6.2-2M2.7 3.6l3.8 5.6M-2.7 3.6l-3.8 5.6M-4.3 -1.4l-6.2-2" stroke="#1C1B22" stroke-width="1.4"/></g></g>
+  </svg>`}
+
+function penQ(st){
+  const n=st<=2?3:4,type=pick(st===1?["hitung","angka","hitung"]:st===2?["hitung","angka","huruf"]:st===3?["tambah","awal","suku","hitung"]:["tambah","kurang","sesudah","kata"]);
+  const max=st===1?5:10;let q={type};
+  if(type==="hitung"){const k=rand(1,st>=3?10:max),it=pick([["bola","bola"],["apel","apel"],["bintang","bintang"],["balon","balon"],["jeruk","jeruk"]]);
+    q={...q,ans:k,opts:choices(n,k,1,st>=3?10:max),vis:`<div class="pitems">${Array.from({length:k},()=>ill(it[0],34)).join("")}</div>`,ask:`Ada berapa ${it[1]}?`,txt:`Ada berapa ${it[1]}?`}}
+  else if(type==="angka"){const k=rand(1,max);q={...q,ans:k,opts:choices(n,k,1,max),ask:`Mana angka ${kata(k)}?`,txt:`Mana angka yang Tongki sebut?`,hideAns:true}}
+  else if(type==="huruf"){const L=pick(LET.filter(l=>!"QXV".includes(l[0]))),others=shuffle(LET.filter(l=>l!==L&&!"QXV".includes(l[0]))).slice(0,n-1).map(l=>l[0]);
+    q={...q,ans:L[0],opts:shuffle([L[0],...others]),ask:`Mana huruf ${L[3]}?`,txt:"Mana huruf yang Tongki sebut?",word:true}}
+  else if(type==="awal"){const L=pick(LET.filter(l=>!"QXVFO".includes(l[0]))),others=shuffle(LET.filter(l=>l!==L&&!"QXV".includes(l[0]))).slice(0,n-1).map(l=>l[0]);
+    q={...q,ans:L[0],opts:shuffle([L[0],...others]),vis:`<div class="pitems one">${ill(L[2],64)}</div>`,ask:`${L[1]}. Dimulai huruf apa?`,txt:`<b>${L[1]}</b> dimulai huruf apa?`,word:true}}
+  else if(type==="suku"){const w=pick(KATA),others=shuffle([...new Set(KATA.map(k=>k[0]).filter(s=>s!==w[0]))]).slice(0,n-1);
+    q={...q,ans:w[0],opts:shuffle([w[0],...others]),vis:`<div class="pitems one">${ill(w[2],64)}</div>`,ask:`${w[2]}. Suku kata depannya apa?`,txt:`Suku kata depan <b>${w[2]}</b>?`,word:true}}
+  else if(type==="tambah"){const top=st===3?10:20,a=rand(1,top-2),b=rand(1,Math.min(9,top-a));q={...q,ans:a+b,opts:choices(n,a+b,2,top),ask:`${kata(a)} tambah ${kata(b)}, jadi berapa?`,txt:`<span class="peq">${a} + ${b} = ?</span>`}}
+  else if(type==="kurang"){const a=rand(5,20),b=rand(1,Math.min(9,a-1));q={...q,ans:a-b,opts:choices(n,a-b,0,20),ask:`${kata(a)} kurang ${kata(b)}, jadi berapa?`,txt:`<span class="peq">${a} − ${b} = ?</span>`}}
+  else if(type==="sesudah"){const k=rand(5,19);q={...q,ans:k+1,opts:choices(n,k+1,3,20),ask:`Angka sesudah ${kata(k)} berapa?`,txt:`Sesudah <span class="peq">${k}</span> angka berapa?`}}
+  else if(type==="kata"){const w=pick(KATA),others=shuffle(KATA.filter(k=>k!==w)).slice(0,n-1).map(k=>k[2]);
+    q={...q,ans:w[2],opts:shuffle([w[2],...others]),ask:`${w[0]}, ${w[1]}. Jadi kata apa?`,txt:`<span class="peq">${w[0]} + ${w[1]}</span> jadi kata apa?`,word:true}}
+  return q}
+
+function crowdNoise(dur=1.8,vol=.5){try{if(!store.sound||!ac||ac.state!=="running")return;
+  const len=Math.floor(ac.sampleRate*dur),buf=ac.createBuffer(1,len,ac.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
+  const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain(),t=ac.currentTime;s.buffer=buf;f.type="bandpass";f.frequency.value=900;f.Q.value=.6;
+  g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.18);g.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(f).connect(g).connect(ac.destination);s.start(t);s.stop(t+dur+.05)}catch(e){}}
+const whistle=()=>tone([2700,2500,2700],.07,"sine",.06,.07);
+
+function gPenalti(p){
+  const tok=++gTok,st=store.stage||1;let k=0,goals=0,busy=true,q=null;const res=[];
+  p.innerHTML=`<div class="game pen">${gHead("Penalti Tongki",`<span class="pscore" id="pscore">${Array.from({length:PEN_N},()=>`<i></i>`).join("")}</span>`)}
+    <div class="pscene" id="pscene">${penScene()}<div class="ptk" id="ptk">${tkFigure("semangat",{armL:30,armR:-30,legL:8,legR:-8})}</div><div class="gol" id="gol" hidden>GOOOL!</div></div>
+    <div class="pq" id="pq"></div></div>`;
+  const scene=$("#pscene"),ball=$("#pball"),keeper=$("#keeper"),tk=$("#ptk"),pq=$("#pq");
+  const setScore=()=>{const s=$("#pscore");if(s)s.innerHTML=Array.from({length:PEN_N},(_,i)=>`<i class="${res[i]===true?"g":res[i]===false?"m":i===k?"now":""}">${res[i]===true?IC.check:res[i]===false?"×":""}</i>`).join("")};
+  const reset=()=>{scene.classList.remove("cheer","kick","shake","sad");ball.style.transition="none";ball.style.transform="translate(200px,252px)";keeper.style.transition="none";keeper.style.transform="translate(200px,160px)";keeper.classList.remove("diveL","diveR","catch");tk.classList.remove("run");$("#gol").hidden=true;void ball.getBoundingClientRect()};
+  const ask=()=>{if(!gAlive(tok))return;reset();busy=false;q=penQ(st);setScore();
+    pq.innerHTML=`<p class="ask pask" data-a="again" role="button" tabindex="0">${q.txt}</p>${q.vis||""}<button class="say btn fill psay" data-a="again">${IC.spk(22)} Dengar</button>
+      <div class="opts n${q.opts.length} ${q.word?"words":"nums"}" style="--n:${q.opts.length}">${q.opts.map(o=>`<button class="opt btn ${q.word?"word":"num"}" data-a="shoot" data-v="${o}">${o}</button>`).join("")}</div>`;
+    tkLook={expr:"semangat",move:"ask"};say(`Tendangan ke ${kata(k+1)}! ${q.ask}`);acts.again=()=>say(q.ask)};
+  const kick=(goal,el)=>{busy=true;whistle();tk.classList.add("run");
+    const left=Math.random()<.5,high=Math.random()<.5,bx=left?pick([150,156]):pick([244,250]),by=high?118:146;
+    setTimeout(()=>{if(!gAlive(tok))return;scene.classList.add("kick");tone([180],.08,"square",.05,.2);
+      ball.style.transition="transform .75s cubic-bezier(.2,.7,.35,1)";
+      keeper.style.transition="transform .5s cubic-bezier(.3,.8,.4,1)";
+      const diveLeft=goal?!left:left;keeper.classList.add(diveLeft?"diveL":"diveR");
+      keeper.style.transform=`translate(${diveLeft?168:232}px,${high?150:158}px) rotate(${diveLeft?-62:62}deg)`;
+      ball.style.transform=goal?`translate(${bx}px,${by}px) scale(.5)`:`translate(${diveLeft?164:236}px,${high?128:140}px) scale(.55)`;
+      setTimeout(()=>{if(!gAlive(tok))return;
+        if(goal){goals++;scene.classList.add("cheer","shake");$("#gol").hidden=false;crowdNoise(2.2,.55);tone([523,659,784,1047,1319],.16,"triangle",.07);
+          store.stars++;save();renderBar("main");tkLook={expr:"tertawa",move:"cheer",after:"senang"};
+          say(pick(["Gooool! Hebat sekali!","Gol! Kipernya kalah cepat!","Gooool! Penonton bersorak untukmu!","Gol! Tendangan yang keren!"]))}
+        else{keeper.classList.add("catch");scene.classList.add("sad");crowdNoise(.9,.18);tone([330,247],.16,"sine",.12,.16);
+          tkLook={expr:"bingung",move:"shrug",after:"senang"};
+          say(`Yah, ditangkap kiper! Jawabannya ${typeof q.ans==="number"?kata(q.ans):q.ans}. Tendangan berikutnya pasti bisa!`)}
+        res[k]=goal;k++;setScore();
+        afterTalk(()=>{if(!gAlive(tok))return;if(k<PEN_N)ask();else end()},1800)},780)},520)};
+  const end=()=>{reset();setScore();busy=true;
+    const msg=goals===PEN_N?`Sempurna! ${kata(goals)} gol dari ${kata(PEN_N)} tendangan. Kamu juara Tongki Cup!`:goals>=3?`Hebat! Kamu mencetak ${kata(goals)} gol. Tongki bangga sekali!`:goals>0?`Kamu mencetak ${kata(goals)} gol. Latihan terus, kamu makin jago!`:"Kiper hari ini kuat sekali. Ayo coba lagi, kamu pasti bisa mencetak gol!";
+    pq.innerHTML=`<div class="pend"><p class="kick3">Pertandingan selesai</p><b class="pbig">${goals} <small>gol dari ${PEN_N}</small></b><button class="say btn fill" data-a="lagi">Main lagi</button></div>`;
+    acts.lagi=()=>gPenalti(p);
+    if(goals>0){scene.classList.add("cheer");crowdNoise(2.6,.5)}
+    gameDone("penalti",pq.querySelector(".pbig"),msg)};
+  acts.shoot=(v,el)=>{if(busy||!q)return;const hit=String(v)===String(q.ans);
+    pq.querySelectorAll("[data-a=shoot]").forEach(b=>{b.disabled=true;if(String(b.dataset.v)===String(q.ans))b.classList.add("right")});
+    if(!hit)el.classList.add("wrong");kick(hit,el)};
+  setScore();
+  tkLook={expr:"semangat",move:"wave"};say("Selamat datang di Tongki Cup! Jawab pertanyaan Tongki supaya tendangannya gol!");
+  afterTalk(()=>{if(gAlive(tok))ask()},900);
 }
 
 /* ================= PROFIL: "Siapa yang main?" ================= */
