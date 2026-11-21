@@ -1637,7 +1637,23 @@ let speechBad=false,pendingSay=null,spUnlocked=false;
 const spKeep=[];let spNoStart=0,spOK=0,spWarned=false,spLast="";
 // Catatan Chrome: membatalkan lalu langsung berbicara bisa membuat ucapan hilang, jadi beri jeda setelah cancel.
 // Ucapan juga disimpan di spKeep supaya tidak terhapus memori sebelum selesai (bug Chrome).
-function say(t,lang,retry){return new Promise(res=>{
+// Hitung ucapan yang sedang berjalan, supaya pindah soal menunggu Tongki selesai bicara.
+let talkN=0,talkEnd=0;
+let talkEnds=[];
+function say(t,lang,retry){
+  if(!retry){talkEnds.forEach(f=>f());talkEnds=[]}   // ucapan baru menggantikan yang lama
+  talkN++;let ended=false;const end=()=>{if(ended)return;ended=true;talkN=Math.max(0,talkN-1);talkEnd=Date.now()};
+  talkEnds.push(end);const cap=setTimeout(end,4500+String(t).length*120);   // jaga-jaga browser tidak memberi kabar selesai
+  return sayRaw(t,lang,retry).finally(()=>{clearTimeout(cap);end()})}
+// Jalankan fn minimal setelah `min` ms DAN setelah Tongki selesai bicara (maks. tambahan 12 detik).
+let talkQ=0;
+// Suara tidak pernah berhasil keluar di perangkat ini: jangan tunggu ucapan.
+const spDead=()=>!store.sound||!("speechSynthesis" in window)||(spOK===0&&spNoStart>0);
+function afterTalk(fn,min=1500){const t0=Date.now();const tick=()=>{const now=Date.now();
+  if(now-t0>=min&&((talkN===0&&talkQ===0&&now-talkEnd>=350)||spDead()||now-t0>=min+12000))fn();else setTimeout(tick,120)};setTimeout(tick,Math.min(min,400))}
+// Ucapkan t SETELAH ucapan yang sedang berjalan selesai (tidak memotong pujian).
+function sayNext(t,lang){talkQ++;const t0=Date.now();const go=()=>{if((talkN===0&&Date.now()-talkEnd>=200)||spDead()||Date.now()-t0>10000){say(t,lang);talkQ=Math.max(0,talkQ-1)}else setTimeout(go,100)};setTimeout(go,300)}
+function sayRaw(t,lang,retry){return new Promise(res=>{
   if(!store.sound||!("speechSynthesis" in window))return res();
   try{
     if(navigator.userActivation&&!navigator.userActivation.hasBeenActive){pendingSay=[t,lang];const tt=tkTalkStart(t,lang);setTimeout(()=>{tkTalkEnd(tt);res()},1200+t.length*60);return}
@@ -1899,7 +1915,7 @@ function bacaTebak(p){
   const ask=()=>say("Mana huruf "+LET[t][3]+"?");ask();
   acts.again=ask;acts.skip=()=>bacaTebak(p);
   acts.pick=(v,el)=>{if(lock)return;
-    if(+v===t){lock=true;el.classList.add("right");win(el);setTimeout(()=>{if(el.isConnected&&tabOf.baca==="tebak"&&curMod()==="baca")bacaTebak(p)},1600)}
+    if(+v===t){lock=true;el.classList.add("right");win(el);afterTalk(()=>{if(el.isConnected&&tabOf.baca==="tebak"&&curMod()==="baca")bacaTebak(p)},1600)}
     else{el.classList.add("wrong");el.disabled=true;lose("Itu huruf "+LET[+v][3]+". Coba lagi ya",el,t)}};
 }
 
@@ -1968,7 +1984,7 @@ function tulisPad(p){
   acts.check=()=>{
     if(!T.strokes.length)return say("Ayo tebalkan dulu garis putus-putusnya");
     const r=scoreTrace(ch),need=S().trace[0];
-    if(r.cov>=need&&r.out<=S().trace[1]){if(pad.classList.contains("ok"))return;pad.classList.add("ok");win(pad);setTimeout(()=>{if(pad.isConnected&&pad.classList.contains("ok")&&curMod()==="tulis")go(1)},1700)}
+    if(r.cov>=need&&r.out<=S().trace[1]){if(pad.classList.contains("ok"))return;pad.classList.add("ok");win(pad);afterTalk(()=>{if(pad.isConnected&&pad.classList.contains("ok")&&curMod()==="tulis")go(1)},1700)}
     else if(r.cov<need)lose("Hampir! Tebalkan semua garisnya ya");
     else lose("Coba lebih rapi, ikuti garis putus-putus");
   };
@@ -2021,7 +2037,7 @@ function hitungAyo(p){
   acts.cnt=(v,el)=>countTap(el);
   acts.reset=()=>{const b=p.querySelector(".items");b.dataset.n=0;b.querySelectorAll(".it").forEach(i=>{i.classList.remove("c");const bd=i.querySelector(".bd");if(bd)bd.remove()})};
   acts.pick=(v,el)=>{if(lock)return;
-    if(+v===n){lock=true;el.classList.add("right");win(el);setTimeout(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="hitung")hitungAyo(p)},1900)}
+    if(+v===n){lock=true;el.classList.add("right");win(el);afterTalk(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="hitung")hitungAyo(p)},1900)}
     else{el.classList.add("wrong");el.disabled=true;lose("Belum tepat. Ayo hitung lagi, ketuk satu-satu",el,n)}};
 }
 function hitungTambah(p){
@@ -2038,7 +2054,7 @@ function hitungTambah(p){
     <button class="ghost" data-a="skip">Ganti soal</button></div>`;
   say(ask);acts.again=()=>say(ask);acts.skip=()=>hitungTambah(p);
   acts.pick=(v,el)=>{if(lock)return;
-    if(+v===ans){lock=true;el.classList.add("right");p.querySelector(".q").textContent=ans;win(el);setTimeout(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="tambah")hitungTambah(p)},1900)}
+    if(+v===ans){lock=true;el.classList.add("right");p.querySelector(".q").textContent=ans;win(el);afterTalk(()=>{if(el.isConnected&&curMod()==="hitung"&&tabOf.hitung==="tambah")hitungTambah(p)},1900)}
     else{el.classList.add("wrong");el.disabled=true;lose(op==="+"?"Coba hitung semua gambarnya":"Hitung yang tidak dicoret ya",el,ans)}};
 }
 
@@ -2057,7 +2073,7 @@ const young=()=>(store.stage||1)<=2;
 function setPick(ans,again,wrong,onRight){
   wrongN=0;acts.pick=(v,el)=>{if(lock)return;
     if(String(v)===String(ans)){lock=true;el.classList.add("right");win(el);if(onRight)onRight();
-      const mod=curMod(),tab=tabOf[mod];setTimeout(()=>{if(el.isConnected&&curMod()===mod&&tabOf[mod]===tab)again()},2000)}
+      const mod=curMod(),tab=tabOf[mod];afterTalk(()=>{if(el.isConnected&&curMod()===mod&&tabOf[mod]===tab)again()},2000)}
     else{el.classList.add("wrong");el.disabled=true;lose(typeof wrong==="function"?wrong(v):wrong,el,ans)}};
 }
 const numOpts=(opts)=>`<div class="opts nums n${opts.length}" style="--n:${opts.length}">${opts.map(o=>`<button class="opt num btn" data-a="pick" data-v="${o}">${o}</button>`).join("")}</div>`;
@@ -2092,8 +2108,8 @@ function bacaRangkai(p){
   acts.rtile=(v,el)=>{if(lock||el.disabled||filled.length>=syl.length)return;
     const t=tiles.find(x=>String(x.i)===v);filled.push(t.s);el.disabled=true;p.querySelectorAll(".slotw")[filled.length-1].textContent=t.s;say(t.s);
     if(filled.length===syl.length){
-      if(filled.join("")===word){lock=true;const sl=p.querySelector(".slots");p.querySelector(".slots").classList.add("ok");win(p.querySelector(".slots"));setTimeout(()=>say(syl.join(" - ")+". "+word),900);
-        setTimeout(()=>{lock=false;if(sl.isConnected&&curMod()==="baca"&&tabOf.baca==="rangkai")bacaRangkai(p)},2600)}
+      if(filled.join("")===word){lock=true;const sl=p.querySelector(".slots");p.querySelector(".slots").classList.add("ok");win(p.querySelector(".slots"));sayNext(syl.join(" - ")+". "+word);
+        afterTalk(()=>{lock=false;if(sl.isConnected&&curMod()==="baca"&&tabOf.baca==="rangkai")bacaRangkai(p)},2600)}
       else{p.querySelectorAll(".slotw").forEach(s=>s.classList.add("bad"));lose("Belum pas. Dengar lagi, "+word);setTimeout(reset,1100)}
     }};
   lock=false;
@@ -2523,12 +2539,12 @@ function kuisActs(){
   acts.kpick=(v,el)=>{const q=Q.q;if(!q||q.done)return;
     const hit=String(v)===String(q.ans),hold=q.type==="balon"?{ra1:125,ra2:5}:{};
     if(hit){q.done=true;if(!q.tries)Q.score++;{const r=$("#replay");if(r)r.hidden=true}el.classList.add("right");win(el);Ktok++;tkExpr(pick(["tertawa","semangat"]));
-      if(q.type==="inggris")setTimeout(()=>say(`${ACT_EN[q.ans]}!`,"en"),900);
-      else if(RIGHT[q.type])setTimeout(()=>say(RIGHT[q.type](q)),900);
+      if(q.type==="inggris")sayNext(`${ACT_EN[q.ans]}!`,"en");
+      else if(RIGHT[q.type])sayNext(RIGHT[q.type](q));
       const base=["posisi","garis","loncat","arah","benda"].includes(q.type)?{x:cur.x,gy:cur.gy,f:cur.f}:{};
       if(q.type==="posisi"&&q.pos==="bawah")play([{d:300,p:{...PO.low,x:cur.x}},{d:300,p:{...PO.low,h:12,x:cur.x}},{d:300,p:{...PO.low,x:cur.x}}]);
       else play([{d:160,p:{...PO.crouch,...base}},{d:240,p:{...PO.cheer,...hold,...base}},{d:200,p:{...PO.crouch,...base}},{d:200,p:{...(q.type==="balon"?PO.hold:{}),...base}}]);
-      const tok=Q.tok;setTimeout(()=>{if(tok!==Q.tok||curMod()!=="kuis")return;Q.i++;Q.i>=Q.n?kuisEnd():kuisNext()},RIGHT[q.type]?3200:2100)}
+      const tok=Q.tok;afterTalk(()=>{if(tok!==Q.tok||curMod()!=="kuis")return;Q.i++;Q.i>=Q.n?kuisEnd():kuisNext()},1500)}
     else{q.tries++;el.classList.add("wrong");el.disabled=true;lose("Belum tepat. Mau lihat lagi?",el,q.ans);Ktok++;tkExpr("bingung");setTimeout(()=>{if(!q.done)tkExpr(q.type==="emosi"?q.emo:"senang")},1400);
       if(!(q.type==="posisi"&&q.pos==="bawah")){const base=q.type==="posisi"?{x:cur.x,gy:cur.gy}:{};
         play([{d:250,p:{...PO.shrug,...hold,...base}},{d:500,p:{...PO.shrug,...hold,...base}},{d:250,p:{...(q.type==="balon"?PO.hold:{}),...base}}])}}};
@@ -2636,7 +2652,7 @@ function engGerak(p){
     $("#gq").innerHTML="";sayEN("Look!");await ACTPLAY[act]();
     $("#gq").innerHTML=`<div class="opts words">${opts.map(o=>`<button class="opt word btn" data-a="pick" data-v="${o}">${pool[o][0]}</button>`).join("")}</div>`;
     if(young())sayEN(opts.map(o=>pool[o][0]).join(" "));
-    setPick(t,()=>{$("#gq").innerHTML="";cap("Tap a sentence · Ketuk kalimatnya")},"Belum tepat. Coba lagi",()=>{setTimeout(()=>sayEN(en),700)});
+    setPick(t,()=>{$("#gq").innerHTML="";cap("Tap a sentence · Ketuk kalimatnya")},"Belum tepat. Coba lagi",()=>sayNext(en,"en"));
   };
 }
 
@@ -2909,7 +2925,7 @@ function gJembatan(p){
         if(done>=N){cap("Berhasil menyeberang!");await hop(282,172);if(!gAlive(tok))return;tkExpr("semangat");play([{d:160,p:PO.crouch},{d:240,p:PO.cheer},{d:200,p:PO.crouch},{d:200,p:{}}]);
           $("#jq").innerHTML=`<button class="say btn fill" data-a="again">Main lagi</button>`;acts.again=()=>gJembatan(p);
           gameDone("jembatan",$(".stage"),"Hore! Tongki berhasil menyeberang. Terima kasih sudah membantu Tongki!")}
-        else setTimeout(ask,700)}
+        else afterTalk(()=>{if(gAlive(tok))ask()},900)}
       else{el.classList.add("wrong");el.disabled=true;tkExpr("bingung");setTimeout(()=>tkExpr("mikir"),1300);lose("Hmm, belum tepat. Coba lagi ya!",el,q.ans)}};
   };
   cap("Sungainya lebar!");say(`Sungainya lebar! Jawab ${numWord(N)} soal untuk memasang papan jembatan.`).then(ask);
@@ -2952,8 +2968,8 @@ function gSimon(p){
   acts.pad=v=>{if(busy)return;const i=+v;flash(i,260);
     if(i===seq[inp]){inp++;if(inp<seq.length)return;
       if(seq.length>=goal){busy=true;gameDone("simon",p.querySelector(".pads"),`Kamu ingat ${numWord(seq.length)} warna berurutan. Ingatanmu hebat!`);return}
-      busy=true;level++;$("#gc").textContent=`Level ${level}`;tkLook={expr:"tertawa",move:"cheer"};say("Betul! Tambah satu warna lagi ya.");seq.push(rand(0,3));setTimeout(()=>{if(gAlive(tok))show()},1700)}
-    else{busy=true;tone([300,220],.15,"sine",.12,.15);tkLook={expr:"bingung",move:"shrug",after:"senang"};say("Hampir! Tongki ulangi ya, perhatikan baik-baik.");setTimeout(()=>{if(gAlive(tok))show()},1900)}};
+      busy=true;level++;$("#gc").textContent=`Level ${level}`;tkLook={expr:"tertawa",move:"cheer"};say("Betul! Tambah satu warna lagi ya.");seq.push(rand(0,3));afterTalk(()=>{if(gAlive(tok))show()},1700)}
+    else{busy=true;tone([300,220],.15,"sine",.12,.15);tkLook={expr:"bingung",move:"shrug",after:"senang"};say("Hampir! Tongki ulangi ya, perhatikan baik-baik.");afterTalk(()=>{if(gAlive(tok))show()},1900)}};
   setTimeout(()=>{if(gAlive(tok))show()},600);
 }
 
@@ -2975,7 +2991,7 @@ function gUmpet(p){
   acts.cup=(v,el)=>{if(busy||el.classList.contains("up"))return;const i=+v;el.classList.add("up");
     if(i===tk){busy=true;round++;tone([660,880,1040],.12);$("#gc").textContent=`Ronde ${Math.min(round+1,rounds)} / ${rounds}`;
       if(round>=rounds){gameDone("umpet",$("#cups"),"Cilukba! Matamu jeli, kamu selalu menemukan Tongki!");return}
-      tkLook={expr:"tertawa",move:"cheer"};say("Cilukba! Ketemu! Sekarang lebih cepat ya.");swaps++;setTimeout(()=>{if(gAlive(tok))startRound()},2200)}
+      tkLook={expr:"tertawa",move:"cheer"};say("Cilukba! Ketemu! Sekarang lebih cepat ya.");swaps++;afterTalk(()=>{if(gAlive(tok))startRound()},2200)}
     else{miss++;tone([300],.12,"sine");tkLook={expr:"bingung",move:"shrug",after:"senang"};
       if(miss>=2){cups[tk].classList.add("wig");say("Ssst… Tongki di sini, yang bergoyang!")}else say("Kosong! Coba kotak lain.");
       setTimeout(()=>el.classList.remove("up"),900)}};
@@ -3381,7 +3397,7 @@ function jamWaktu(p){
     acts.skip=()=>jamWaktu(p);
     acts.seq=(v,el)=>{if(lock||el.classList.contains("done"))return;
       if(+v===k){el.classList.add("done");el.querySelector("em").textContent=k+1;tone([520+k*90],.08);say(seq[k].l);k++;
-        if(k===seq.length){lock=true;win(el);setTimeout(()=>{if(el.isConnected&&curMod()==="jam"&&tabOf.jam==="waktu")jamWaktu(p)},2200)}}
+        if(k===seq.length){lock=true;win(el);afterTalk(()=>{if(el.isConnected&&curMod()==="jam"&&tabOf.jam==="waktu")jamWaktu(p)},2200)}}
       else{el.classList.add("shake");setTimeout(()=>el.classList.remove("shake"),450);lose(`Hmm, ${seq[+v].l} itu waktu ${PERIODS[seq[+v].p].l.toLowerCase()}. Cari yang lebih dulu ya`)}};
     return}
   const q=pick(pool),opts=st===1?shuffle(["pagi","malam"].includes(q.p)?["pagi","malam"]:["siang","malam"]):shuffle([...per]);lock=false;
@@ -3390,7 +3406,7 @@ function jamWaktu(p){
     <div class="opts skyopts n${opts.length}" style="--n:${opts.length}">${opts.map(o=>`<button class="opt btn qpic" data-a="pick" data-v="${o}">${skySVG(o,76)}<small>${PERIODS[o].l}</small></button>`).join("")}</div>
     <button class="ghost" data-a="skip">Ganti soal</button></div>`;
   const ask=`Kapan Tongki ${q.l}? Pagi, siang${per.includes("sore")?", sore":""}, atau malam?`;say(ask);acts.skip=()=>jamWaktu(p);
-  setPick(q.p,()=>jamWaktu(p),v=>`Hmm, kalau ${PERIODS[v].l.toLowerCase()} biasanya hari ${v==="malam"?"gelap":"terang"}. Coba lagi ya`,()=>setTimeout(()=>say(`Betul! Tongki ${q.l} waktu ${PERIODS[q.p].l.toLowerCase()}.`),900));
+  setPick(q.p,()=>jamWaktu(p),v=>`Hmm, kalau ${PERIODS[v].l.toLowerCase()} biasanya hari ${v==="malam"?"gelap":"terang"}. Coba lagi ya`,()=>sayNext(`Betul! Tongki ${q.l} waktu ${PERIODS[q.p].l.toLowerCase()}.`));
 }
 
 function jamHari(p){
@@ -3415,7 +3431,7 @@ function jamHari(p){
   say(ask);acts.again=()=>say(ask);acts.skip=()=>jamHari(p);
   acts.car=v=>{const i=+v;if(i===hide&&type!=="jumlah")return say("Ini yang kita cari!");tone([400+i*60],.08);say(DAYS[i])};
   setPick(ans,()=>jamHari(p),v=>type==="jumlah"?"Coba hitung gerbong keretanya":`Itu hari ${v}. Lihat keretanya ya`,()=>{const c=p.querySelector(".car.q");if(c){c.classList.remove("q");c.querySelector("b").textContent=type==="jumlah"?c.querySelector("b").textContent:ans}
-    if(type==="jumlah")setTimeout(()=>say("Betul! Senin, Selasa, Rabu, Kamis, Jumat, Sabtu, Minggu. Tujuh hari!"),900)});
+    if(type==="jumlah")sayNext("Betul! Senin, Selasa, Rabu, Kamis, Jumat, Sabtu, Minggu. Tujuh hari!")});
 }
 
 function jamTarget(){const st=store.stage||1;
@@ -3436,7 +3452,7 @@ function jamBaca(p){
     <p class="hint">${st>=4?"Jarum pendek menunjuk jam. Jarum panjang di angka 6 berarti setengah.":"Jarum pendek menunjuk jam. Jarum panjang di angka 12."}</p>
     <button class="ghost" data-a="skip">Ganti soal</button></div>`;
   say(ask);acts.again=()=>say(ask);acts.skip=()=>jamBaca(p);
-  setPick(key(tgt),()=>jamBaca(p),v=>{const o={h:parseInt(v),half:/h/.test(v)};return `Itu ${jamSay(o.h,o.half)}. Lihat jarum pendeknya ya`},()=>setTimeout(()=>say(`Betul, ${jamSay(tgt.h,tgt.half)}!`),900));
+  setPick(key(tgt),()=>jamBaca(p),v=>{const o={h:parseInt(v),half:/h/.test(v)};return `Itu ${jamSay(o.h,o.half)}. Lihat jarum pendeknya ya`},()=>sayNext(`Betul, ${jamSay(tgt.h,tgt.half)}!`));
 }
 
 function jamAtur(p){
@@ -3461,7 +3477,7 @@ function jamAtur(p){
   acts.turn=v=>{if(lock)return;if(hand==="m"){M+=+v*5;if(M>=60){M-=60;H=H%12+1}if(M<0){M+=60;H=(H+10)%12+1}}else H=((H-1+(+v)+12)%12)+1;tone([520],.04);draw()};
   acts.skip=()=>jamAtur(p);acts.again=()=>say(ask);
   acts.cek=()=>{if(lock)return;const okH=H===(tgt.half?tgt.h:tgt.h)&&M===(tgt.half?30:0);
-    if(okH){lock=true;const w=$("#cwrap");w.classList.add("ok");win(w);setTimeout(()=>say(`Tepat sekali, ${jamSay(tgt.h,tgt.half)}!`),900);setTimeout(()=>{if(svg.isConnected&&curMod()==="jam"&&tabOf.jam==="atur")jamAtur(p)},2600)}
+    if(okH){lock=true;const w=$("#cwrap");w.classList.add("ok");win(w);sayNext(`Tepat sekali, ${jamSay(tgt.h,tgt.half)}!`);afterTalk(()=>{if(svg.isConnected&&curMod()==="jam"&&tabOf.jam==="atur")jamAtur(p)},2600)}
     else{wrongN++;const msg=tgt.half&&M!==30?"Jarum panjang harus di angka enam untuk setengah":H!==tgt.h?(tgt.half?`Jarum pendek di antara ${kata(tgt.h)} dan ${kata(h12(tgt.h+1))} ya`:`Jarum pendek harus menunjuk angka ${kata(tgt.h)}`):"Jarum panjang harus di angka dua belas";
       tone([330,247],.16,"sine",.13,.18);tkLook={expr:"bingung",move:"shrug",after:"senang"};
       if(wrongN>=3){H=tgt.h;M=tgt.half?30:0;draw();say("Tongki bantu ya. Begini jamnya. Tekan Sudah!")}else say(msg)}};
@@ -3494,7 +3510,7 @@ function tokoKenal(p){
       <div class="purse">${Array.from({length:n},()=>moneySVG(100,1)).join("")}</div>${numOpts(choices(st===1?3:3,n,1,st===1?5:10))}
       <button class="ghost" data-a="skip">Ganti soal</button></div>`;
     say("Ada berapa koin di dompet Tongki? Ayo hitung!");acts.skip=()=>tokoKenal(p);
-    setPick(n,()=>tokoKenal(p),"Ayo hitung lagi koinnya satu per satu",()=>setTimeout(()=>say(`Betul, ${kata(n)} koin. Kalau koin seratusan, jadi ${rpS(n*100)}!`),900));return}
+    setPick(n,()=>tokoKenal(p),"Ayo hitung lagi koinnya satu per satu",()=>sayNext(`Betul, ${kata(n)} koin. Kalau koin seratusan, jadi ${rpS(n*100)}!`));return}
   const most=st>=3&&Math.random()<.35,n=Math.min(set.length,st===1?3:4),opts=shuffle(set).slice(0,n),ans=most?Math.max(...opts):pick(opts);
   const ask=most?"Mana uang yang nilainya paling besar?":`Mana uang ${rpS(ans)}?`;
   p.innerHTML=`<div class="quiz"><p class="ask">${most?"Mana yang nilainya <mark>paling besar</mark>?":`Mana uang <mark>${rpT(ans)}</mark>?`}</p>
@@ -3503,7 +3519,7 @@ function tokoKenal(p){
     <p class="hint">Uang mainan Tongki. Lihat angka di uangnya.</p>
     <button class="ghost" data-a="skip">Ganti soal</button></div>`;
   say(ask);acts.again=()=>say(ask);acts.skip=()=>tokoKenal(p);
-  setPick(ans,()=>tokoKenal(p),v=>`Itu ${rpS(+v)}. Coba lagi ya`,()=>setTimeout(()=>say(most?`Betul! ${rpS(ans)} paling besar.`:`Betul, ini ${rpS(ans)}!`),900));
+  setPick(ans,()=>tokoKenal(p),v=>`Itu ${rpS(+v)}. Coba lagi ya`,()=>sayNext(most?`Betul! ${rpS(ans)} paling besar.`:`Betul, ini ${rpS(ans)}!`));
 }
 
 function tokoBayar(p){
@@ -3522,8 +3538,8 @@ function tokoBayar(p){
   acts.reset=()=>{if(lock)return;tray=[];draw()};acts.skip=()=>tokoBayar(p);acts.again=()=>say(ask);
   acts.bayar=(v,el)=>{if(lock)return;const s=sumCoins(tray);
     if(!tray.length)return say("Ketuk uangnya dulu, lalu bayar");
-    if(s===price){lock=true;win(el);setTimeout(()=>say(`Uangnya pas! Terima kasih, ini ${it[1]}nya.`),900);p.querySelector(".stall").classList.add("sold");
-      setTimeout(()=>{if(el.isConnected&&curMod()==="toko"&&tabOf.toko==="bayar")tokoBayar(p)},2800)}
+    if(s===price){lock=true;win(el);sayNext(`Uangnya pas! Terima kasih, ini ${it[1]}nya.`);p.querySelector(".stall").classList.add("sold");
+      afterTalk(()=>{if(el.isConnected&&curMod()==="toko"&&tabOf.toko==="bayar")tokoBayar(p)},2800)}
     else{lose(s<price?(dots?`Masih kurang. Harganya ${kata(price/100)} koin`:`Masih kurang ${rpS(price-s)}`):(dots?"Kelebihan. Ambil kembali satu koin ya":`Uangnya kelebihan ${rpS(s-price)}. Ambil kembali sebagian ya`),null,null)}};
 }
 
@@ -3548,7 +3564,7 @@ function tokoCukup(p){
     <div class="opts n2 yn" style="--n:2"><button class="opt btn word yes" data-a="pick" data-v="cukup"><span class="ynic">✓</span><span>Cukup</span></button><button class="opt btn word no" data-a="pick" data-v="kurang"><span class="ynic">✕</span><span>Kurang</span></button></div>
     <button class="ghost" data-a="skip">Ganti soal</button></div></div>`;
   const ask=`${it[1].charAt(0).toUpperCase()+it[1].slice(1)} harganya ${rpS(price)}. Uang Tongki cukup atau kurang?`;say(ask);acts.skip=()=>tokoCukup(p);
-  setPick(ans,()=>tokoCukup(p),st<=2?"Ayo hitung koin Tongki dan titik di harganya":"Coba jumlahkan uang Tongki dulu",()=>setTimeout(()=>say(ans==="cukup"?`Betul, uangnya ${rpS(have)}, cukup!`:`Betul, uangnya cuma ${rpS(have)}, masih kurang ${rpS(price-have)}.`),900));
+  setPick(ans,()=>tokoCukup(p),st<=2?"Ayo hitung koin Tongki dan titik di harganya":"Coba jumlahkan uang Tongki dulu",()=>sayNext(ans==="cukup"?`Betul, uangnya ${rpS(have)}, cukup!`:`Betul, uangnya cuma ${rpS(have)}, masih kurang ${rpS(price-have)}.`));
 }
 
 function tokoKembali(p){
@@ -3563,7 +3579,7 @@ function tokoKembali(p){
     <p class="hint">Kembalian = uang yang dibayar − harga.</p>
     <button class="ghost" data-a="skip">Ganti soal</button></div></div>`;
   const ask=`${it[1].charAt(0).toUpperCase()+it[1].slice(1)} harganya ${rpS(price)}. Tongki bayar ${rpS(paid)}. Berapa kembaliannya?`;say(ask);acts.skip=()=>tokoKembali(p);
-  setPick(ans,()=>tokoKembali(p),`Coba hitung: ${rpS(paid)} dikurangi ${rpS(price)}`,()=>setTimeout(()=>say(`Betul, kembaliannya ${rpS(ans)}.`),900));
+  setPick(ans,()=>tokoKembali(p),`Coba hitung: ${rpS(paid)} dikurangi ${rpS(price)}`,()=>sayNext(`Betul, kembaliannya ${rpS(ans)}.`));
 }
 
 /* ======================= RUTINITAS HARIAN ======================= */
