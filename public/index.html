@@ -1624,6 +1624,51 @@ h3.wk{margin:6px 0 0;font:800 16px var(--f-display);text-transform:uppercase;let
   .tenang .lead{font-size:14px}
   .nafter .feelopts .qpic svg{width:44px}
 }
+
+/* ===== LEMARI & SERTIFIKAT ===== */
+[data-mod=lemari]{--c:#6C4AB6;--c-d:#4A2F8A;--c-s:#E6DFF5;--c-on:#fff}
+.koleksi{grid-template-columns:repeat(auto-fit,minmax(96px,1fr))!important}
+.kolhead svg,.kolcert svg{display:block}
+.kol b svg{width:16px;height:16px;vertical-align:-2px;margin-left:2px}
+.lemari{display:grid;grid-template-columns:1fr;gap:14px;max-width:900px;margin:0 auto}
+.lmstage{position:relative;display:grid;place-items:center;background:radial-gradient(circle at 50% 38%,#fff 0,var(--c-s) 70%);border:3px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);padding:10px 0 0;overflow:hidden}
+.lmfig{width:clamp(130px,min(42vw,30dvh),240px)}
+.lmfig .tkfig{width:100%;height:auto;display:block}
+.lmfig.pop{animation:pop .5s}
+.lmrail{position:absolute;left:0;right:0;bottom:0;height:14px;background:repeating-linear-gradient(90deg,#B07A43 0 22px,#C98E52 22px 44px);border-top:3px solid var(--ink)}
+.lmside{display:flex;flex-direction:column;gap:12px}
+.lmwallet{display:flex;align-items:center;gap:8px;font-weight:700}
+.lmwallet svg{width:26px;height:26px}
+.lmwallet b{font:900 28px/1 var(--f-display)}
+.lmwallet span{color:var(--muted)}
+.lmcat{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}
+.lmgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.lmit{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px;height:auto!important;text-align:center}
+.lmprev{height:64px;display:grid;place-items:center}
+.lmprev .tkfig{height:72px;width:auto}
+.lmit b{font:800 14px/1.15 var(--f-display)}
+.lmit em{font-style:normal;font-weight:800;font-size:13px;display:flex;align-items:center;gap:3px;padding:3px 10px;border-radius:999px;background:var(--paper);border:2px solid var(--ink)}
+.lmit em svg{width:14px;height:14px}
+.lmit.own em{background:var(--c-s)}
+.lmit.on{background:var(--c-s);outline:4px solid var(--c);outline-offset:-2px}
+.lmit.on em{background:var(--c);color:#fff}
+@media (min-width:760px),(orientation:landscape) and (max-height:560px){.lemari{grid-template-columns:minmax(200px,320px) minmax(0,1fr);align-items:start}.lmstage{position:sticky;top:0}}
+@media (orientation:landscape) and (max-height:560px){.lmfig{width:min(170px,calc(100dvh - 190px))}.lemari .hint{display:none}}
+.certsh{max-width:760px}
+.certwrap{width:100%;border-radius:10px;overflow:hidden;box-shadow:5px 5px 0 var(--ink);border:3px solid var(--ink);background:#FFFDF6}
+.certwrap .certsvg{display:block;width:100%;height:auto}
+.certsh .row{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.certlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.certit{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:8px;height:auto!important;text-align:left}
+.certmini .certsvg{display:block;width:100%;height:auto;border-radius:6px;border:2px solid var(--ink)}
+.certit b{font:800 15px var(--f-display)}
+.certit small{color:var(--muted);font-weight:600}
+
+@media (orientation:portrait){.lmfig{width:clamp(110px,min(36vw,20dvh),200px)}}
+@media (min-width:640px){.koleksi{grid-template-columns:repeat(5,1fr)!important}}
+
+.certsh{padding-top:64px!important}
+.certsh>.kick3{margin-top:-34px;padding-right:56px}
 </style>
 
 <div id="app" data-mod="home">
@@ -1880,6 +1925,7 @@ const MODS={
   warna:{title:"Mewarnai",tabs:[]},
   rutin:{title:"Rutinitas",tabs:[]},
   petualang:{title:"Peta",tabs:[]},
+  lemari:{title:"Lemari",tabs:[]},
   rasa:{title:"Perasaan",tabs:[["kenali","Kenali Perasaan"],["sikap","Apa yang Dilakukan?"],["tenang","Pojok Tenang"]]},
   jam:{title:"Jam & Hari",tabs:[["waktu","Pagi Siang Malam"],["hari","Nama Hari"],["baca","Baca Jam"],["atur","Atur Jam"]],groups:[["Waktu & Hari",["waktu","hari"]],["Jam",["baca","atur"]]]},
   toko:{title:"Toko",tabs:[["kenal","Kenal Uang"],["bayar","Bayar Pas"],["cukup","Cukup?"],["kembali","Kembalian"]]},
@@ -1929,8 +1975,9 @@ function route(){
 window.addEventListener("hashchange",route);
 function renderMod(mod){
   Ktok++;Q.tok++;wrongN=0;stRead++;sayEvt=null;gTok++;
-  buddyShow(!["kuis","cerita","warna","rasa","petualang"].includes(mod)&&!(mod==="inggris"&&tabOf.inggris==="gerak")&&!(mod==="main"&&["jembatan","penalti"].includes(tabOf.main)));
+  buddyShow(!["kuis","cerita","warna","rasa","petualang","lemari"].includes(mod)&&!(mod==="inggris"&&tabOf.inggris==="gerak")&&!(mod==="main"&&["jembatan","penalti"].includes(tabOf.main)));
   if(mod==="kuis"){main.innerHTML=`<div id="panel"></div>`;acts={};kuisActs();kuisStart($("#panel"));return}
+  if(mod==="lemari"){main.innerHTML=`<div id="panel"></div>`;acts={};lemariPage($("#panel"));return}
   if(mod==="petualang"){main.innerHTML=`<div id="panel"></div>`;acts={};petualangPage($("#panel"));return}
   if(mod==="rutin"){main.innerHTML=`<div id="panel"></div>`;acts={};rtnSeg=rtnSegNow();rutinPage($("#panel"));const[a,b]=rtnCount();tkLook={expr:"senang",move:"wave"};say(a>=b&&b?"Wah, semua rutinitas hari ini sudah selesai. Hebat!":`Ayo cek rutinitas ${RSEG[rtnSeg].toLowerCase()}! Mana yang sudah kamu kerjakan?`);return}
   if(mod==="cerita"||mod==="warna"){main.innerHTML=`<div id="panel"></div>`;acts={};(mod==="cerita"?ceritaList:warnaList)($("#panel"));return}
@@ -1985,12 +2032,14 @@ function renderHome(){
     ${card("j","jam",`<span class="artill">${clockSVG(new Date().getHours(),new Date().getMinutes(),96,{ring:"#1C1B22"})}</span>`,"Jam","Jam & Hari","Pagi-malam, nama hari, jam")}
     ${card("o","toko",`<span class="artill coins">${moneySVG(500,1.5)}${moneySVG(1000,1.3)}</span>`,"Toko","Toko Tongki","Kenal uang & belanja")}
     ${card("f tkc","rasa",tkHeadSVG("malu",88),"Perasaan","Rumah Perasaan","Kenali & kelola perasaan")}
-    ${(()=>{const[a,b]=rtnCount();return card("r","rutin",`<span class="artill">${ill("sikat",92)}</span>`,"Rutinitas","Rutinitasku",b?`${a} dari ${b} selesai hari ini`:"Atur kebiasaan harian")})()}
+    ${(()=>{const[a,b]=rtnCount();return card("r","rutin",`<span class="artill">${ill("sikat",92)}</span>`,"Rutinitas","Kebiasaanku",b?`${a} dari ${b} selesai hari ini`:"Atur kebiasaan harian")})()}
   </div>
   <h2 class="grp">Koleksiku</h2>
   <div class="koleksi">
     <button class="kol btn" data-a="albumh">${IC.star}<b>${stkOwned()}<small>/${STK.length}</small></b><span>Stiker</span></button>
     <button class="kol btn" data-a="karya">${ICW.pal}<b>${artList().length}</b><span>Karyaku</span></button>
+    <button class="kol btn" data-a="go" data-v="lemari"><span class="kolhead">${tkHeadSVG("tertawa",40)}</span><b>${wallet()}${IC.star}</b><span>Lemari Baju</span></button>
+    <button class="kol btn" data-a="sert"><span class="kolcert">${CERTIC}</span><b>${(certBackfill(),(store.certs||[]).length)}</b><span>Sertifikat</span></button>
     <button class="kol btn" data-a="piala">${TROPHY.replace(/width="26" height="26"/,'width="34" height="34"')}<b>${store.trophies||0}</b><span>Piala</span></button>
   </div>
   <button class="btn donebtn" data-a="recap">${tkHeadSVG("cinta",36)}<span>Selesai belajar, dadah Tongki!</span></button>
@@ -2006,7 +2055,7 @@ function renderHome(){
   acts.skipName=()=>{skipName=true;renaming=false;renderHome()};
   acts.go=(v,el)=>{inApp=true;tone([523,784],.1);if(el&&el.dataset.t)tabOf[v]=el.dataset.t;location.hash=v};
   acts.dgo=v=>{inApp=true;tone([523,784],.1);const n=v.slice(2);if(v[0]==="g"){if(n==="cerita"||n==="warna")location.hash=n;else{tabOf.main=n;location.hash="main"}}else location.hash=n};
-  acts.pro=()=>lockSheet();acts.albumh=()=>openAlbum();acts.recap=()=>openRecap();acts.karya=()=>openKarya();
+  acts.pro=()=>lockSheet();acts.sert=()=>openCerts();acts.albumh=()=>openAlbum();acts.recap=()=>openRecap();acts.karya=()=>openKarya();
   acts.piala=()=>{tkLook={expr:"semangat",move:"cheer",after:"senang"};say((store.trophies||0)?`Kamu punya ${numWord(store.trophies)} piala! Selesaikan tantangan hari ini untuk dapat piala lagi.`:"Selesaikan tiga tantangan hari ini untuk dapat piala pertamamu!")};
   acts.poke=()=>{tkLook={expr:"tertawa",move:"cheer"};say(pick([`Hihi, geli! Ayo pilih permainan${store.name?", "+store.name:""}!`,"Halo! Aku Tongki. Ayo main sambil belajar!","Tongki siap menemani kamu belajar!"]))};
   bindHold(main.querySelector("[data-hold=parent]"),openRoom);
@@ -2837,26 +2886,53 @@ function tkMouth(e){const I=TK.ink;switch(e){
   default:return tkL("M141 123Q160 140 179 123")}}
 const tkBlinky=e=>["senang","mikir","bingung"].includes(e);
 function tkFace(e){return `<g class="tkeyes${tkBlinky(e)?" blink":""}">${tkEyes(e)}</g>${tkBrows(e)}${tkMouth(e)}`}
+/* --- pakaian Tongki (Lemari Baju) --- */
+let tkWearOverride=null;
+function tkW(){if(tkWearOverride)return tkWearOverride;try{return (typeof store!=="undefined"&&store&&store.wear)||{}}catch(e){return{}}}
+function tkCap(c){const I=TK.ink;return `<rect x="68" y="68" width="44" height="13" rx="6.5" transform="rotate(-13 90 74)" fill="${c}" stroke="${I}" stroke-width="4.5"/>
+  <path d="M103 89A57 57 0 0 1 217 89Z" fill="${c}" stroke="${I}" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="160" cy="46" r="6.5" fill="${c}" stroke="${I}" stroke-width="4"/><polygon points="${tkStar(192,66,7.5)}" fill="#fff"/>`}
+function tkHat(k){const I=TK.ink;switch(k){
+  case "capbiru":return tkCap("#2F5BD3");
+  case "pesta":return `<path d="M126 62L160 24L194 62Z" fill="#F49AB9" stroke="${I}" stroke-width="4.5" stroke-linejoin="round"/><path d="M137 50l13-14M150 60l22-24M170 60l14-15" stroke="#FFC21A" stroke-width="5"/><circle cx="160" cy="26" r="7" fill="#2F5BD3" stroke="${I}" stroke-width="3.5"/><path d="M118 63q42 10 84 0" stroke="${I}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+  case "koboi":return `<path d="M120 62c0-26 8-36 18-36c10 0 14 6 22 6s12-6 22-6c10 0 18 10 18 36z" fill="#B07A43" stroke="${I}" stroke-width="4.5" stroke-linejoin="round"/><path d="M121 54h78" stroke="#E5412D" stroke-width="7"/><path d="M80 60q80 24 160 0q-6 12-24 16q-56 12-112 0q-18-4-24-16z" fill="#C98E52" stroke="${I}" stroke-width="4.5" stroke-linejoin="round"/>`;
+  case "kelinci":return `<g fill="#FFFDF6" stroke="${I}" stroke-width="4.5"><ellipse cx="130" cy="44" rx="11" ry="24" transform="rotate(-16 130 44)"/><ellipse cx="190" cy="44" rx="11" ry="24" transform="rotate(16 190 44)"/></g><g fill="#F49AB9"><ellipse cx="130" cy="46" rx="5" ry="15" transform="rotate(-16 130 46)"/><ellipse cx="190" cy="46" rx="5" ry="15" transform="rotate(16 190 46)"/></g><path d="M108 76A58 58 0 0 1 212 76" stroke="#E0567A" stroke-width="9" fill="none" stroke-linecap="round"/>`;
+  case "mahkota":return `<path d="M116 66L120 28L141 48L160 22L179 48L200 28L204 66Z" fill="#FFC21A" stroke="${I}" stroke-width="4.5" stroke-linejoin="round"/><circle cx="160" cy="52" r="6" fill="#E5412D" stroke="${I}" stroke-width="2.5"/><circle cx="134" cy="56" r="4.5" fill="#2F5BD3" stroke="${I}" stroke-width="2"/><circle cx="186" cy="56" r="4.5" fill="#10A260" stroke="${I}" stroke-width="2"/>`;
+  case "wisuda":return `<path d="M118 70V54h84v16" fill="#1C1B22" stroke="${I}" stroke-width="4"/><path d="M160 26L232 44L160 62L88 44Z" fill="#1C1B22" stroke="${I}" stroke-width="4" stroke-linejoin="round"/><circle cx="160" cy="44" r="4" fill="#FFC21A"/><path d="M160 44L214 52V82" stroke="#FFC21A" stroke-width="3.5" fill="none"/><path d="M208 80h12l-2 14h-8z" fill="#FFC21A" stroke="${I}" stroke-width="2"/>`;
+  default:return tkCap(TK.cap)}}
+function tkGlasses(k){const I=TK.ink;switch(k){
+  case "bulat":return `<g fill="rgba(255,255,255,.25)" stroke="${I}" stroke-width="4.5"><circle cx="138" cy="104" r="16"/><circle cx="182" cy="104" r="16"/></g><path d="M154 102q6-5 12 0M122 100l-14-6M198 100l14-6" stroke="${I}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+  case "hitam":return `<path d="M120 94h36v12a14 14 0 0 1-14 14h-8a14 14 0 0 1-14-14zM164 94h36v12a14 14 0 0 1-14 14h-8a14 14 0 0 1-14-14z" fill="#1C1B22" stroke="${I}" stroke-width="3.5"/><path d="M156 98h8M120 96l-12-4M200 96l12-4" stroke="${I}" stroke-width="4.5" stroke-linecap="round"/><path d="M127 100l8 0M171 100l8 0" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>`;
+  case "bintang":return `<g fill="rgba(255,194,26,.35)" stroke="#E7A21A" stroke-width="4.5" stroke-linejoin="round"><polygon points="${tkStar(138,104,19)}"/><polygon points="${tkStar(182,104,19)}"/></g><path d="M155 102h10" stroke="#E7A21A" stroke-width="4.5" stroke-linecap="round"/>`;
+  case "hati":return `<g fill="rgba(244,154,185,.45)" stroke="#E0567A" stroke-width="4.5" stroke-linejoin="round"><path d="M138 120c-14-9-20-16-20-23a9 9 0 0 1 20-3a9 9 0 0 1 20 3c0 7-6 14-20 23z"/><path d="M182 120c-14-9-20-16-20-23a9 9 0 0 1 20-3a9 9 0 0 1 20 3c0 7-6 14-20 23z"/></g><path d="M157 100h6" stroke="#E0567A" stroke-width="4.5"/>`;
+  default:return ""}}
+function tkNeck(k,back){const I=TK.ink;
+  if(back)return k==="jubah"?`<path d="M136 166L112 292Q160 306 208 292L184 166Z" fill="#E5412D" stroke="${I}" stroke-width="4.5" stroke-linejoin="round"/>`:"";
+  switch(k){
+  case "dasi":return `<path d="M160 172l-18-10v20zM160 172l18-10v20z" fill="#E5412D" stroke="${I}" stroke-width="4" stroke-linejoin="round"/><circle cx="160" cy="172" r="5" fill="#E5412D" stroke="${I}" stroke-width="3.5"/>`;
+  case "syal":return `<path d="M134 164q26 14 52 0l2 12q-28 14-56 0z" fill="#10A260" stroke="${I}" stroke-width="4" stroke-linejoin="round"/><path d="M174 172l6 40h-14l-4-36z" fill="#10A260" stroke="${I}" stroke-width="4" stroke-linejoin="round"/><path d="M168 186h10M170 198h10" stroke="#FFC21A" stroke-width="3"/>`;
+  case "jubah":return `<path d="M136 166q24 10 48 0" stroke="#E5412D" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="160" cy="171" r="5" fill="#FFC21A" stroke="${I}" stroke-width="3"/>`;
+  case "medali":return `<path d="M144 164l16 34 16-34" stroke="#2F5BD3" stroke-width="7" fill="none" stroke-linejoin="round"/><circle cx="160" cy="206" r="13" fill="#FFC21A" stroke="${I}" stroke-width="4"/><polygon points="${tkStar(160,206,7)}" fill="#fff"/>`;
+  default:return ""}}
 function tkHeadBase(){const I=TK.ink,c=TK.cap;
   return `<circle cx="160" cy="105" r="58" fill="${TK.white}" stroke="${I}" stroke-width="7"/>
   <ellipse cx="116" cy="122" rx="10" ry="6.5" fill="${TK.cheek}" opacity=".9"/><ellipse cx="204" cy="122" rx="10" ry="6.5" fill="${TK.cheek}" opacity=".9"/>
-  <rect x="68" y="68" width="44" height="13" rx="6.5" transform="rotate(-13 90 74)" fill="${c}" stroke="${I}" stroke-width="4.5"/>
-  <path d="M103 89A57 57 0 0 1 217 89Z" fill="${c}" stroke="${I}" stroke-width="5" stroke-linejoin="round"/>
-  <circle cx="160" cy="46" r="6.5" fill="${c}" stroke="${I}" stroke-width="4"/><polygon points="${tkStar(192,66,7.5)}" fill="#fff"/>`}
-function tkHeadSVG(e,s=64){return `<svg class="tkhead-only" viewBox="52 22 216 196" width="${s}" height="${s}" aria-hidden="true">${tkHeadBase()}${tkFace(e)}</svg>`}
+  ${tkHat(tkW().topi)}`}
+function tkHeadSVG(e,s=64){return `<svg class="tkhead-only" viewBox="52 22 216 196" width="${s}" height="${s}" aria-hidden="true">${tkHeadBase()}${tkFace(e)}<g class="tkglass">${tkGlasses(tkW().mata)}</g></svg>`}
 // Badan utuh (koordinat sama dengan desain maskot). Sudut lengan/kaki lewat --a, jadi bisa digerakkan CSS.
 function tkFigure(e="senang",o={}){
   const I=TK.ink,c=TK.cap,aL=o.armL??14,aR=o.armR??-14,lL=o.legL??7,lR=o.legR??-7;
   let prop="";if(o.prop){const th=aR*Math.PI/180,hx=160-62*Math.sin(th),hy=178+62*Math.cos(th);prop=`<g transform="translate(${(hx-30).toFixed(1)} ${(hy-84).toFixed(1)}) scale(.9)">${ICON[o.prop]||""}</g>`}
   return `<svg class="tkfig" viewBox="20 8 280 336" aria-hidden="true">
   <ellipse cx="160" cy="326" rx="80" ry="11" fill="#000" opacity=".08"/>
-  <g class="tkbody">
+  <g class="tkbody">${tkNeck(tkW().leher,true)}
    <g class="legL" style="--a:${lL}deg"><line x1="160" y1="235" x2="160" y2="298" stroke="${I}" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="155" cy="303" rx="15" ry="8.5" fill="${c}" stroke="${I}" stroke-width="4.5"/></g>
    <g class="legR" style="--a:${lR}deg"><line x1="160" y1="235" x2="160" y2="298" stroke="${I}" stroke-width="7.5" stroke-linecap="round"/><ellipse cx="165" cy="303" rx="15" ry="8.5" fill="${c}" stroke="${I}" stroke-width="4.5"/></g>
    <line x1="160" y1="162" x2="160" y2="235" stroke="${I}" stroke-width="7.5" stroke-linecap="round"/>
    <g class="armL" style="--a:${aL}deg"><line x1="160" y1="178" x2="160" y2="238" stroke="${I}" stroke-width="7.5" stroke-linecap="round"/><circle cx="160" cy="241" r="9.5" fill="#fff" stroke="${I}" stroke-width="5"/></g>
    <g class="armR" style="--a:${aR}deg"><line x1="160" y1="178" x2="160" y2="238" stroke="${I}" stroke-width="7.5" stroke-linecap="round"/><circle cx="160" cy="241" r="9.5" fill="#fff" stroke="${I}" stroke-width="5"/></g>
-   <g class="tkhead">${tkHeadBase()}<g class="tkfacebox">${tkFace(e)}</g></g>
+   ${tkNeck(tkW().leher)}
+   <g class="tkhead">${tkHeadBase()}<g class="tkfacebox">${tkFace(e)}</g><g class="tkglass">${tkGlasses(tkW().mata)}</g></g>
    ${prop}
   </g></svg>`;
 }
@@ -4080,11 +4156,12 @@ function petualangPage(p,celebrate){
   acts.pergi=()=>{if(!free)return lockSheet();const[m,t]=s.go;if(t)tabOf[m]=t;location.hash=m};
   acts.lanjut=()=>advNext(p);
   acts.lewati=()=>{say("Oke, kita lewati misi ini dulu.");advNext(p,true)};
-  acts.peti=()=>{a.badge=[...new Set([...a.badge,s.isl])];store.stars+=3;save();renderBar("petualang");tone([523,659,784,1047,1319],.15,"triangle",.07);
+  acts.peti=()=>{a.badge=[...new Set([...a.badge,s.isl])];store.stars+=3;save();
+    const cert=certAdd(`Penjelajah ${isl.n}`,`telah menyelesaikan semua misi di ${isl.n}`),lastC=a.i>=S.length-1?certAdd("Juara Petualang","telah menjelajahi keenam pulau di Peta Petualangan"):null;renderBar("petualang");tone([523,659,784,1047,1319],.15,"triangle",.07);
     const last=a.i>=S.length-1;
     sheet(`<div class="sheet-in unlock"><p class="kick3">${isl.n} selesai!</p><div class="moodtk">${tkFigure("semangat",{armR:-150,armL:150})}</div>
       <p class="lead">${last?"Kamu sudah menjelajahi semua pulau! Kamu Juara Petualang!":"Kamu dapat 3 bintang dan lencana pulau. Ayo ke pulau berikutnya!"}</p><button class="say btn fill" data-sa="ok">${last?"Petualangan baru!":"Lanjut berlayar!"}</button></div>`,
-      {ok:()=>{closeSheet();if(last){a.lap++;a.i=0;a.base=null;a.badge=[];save();petualangPage(p,true)}else advNext(p)}});
+      {ok:()=>{closeSheet();if(last){a.lap++;a.i=0;a.base=null;a.badge=[];save();petualangPage(p,true)}else advNext(p);const cc=lastC||cert;if(cc)setTimeout(()=>openCert(cc,true),500)}});
     tkLook={expr:"semangat",move:"cheer"};say(last?`Luar biasa${store.name?", "+store.name:""}! Semua pulau sudah kamu jelajahi. Kamu Juara Petualang!`:`Hore! ${isl.n} selesai! Tiga bintang dan lencana pulau untukmu!`)};
   tkLook={expr:"semangat",move:celebrate?"cheer":"wave"};
   if(celebrate)say(s.chest?`Kita sampai di peti harta ${isl.n}! Ayo buka!`:`Misi berikutnya: ${s.l}. Ayo!`);
@@ -4096,6 +4173,96 @@ function advMini(){return `<svg viewBox="0 0 80 64" width="80" height="64" aria-
   <ellipse cx="40" cy="38" rx="28" ry="17" fill="#F4D58D" stroke="#1C1B22" stroke-width="2.5"/><ellipse cx="40" cy="35" rx="21" ry="11" fill="#8FD18A"/>
   <path d="M24 40q8-10 16-2t16-6" stroke="#1C1B22" stroke-width="2.4" stroke-dasharray="1 5" stroke-linecap="round" fill="none"/>
   <path d="M56 32V14" stroke="#1C1B22" stroke-width="2.5"/><path d="M56 14h13l-4 4 4 4H56z" fill="#E5412D" stroke="#1C1B22" stroke-width="2"/><path d="M33 44l-3-2h6z" fill="#B07A43"/><rect x="18" y="36" width="10" height="7" rx="1.5" fill="#B07A43" stroke="#1C1B22" stroke-width="1.6"/></svg>`}
+
+/* ================= LEMARI BAJU TONGKI + SERTIFIKAT ================= */
+const WEAR={
+  topi:[{k:"cap",n:"Topi Oranye",p:0},{k:"capbiru",n:"Topi Biru",p:5},{k:"pesta",n:"Topi Pesta",p:10},{k:"kelinci",n:"Telinga Kelinci",p:15},{k:"koboi",n:"Topi Koboi",p:15},{k:"mahkota",n:"Mahkota",p:30},{k:"wisuda",n:"Topi Wisuda",p:0,cert:true}],
+  mata:[{k:"",n:"Tanpa Kacamata",p:0},{k:"bulat",n:"Kacamata Bulat",p:5},{k:"hitam",n:"Kacamata Hitam",p:12},{k:"hati",n:"Kacamata Hati",p:15},{k:"bintang",n:"Kacamata Bintang",p:18}],
+  leher:[{k:"",n:"Polos",p:0},{k:"dasi",n:"Dasi Kupu-kupu",p:8},{k:"syal",n:"Syal Hijau",p:12},{k:"jubah",n:"Jubah Pahlawan",p:20},{k:"medali",n:"Medali Juara",p:25}]};
+const CERTIC=`<svg viewBox="0 0 40 32" width="40" height="32" aria-hidden="true"><rect x="2" y="3" width="36" height="24" rx="3" fill="#FFFDF6" stroke="#1C1B22" stroke-width="2.5"/><path d="M8 10h16M8 15h12" stroke="#1C1B22" stroke-width="2.2" stroke-linecap="round"/><circle cx="30" cy="19" r="6" fill="#FFC21A" stroke="#1C1B22" stroke-width="2"/><path d="M27 24l-2 6 5-2 5 2-2-6" fill="#E5412D" stroke="#1C1B22" stroke-width="1.6"/></svg>`;
+const WCAT=[["topi","Topi"],["mata","Kacamata"],["leher","Leher"]];
+let wCat="topi";
+const wallet=()=>Math.max(0,(store.stars||0)-(store.spent||0));
+function wearInit(){store.wear=store.wear||{topi:"cap",mata:"",leher:""};store.owned=store.owned||["topi:cap","mata:","leher:"];return store.wear}
+const wOwned=(c,k)=>wearInit()&&store.owned.includes(c+":"+k);
+const wCertOK=it=>!it.cert||(store.certs||[]).length>0;
+function wearPreview(c,k,e="senang"){const w={...wearInit(),[c]:k};tkWearOverride=w;try{return tkFigure(e,{armR:-140})}finally{tkWearOverride=null}}
+function wearRefresh(){const b=$("#buddy .bfig");if(b)b.innerHTML=tkFigure("senang")}
+
+function lemariPage(p,flash){
+  const w=wearInit(),items=WEAR[wCat];
+  p.innerHTML=`<div class="lemari">
+    <div class="lmstage"><div class="lmfig" id="lmfig">${tkFigure(flash?"tertawa":"senang",{armL:40,armR:-50})}</div><div class="lmrail"></div></div>
+    <div class="lmside">
+      <div class="lmwallet">${IC.star}<b>${wallet()}</b><span>bintang bisa dipakai</span></div>
+      <div class="seg lmcat" role="group" aria-label="Jenis">${WCAT.map(([k,l])=>`<button data-a="wcat" data-v="${k}" aria-pressed="${k===wCat}">${l}</button>`).join("")}</div>
+      <div class="lmgrid">${items.map(it=>{const own=wOwned(wCat,it.k),on=(w[wCat]||"")===it.k,certLock=!wCertOK(it);
+        return `<button class="lmit btn${on?" on":""}${own?" own":""}" data-a="wit" data-v="${it.k}" aria-pressed="${on}">
+          <span class="lmprev">${tkHeadPrev(wCat,it.k)}</span><b>${it.n}</b>
+          <em>${on?"Dipakai":own?"Pakai":certLock?"Hadiah sertifikat":it.p?`${IC.star}${it.p}`:"Gratis"}</em></button>`}).join("")}</div>
+      <p class="hint">Bintang didapat dari belajar dan bermain. Belanja di lemari tidak mengurangi stiker di album.</p></div></div>`;
+  acts.wcat=v=>{wCat=v;lemariPage(p)};
+  acts.wit=(v,el)=>{const it=items.find(x=>x.k===v),own=wOwned(wCat,v);
+    if((w[wCat]||"")===v){if(wCat!=="topi"){w[wCat]="";save();wearRefresh();lemariPage(p);say("Dilepas dulu")}return}
+    if(!own){
+      if(!wCertOK(it))return say("Topi wisuda adalah hadiah sertifikat. Selesaikan satu pulau di Peta Petualangan dulu ya!");
+      if(wallet()<it.p){tkLook={expr:"mikir",move:"shrug"};return say(`${it.n} butuh ${kata(it.p)} bintang. Kumpulkan ${kata(it.p-wallet())} bintang lagi ya!`)}
+      store.spent=(store.spent||0)+it.p;store.owned.push(wCat+":"+v);tone([523,659,784,1047],.12,"triangle",.07)}
+    w[wCat]=v;save();wearRefresh();renderBar("lemari");lemariPage(p,true);
+    const f=$("#lmfig");if(f){f.classList.add("pop");burst(f)}
+    tkLook={expr:"tertawa",move:"cheer",after:"senang"};say(own?pick([`Pakai ${it.n.toLowerCase()}!`,"Gantengnya Tongki!","Keren!"]):`Hore! Tongki pakai ${it.n.toLowerCase()}. Terima kasih!`)};
+  if(!flash){tkLook={expr:"senang",move:"wave"};say(`Ini lemari baju Tongki! Kamu punya ${kata(wallet())} bintang. Mau pilih yang mana?`)}
+}
+function tkHeadPrev(c,k){const w={...wearInit()};w[c]=k;tkWearOverride=w;try{return c==="leher"?tkFigure("senang"):tkHeadSVG("senang",64)}finally{tkWearOverride=null}}
+
+/* --- SERTIFIKAT --- */
+function certAdd(t,sub){store.certs=store.certs||[];const id=t+"|"+(store.adv&&store.adv.lap||1);if(store.certs.some(c=>c.id===id))return null;
+  const c={id,t,sub,d:today()};store.certs.push(c);save();return c}
+function certBackfill(){try{const a=advState();store.certs=store.certs||[];
+  if(!store.certs.length&&a.badge.length){a.badge.forEach(i=>certAdd(`Penjelajah ${ISLANDS[i].n}`,`telah menyelesaikan semua misi di ${ISLANDS[i].n}`))}}catch(e){}}
+const tglID=d=>{try{return new Date(d+"T12:00:00").toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"})}catch(e){return d}};
+function certSVG(c,forFile){
+  const nm=(store.name||"Sahabat Tongki").slice(0,24),fs=nm.length>14?62:76;
+  tkWearOverride={...wearInit(),topi:"wisuda"};const head=tkHeadSVG("tertawa",210);tkWearOverride=null;
+  const F=forFile?"'Trebuchet MS',Verdana,sans-serif":"var(--f-display),system-ui,sans-serif";
+  const rays=Array.from({length:16},(_,i)=>`<path d="M0 0L${(Math.cos(i*Math.PI/8)*44).toFixed(1)} ${(Math.sin(i*Math.PI/8)*44).toFixed(1)}" stroke="#E7B53C" stroke-width="5"/>`).join("");
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" class="certsvg">
+  <rect width="1000" height="700" fill="#FFFDF6"/>
+  <rect x="18" y="18" width="964" height="664" rx="22" fill="none" stroke="#1C1B22" stroke-width="8"/>
+  <rect x="38" y="38" width="924" height="624" rx="14" fill="none" stroke="#FF8A3D" stroke-width="4" stroke-dasharray="14 10"/>
+  ${["#E5412D","#FFC21A","#2F5BD3","#10A260"].map((col,i)=>{const x=i%2?962:38,y=i<2?38:662;return `<circle cx="${x}" cy="${y}" r="26" fill="${col}" stroke="#1C1B22" stroke-width="5"/>`}).join("")}
+  <g transform="translate(64 250)">${head}</g>
+  <text x="560" y="128" text-anchor="middle" font-family="${F}" font-size="68" font-weight="900" letter-spacing="10" fill="#1C1B22">SERTIFIKAT</text>
+  <text x="560" y="170" text-anchor="middle" font-family="${F}" font-size="24" font-weight="700" letter-spacing="4" fill="#E5412D">${esc(c.t.toUpperCase())}</text>
+  <text x="560" y="236" text-anchor="middle" font-family="${F}" font-size="24" fill="#5B5866">diberikan dengan bangga kepada</text>
+  <text x="560" y="${300+(76-fs)/3}" text-anchor="middle" font-family="${F}" font-size="${fs}" font-weight="900" fill="#1C1B22">${esc(nm)}</text>
+  <path d="M330 326H790" stroke="#1C1B22" stroke-width="4"/>
+  <text x="560" y="376" text-anchor="middle" font-family="${F}" font-size="25" fill="#1C1B22">${esc(c.sub)}</text>
+  <text x="560" y="410" text-anchor="middle" font-family="${F}" font-size="25" fill="#1C1B22">bersama Tongki. Terus semangat belajar ya!</text>
+  <g transform="translate(560 500)">${rays}<circle r="40" fill="#FFC21A" stroke="#1C1B22" stroke-width="5"/><polygon points="${tkStar(0,0,22)}" fill="#fff" stroke="#1C1B22" stroke-width="3"/><path d="M-22 34l-12 44 22-12 12 18 6-48zM22 34l12 44-22-12-12 18-6-48z" fill="#E5412D" stroke="#1C1B22" stroke-width="4" stroke-linejoin="round"/></g>
+  <text x="300" y="590" text-anchor="middle" font-family="${F}" font-size="22" fill="#1C1B22">${esc(tglID(c.d))}</text><path d="M200 604H400" stroke="#1C1B22" stroke-width="3"/>
+  <text x="300" y="632" text-anchor="middle" font-family="${F}" font-size="18" fill="#5B5866">Tanggal</text>
+  <text x="820" y="588" text-anchor="middle" font-family="'Brush Script MT','Segoe Script',cursive" font-size="40" fill="#2F5BD3">Tongki</text><path d="M720 604H920" stroke="#1C1B22" stroke-width="3"/>
+  <text x="820" y="632" text-anchor="middle" font-family="${F}" font-size="18" fill="#5B5866">Sahabat Belajar</text>
+  <text x="500" y="648" text-anchor="middle" font-family="${F}" font-size="14" fill="#8A8696">Tongki Calistung · Ayah Akhtar Creative x Opus</text></svg>`}
+function certPNG(c){return new Promise((res,rej)=>{const svg=certSVG(c,true),img=new Image();
+  img.onload=()=>{try{const cv=document.createElement("canvas");cv.width=2000;cv.height=1400;const g=cv.getContext("2d");g.drawImage(img,0,0,2000,1400);cv.toBlob(b=>b?res(b):rej(),"image/png")}catch(e){rej(e)}};
+  img.onerror=rej;img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg)})}
+async function certSave(c){
+  try{const b=await certPNG(c),name=`sertifikat-${(store.name||"tongki").toLowerCase().replace(/[^a-z0-9]+/g,"-")}-${c.d}.png`,file=new File([b],name,{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:"Sertifikat Tongki"});return}catch(e){if(e&&e.name==="AbortError")return}}
+    const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast("Sertifikat disimpan")}
+  catch(e){toast("Gagal membuat gambar")}}
+function openCert(c,isNew){
+  sheet(`<div class="sheet-in certsh">${isNew?`<p class="kick3">Kamu dapat sertifikat!</p>`:""}<div class="certwrap">${certSVG(c)}</div>
+    <div class="row"><button class="say btn fill" data-sa="csave">Simpan / bagikan</button><button class="ghost" data-sa="close">Tutup</button></div>
+    ${isNew&&(store.certs||[]).length===1?`<p class="hint">Hadiah: Topi Wisuda sekarang ada di Lemari Baju Tongki!</p>`:""}</div>`,{csave:()=>certSave(c)});
+  if(isNew){tkLook={expr:"semangat",move:"cheer"};say(`Selamat${store.name?", "+store.name:""}! Kamu dapat sertifikat ${c.t}!${(store.certs||[]).length===1?" Ada hadiah topi wisuda di lemari Tongki!":""}`)}
+}
+function openCerts(){certBackfill();const L=store.certs||[];
+  sheet(`<div class="plate peta-plate"><p class="kick2">Koleksiku</p><div class="peta-t">Sertifikatku</div><p class="peta-s">${L.length?`${L.length} sertifikat`:"Selesaikan satu pulau di Peta Petualangan untuk dapat sertifikat pertama!"}</p></div>
+    <div class="sheet-in certlist">${L.length?L.map((c,i)=>`<button class="certit btn" data-sa="copen" data-v="${i}"><span class="certmini">${certSVG(c)}</span><b>${esc(c.t)}</b><small>${esc(tglID(c.d))}</small></button>`).join(""):`<div class="moodtk">${tkFigure("semangat",{armR:-140})}</div><button class="say btn fill" data-sa="peta">Ke Peta Petualangan</button>`}</div>`,
+    {copen:v=>openCert(L[+v]),peta:()=>{closeSheet();location.hash="petualang"}})}
 
 /* ================= LISENSI: beli sekali, buka semua fitur ================= */
 /* Atur bagian ini sebelum jualan. Nilai lain tidak perlu diubah. */
@@ -4247,6 +4414,8 @@ const THEMES={
     mel:[4,_,_,2,_,_,0,_, 2,_,_,4,_,_,_,_, 7,_,_,4,_,_,2,_, 4,_,_,_,_,_,_,_],bass:[0,0,3,3,4,4,0,0]},
   petualang:{bpm:116,root:67,scale:[0,2,4,5,7,9,11],wave:"triangle",dec:.3,perc:true,spark:true,
     mel:[0,_,4,_,7,_,9,_, 7,_,4,_,5,_,_,_, 4,_,5,_,7,_,11,_, 9,7,5,4, 0,_,_,_],bass:[0,0,3,3,4,4,0,0]},
+  lemari:{bpm:100,root:70,scale:[0,2,4,7,9],wave:"triangle",dec:.4,spark:true,
+    mel:[0,_,2,4,_,7,_,_, 4,_,2,_,0,_,_,_, 2,_,4,7,_,9,_,_, 7,_,4,_,2,_,_,_],bass:[0,0,3,3,4,4,0,0]},
   kuis:{bpm:132,root:70,scale:[0,2,4,5,7,9,11],wave:"triangle",dec:.2,perc:true,spark:true,
     mel:[11,_,9,11, 14,_,11,_, 12,_,10,12, 13,_,_,_, 11,_,9,11, 14,_,16,_, 15,13,12,10, 11,_,_,_],bass:[0,0,3,3,1,4,0,0]}
 };
