@@ -2069,7 +2069,7 @@ function bacaHuruf(p){
   acts.letter=v=>openLetter(+v);
 }
 async function sayLetter(i){await say(LET[i][3]);await wait(120);await say(LET[i][3]+", "+LET[i][1])}
-function openLetter(i){
+function openLetter(i){advSeen("baca:huruf",i);
   const [U,w,ic]=LET[i];
   sheet(`<div class="plate"><div class="big-letter"><span>${U}</span><span>${U.toLowerCase()}</span></div>${ill(ic,104)}</div>
     <div class="sheet-in"><div class="word"><b>${w[0]}</b>${w.slice(1)}</div><p class="hint">${VOK.includes(U)?"Huruf vokal":"Huruf konsonan"} · ${i+1} dari 26</p>
@@ -2087,8 +2087,8 @@ function bacaSuku(p){
   <h2 class="sec">Baca kata</h2>
   <div class="words">${KATA.map((k,i)=>`<button class="wc btn" data-a="word" data-v="${i}">${ill(k[2],64)}<span class="sy">${k.slice(0,-1).map(s=>`<span class="syl">${s}</span>`).join("<i>-</i>")}</span></button>`).join("")}</div>`;
   acts.kon=v=>{sukuK=v;bacaSuku(p);say(LET[v.charCodeAt(0)-65][3])};
-  acts.syl=v=>say(v);
-  acts.word=async(v,el)=>{
+  acts.syl=v=>{advSeen("baca:suku",v);say(v)};
+  acts.word=async(v,el)=>{advSeen("baca:suku","w"+v);
     if(el.dataset.busy)return;el.dataset.busy=1;const k=KATA[+v],sp=el.querySelectorAll(".syl"),syl=k.slice(0,-1);
     for(let j=0;j<syl.length;j++){sp.forEach(s=>s.classList.remove("on"));sp[j].classList.add("on");await say(syl[j]);await wait(180)}
     sp.forEach(s=>s.classList.add("on"));await say(syl.join(""));await wait(500);sp.forEach(s=>s.classList.remove("on"));delete el.dataset.busy;
@@ -2202,7 +2202,7 @@ function hitungKenal(p){
   p.innerHTML=`<h2 class="sec">Ketuk angka untuk melihat jumlahnya</h2><div class="grid-n">${Array.from({length:max},(_,i)=>`<button class="nt btn" data-a="num" data-v="${i+1}">${i+1}</button>`).join("")}</div>`;
   acts.num=v=>openNum(+v,max);
 }
-function openNum(n,max){
+function openNum(n,max){advSeen("hitung:kenal",n);
   const em=EMO[(n-1)%EMO.length];
   sheet(`<div class="plate"><div class="big-letter">${n}</div></div>
     <div class="sheet-in"><div class="word" style="padding-right:50px">${numWord(n)}</div>
@@ -2773,7 +2773,7 @@ function engAbc(p){
   acts.eletter=v=>openEnLetter(+v);
 }
 async function sayEnLetter(i){const l=ABC[i];await sayEN(l[0]);await wait(100);await sayEN(`${l[0]} is for ${l[1]}.`);await say(l[3])}
-function openEnLetter(i){
+function openEnLetter(i){advSeen("inggris:abc",i);
   const [U,w,ic,id]=ABC[i];
   sheet(`<div class="plate"><div class="big-letter"><span>${U}</span><span>${U.toLowerCase()}</span></div>${ill(ic,104)}</div>
     <div class="sheet-in"><div class="word"><b>${w[0]}</b>${w.slice(1)}</div><p class="hint">${U} is for ${w} · artinya <b>${id}</b></p>
@@ -4088,14 +4088,14 @@ const ISLANDS=[
   {n:"Pulau Huruf",c:"#FFC21A",deco:"abc"},{n:"Pulau Angka",c:"#2F5BD3",deco:"123"},{n:"Pulau Perasaan",c:"#E0567A",deco:"rasa"},
   {n:"Pulau Waktu",c:"#1E88C8",deco:"jam"},{n:"Pulau Pasar",c:"#8DB33A",deco:"toko"},{n:"Pulau Juara",c:"#E5412D",deco:"juara"}];
 function advPlan(st){const hi=st>=3;
-  const M=(k,n,l)=>{const[m,t]=k.split(":");return{k,n,l,go:m==="g"?(["cerita","warna"].includes(t)?[t,""]:["main",t]):[m,t]}};
+  const M=(k,n,l,h)=>{const[m,t]=k.split(":");return{k,n,l,h,go:m==="g"?(["cerita","warna"].includes(t)?[t,""]:["main",t]):[m,t]}};
   return [
-    [hi?M("baca:suku",5,"Jawab 5 soal Suku Kata"):M("baca:huruf",5,"Kenali 5 huruf"),hi?M("tulis:besar",3,"Tebalkan 3 huruf besar"):M("tulis:garis",3,"Tebalkan 3 pola garis"),hi?M("baca:rangkai",4,"Rangkai 4 kata"):M("baca:bunyi",5,"Jawab 5 soal Bunyi Awal"),M("g:memori",1,"Selesaikan game Memori")],
-    [hi?M("hitung:tambah",5,"Jawab 5 soal Tambah"):M("hitung:kenal",5,"Kenali 5 angka"),M("hitung:hitung",5,"Hitung benda 5 kali"),M("tulis:angka",3,"Tebalkan 3 angka"),M("g:balon",1,"Pecahkan balon berurutan")],
+    [hi?M("baca:suku",5,"Baca 5 suku kata","Ketuk 5 suku kata atau kata yang berbeda"):M("baca:huruf",5,"Kenali 5 huruf","Buka 5 huruf yang berbeda"),hi?M("tulis:besar",3,"Tebalkan 3 huruf besar"):M("tulis:garis",3,"Tebalkan 3 pola garis"),hi?M("baca:rangkai",4,"Rangkai 4 kata"):M("baca:bunyi",5,"Jawab 5 soal Bunyi Awal"),M("g:memori",1,"Selesaikan game Memori")],
+    [hi?M("hitung:tambah",5,"Jawab 5 soal Tambah"):M("hitung:kenal",5,"Kenali 5 angka","Buka 5 angka yang berbeda"),M("hitung:hitung",5,"Hitung benda 5 kali"),M("tulis:angka",3,"Tebalkan 3 angka"),M("g:balon",1,"Pecahkan balon berurutan")],
     [M("rasa:kenali",4,"Kenali 4 perasaan"),M("rasa:sikap",3,"Pilih sikap baik 3 kali"),M("rasa:tenang",1,"Latihan Napas Balon"),M("g:umpet",1,"Temukan Tongki di Petak Umpet")],
     [M("jam:waktu",4,"Jawab 4 soal Pagi Siang Malam"),M("jam:hari",4,"Jawab 4 soal Nama Hari"),M("rutin:",3,"Centang 3 rutinitas"),hi?M("jam:baca",3,"Baca jam 3 kali"):M("g:simon",1,"Ikuti Tongki Bilang")],
     [M("toko:kenal",4,"Kenali uang 4 kali"),M("toko:bayar",3,"Bayar pas 3 kali"),hi?M("toko:cukup",3,"Jawab 3 soal Cukup?"):M("hitung:pasangan",4,"Cocokkan 4 pasangan"),M("g:tangkap",1,"Selesaikan game Tangkap")],
-    [M("inggris:abc",5,"Jawab 5 soal ABC"),M("g:cerita",1,"Baca satu cerita"),M("kuis:",4,"Jawab 4 soal Kuis Tongki"),M("g:penalti",1,"Main Penalti Tongki")]
+    [M("inggris:abc",5,"Kenali 5 huruf English","Buka 5 huruf ABC yang berbeda"),M("g:cerita",1,"Baca satu cerita"),M("kuis:",4,"Jawab 4 soal Kuis Tongki"),M("g:penalti",1,"Main Penalti Tongki")]
   ]}
 function advStops(){const st=store.stage||1,a=advState(),mul=a.lap>1?1.5:1;
   return advPlan(st).flatMap((ms,ii)=>[...ms.map(m=>({...m,n:Math.max(1,Math.round(m.n*mul)),isl:ii})),{chest:true,isl:ii,l:`Peti harta ${ISLANDS[ii].n}`}])}
@@ -4103,6 +4103,13 @@ function advState(){if(!store.adv||typeof store.adv.i!=="number")store.adv={i:0,
   if(!store.tot){store.tot={};for(const d of Object.values(store.log||{})){for(const[k,v]of Object.entries(d.c||{}))store.tot[k]=(store.tot[k]||0)+v;for(const[k,v]of Object.entries(d.g||{}))store.tot["g:"+k]=(store.tot["g:"+k]||0)+v}}
   return store.adv}
 function advTick(k){store.tot=store.tot||{};store.tot[k]=(store.tot[k]||0)+1}
+/* Papan jelajah (Huruf, Kenal Angka, ABC, Suku Kata) tidak punya soal benar/salah:
+   misinya dihitung dari item BERBEDA yang dibuka anak. */
+function advSeen(k,item){try{const a=advState(),s=advCur();
+  if(s.chest||s.k!==k){advTick(k);return}
+  if(!a.seen||a.seen.k!==k||a.seen.i!==a.i)a.seen={k,i:a.i,items:[]};
+  item=String(item);if(a.seen.items.includes(item))return;
+  a.seen.items.push(item);advTick(k);save();advCheck()}catch(e){}}
 function advCur(){const a=advState(),S=advStops();if(a.i>=S.length)a.i=S.length-1;const s=S[a.i];if(!s.chest&&(a.base==null||a.bk!==s.k)){a.base=store.tot[s.k]||0;a.bk=s.k;save()}return s}
 const advProg=s=>s.chest?0:Math.max(0,Math.min(s.n,(store.tot[s.k]||0)-(store.adv.base||0)));
 const advDone=s=>s.chest||advProg(s)>=s.n;
@@ -4150,7 +4157,7 @@ function petualangPage(p,celebrate){
   p.innerHTML=`<div class="adv"><div class="advtop"><div><p class="kick3">Petualangan ${a.lap>1?`ke-${a.lap}`:""}</p><b>Misi ${a.i+1} dari ${S.length}</b></div><div class="bdgs" aria-label="Lencana pulau">${badges}</div></div>
     <div class="advmap" id="advmap">${advMapSVG(S,a.i)}</div>
     <div class="advcard" style="--ic:${isl.c}"><div class="ac-t"><span class="ac-isl">${isl.n}</span><b>${s.chest?"Peti harta karun!":s.l}</b>
-      ${s.chest?`<small>Buka petinya untuk dapat 3 bintang dan lencana pulau.</small>`:`<div class="ac-bar"><i style="width:${prog/s.n*100}%"></i></div><small>${prog} dari ${s.n}${free?"":" · bagian Tongki Lengkap"}</small>`}</div>
+      ${s.chest?`<small>Buka petinya untuk dapat 3 bintang dan lencana pulau.</small>`:`<div class="ac-bar"><i style="width:${prog/s.n*100}%"></i></div><small>${prog} dari ${s.n}${s.h&&!done?` · ${s.h}`:""}${free?"":" · bagian Tongki Lengkap"}</small>`}</div>
       ${s.chest?`<button class="say btn fill" data-a="peti">Buka peti</button>`:done?`<button class="say btn fill" data-a="lanjut">Lanjut!</button>`:free?`<button class="say btn fill" data-a="pergi">Ayo berangkat!</button>`:`<button class="say btn fill" data-a="pergi">${LOCK} Buka</button><button class="ghost sm" data-a="lewati">Lewati</button>`}</div></div>`;
   const map=$("#advmap");requestAnimationFrame(()=>{const el=$("#stop-"+a.i);if(el&&map){const r=el.getBoundingClientRect(),mr=map.getBoundingClientRect();map.scrollTop+=r.top-mr.top-mr.height*.55}});
   acts.stop=v=>{const i=+v,st=S[i];if(i<a.i)return say(`Misi ${kata(i+1)} sudah selesai. ${st.l}. Hebat!`);if(i>a.i)return say("Selesaikan misi sebelumnya dulu ya");say(s.chest?"Ayo buka peti hartanya!":`Misi sekarang: ${s.l}`)};
