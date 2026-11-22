@@ -3147,7 +3147,7 @@ function gJembatan(p){
     acts.pick=async(v,el)=>{if(lock)return;
       if(String(v)===String(q.ans)){lock=true;el.classList.add("right");win(el);tkExpr("tertawa");
         $("#planks").insertAdjacentHTML("beforeend",`<rect x="${px[done]-16}" y="168" width="32" height="8" rx="2" fill="#E0A458" stroke="${C.K}" stroke-width="2.5" class="plank"/>`);
-        await wait(500);if(!gAlive(tok))return;await hop(px[done],168);done++;$("#gc").textContent=`${done} / ${N} papan`;
+        await wait(500);if(!gAlive(tok))return;await hop(px[done],168);if(!gAlive(tok))return;done++;$("#gc").textContent=`${done} / ${N} papan`;
         if(done>=N){cap("Berhasil menyeberang!");await hop(282,172);if(!gAlive(tok))return;tkExpr("semangat");play([{d:160,p:PO.crouch},{d:240,p:PO.cheer},{d:200,p:PO.crouch},{d:200,p:{}}]);
           $("#jq").innerHTML=`<button class="say btn fill" data-a="again">Main lagi</button>`;acts.again=()=>gJembatan(p);
           gameDone("jembatan",$(".stage"),"Hore! Tongki berhasil menyeberang. Terima kasih sudah membantu Tongki!")}
@@ -3213,7 +3213,7 @@ function gUmpet(p){
     gc("Tongki sembunyi di sini!");say("Tongki sembunyi di sini. Perhatikan kotaknya ya!");await wait(1700);if(!gAlive(tok))return;
     cups.forEach(c=>c.classList.remove("up"));await wait(600);
     for(let s=0;s<swaps;s++){if(!gAlive(tok))return;const a=rand(0,n-1);let b=rand(0,n-2);if(b>=a)b++;[slots[a],slots[b]]=[slots[b],slots[a]];place();tone([440+s*30],.05,"square",.05,.06);await wait(speed+120)}
-    busy=false;gc("Tongki ada di kotak mana?");say("Tongki ada di kotak mana?")};
+    if(!gAlive(tok))return;busy=false;gc("Tongki ada di kotak mana?");say("Tongki ada di kotak mana?")};
   acts.cup=(v,el)=>{if(busy||el.classList.contains("up"))return;const i=+v;el.classList.add("up");
     if(i===tk){busy=true;round++;tone([660,880,1040],.12);$("#gc").textContent=`Ronde ${Math.min(round+1,rounds)} / ${rounds}`;
       if(round>=rounds){gameDone("umpet",$("#cups"),"Cilukba! Matamu jeli, kamu selalu menemukan Tongki!");return}
@@ -3379,6 +3379,7 @@ function switchProfile(id,greet=true){
   if(!PROF.list.some(p=>p.id===id))return;
   save();PROF.cur=id;loadStore(id,true);if(!store.stage)store.stage=1;save();
   session.c={};mood="";renaming=false;skipName=false;whoAsked=true;wrongN=0;
+  try{wearRefresh()}catch(e){}
   closeSheet();if(curMod())location.hash="";else{renderBar(null);renderHome()}
   if(greet){tkLook={expr:"tertawa",move:"wave"};say(`Halo${store.name?" "+store.name:""}! Ayo main bareng Tongki!`)}
 }
@@ -4102,7 +4103,7 @@ function advState(){if(!store.adv||typeof store.adv.i!=="number")store.adv={i:0,
   if(!store.tot){store.tot={};for(const d of Object.values(store.log||{})){for(const[k,v]of Object.entries(d.c||{}))store.tot[k]=(store.tot[k]||0)+v;for(const[k,v]of Object.entries(d.g||{}))store.tot["g:"+k]=(store.tot["g:"+k]||0)+v}}
   return store.adv}
 function advTick(k){store.tot=store.tot||{};store.tot[k]=(store.tot[k]||0)+1}
-function advCur(){const a=advState(),S=advStops();if(a.i>=S.length)a.i=S.length-1;const s=S[a.i];if(!s.chest&&a.base==null){a.base=store.tot[s.k]||0;save()}return s}
+function advCur(){const a=advState(),S=advStops();if(a.i>=S.length)a.i=S.length-1;const s=S[a.i];if(!s.chest&&(a.base==null||a.bk!==s.k)){a.base=store.tot[s.k]||0;a.bk=s.k;save()}return s}
 const advProg=s=>s.chest?0:Math.max(0,Math.min(s.n,(store.tot[s.k]||0)-(store.adv.base||0)));
 const advDone=s=>s.chest||advProg(s)>=s.n;
 const advFree=s=>{if(s.chest)return true;const[m,t]=s.go;if(m==="main")return tabFree("main",t);if(m==="cerita")return storyFree(0);if(m==="warna")return true;return tabFree(m,t)};
